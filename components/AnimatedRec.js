@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import React, { useState, useEffect } from "react";
 
-const AnimatedRec = ({initialSize, scale, initialPosition, position}) => {
+const AnimatedRec = ({initialSize, scale, initialPosition, position, dragPosition}) => {
   const path = [
     { x: -10 * scale, y: -10 * scale }, // Top-left corner
     { x: (initialSize.w - 20) * scale, y: -10 * scale }, // Top-right corner
@@ -17,8 +17,8 @@ const AnimatedRec = ({initialSize, scale, initialPosition, position}) => {
       style={{
         backgroundColor: "red",
         position: "absolute",
-        top: `${(position.y  + initialPosition.y) * scale}px`, // Apply drag position
-        left: `${(position.x + initialPosition.x) * scale}px`, // Apply drag position
+        top: `${(position.y  + initialPosition.y) * scale + dragPosition.y}px`, // Apply drag position
+        left: `${(position.x + initialPosition.x) * scale + dragPosition.x}px`, // Apply drag position
         width: `${initialSize.w * scale}px`, // Scaled width
         height: `${initialSize.h * scale}px`, // Scaled height
         border: `${10 * scale}px solid rgb(66, 5, 48)`, // Scaled border

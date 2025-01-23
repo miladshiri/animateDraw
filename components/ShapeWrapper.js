@@ -62,7 +62,7 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, scale, initial
         userSelect: 'none', // Prevent text selection while dragging
       }}
     >
-      <ShapeComponent initialSize={initialSize} scale={scale} initialPosition={dragPosition} position={position} />
+      <ShapeComponent initialSize={initialSize} scale={scale} initialPosition={initialPosition} position={position} dragPosition={dragPosition} />
     </div>
   );
 };
