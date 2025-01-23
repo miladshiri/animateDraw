@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-const Toolbar = ({ setSelectedTool }) => {
+const Toolbar = ({ setSelectedTool, selectedTool }) => {
   const toolbarStyle = {
     position: "fixed",
     top: "10px", // margin from the top
@@ -19,10 +19,10 @@ const Toolbar = ({ setSelectedTool }) => {
     alignItems: "center",
   };
 
-  const shapeStyle = (shapeType) => ({
+  const shapeStyle = (shapeType, isSelected) => ({
     width: shapeType === "circle" ? "40px" : "50px",
     height: "40px",
-    backgroundColor: "#4CAF50",
+    backgroundColor: isSelected ? "#4CAF50" : "#111D80",
     borderRadius: shapeType === "circle" ? "50%" : "5px",
     display: "flex",
     justifyContent: "center",
@@ -30,6 +30,7 @@ const Toolbar = ({ setSelectedTool }) => {
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
+    userSelect: "none",
   });
 
   const handleMouseDown = (e, tool) => {
@@ -41,9 +42,9 @@ const Toolbar = ({ setSelectedTool }) => {
 
   return (
     <div style={toolbarStyle}>
-      <div onMouseDown={(event) => handleMouseDown(event, "pan")} style={shapeStyle("circle")}>Pan</div>
-      <div onMouseDown={(event) => handleMouseDown(event, "select")} style={shapeStyle("circle")}>Select</div>
-      <div onMouseDown={(event) => handleMouseDown(event, "square")} style={shapeStyle("square")}>Rect</div>
+      <div onMouseDown={(event) => handleMouseDown(event, "pan")} style={shapeStyle("circle", selectedTool == 'pan')}>Pan</div>
+      <div onMouseDown={(event) => handleMouseDown(event, "select")} style={shapeStyle("circle", selectedTool == 'select')}>Select</div>
+      <div onMouseDown={(event) => handleMouseDown(event, "square")} style={shapeStyle("square", selectedTool == 'square')}>Rect</div>
       <div style={shapeStyle("circle")}>A</div>
       <div style={shapeStyle("rectangle")}>C</div>
     </div>

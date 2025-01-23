@@ -82,7 +82,7 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <Toolbar setSelectedTool={setSelectedTool}/>
+      <Toolbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
       {/* <WaveRectangle /> */}
       {/* <AnimatedRec scale={scale} initialPosition={initialPosition1} position={position}/>
       <AnimatedRec scale={scale} initialPosition={initialPosition2} position={position}/> */}
