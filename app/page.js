@@ -17,6 +17,8 @@ export default function Home() {
   const [selectedTool, setSelectedTool] = useState('');
   const [shapes, setShapes] = useState([]);
 
+  const [startCreatePosition, setStartCreatePosition] = useState({ x: 0, y: 0 });
+
   const handleWheel = (e) => {
     e.preventDefault();
     setScale((prevScale) => {
@@ -35,6 +37,13 @@ export default function Home() {
     }
     else if (selectedTool == 'square') {
       console.log('place new square');
+      const startCreatePosition = {
+        x: e.clientX,
+        y: e.clientY,
+      };
+  
+      // Add a new rectangle at the drop position
+      setShapes((prev) => [...prev, dropPosition]);
     }
   };
 
@@ -89,6 +98,12 @@ export default function Home() {
       <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize1} scale={scale} initialPosition={initialPosition1} position={position} />
       <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize2} scale={scale} initialPosition={initialPosition2} position={position} />
       <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize3} scale={scale} initialPosition={initialPosition3} position={position} />
+      
+      {shapes.map((shape, index) => (
+
+            <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize1} scale={scale} initialPosition={shape} position={position} />
+      ))}
+
       {scale}
     </div>
   );
