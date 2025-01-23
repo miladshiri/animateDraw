@@ -2,33 +2,38 @@
 
 import React, { useState, useEffect } from "react";
 
-const ShapeWrapper = ({ShapeComponent, initialSize, scale, initialPosition, position}) => {
+const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, scale, initialPosition, position}) => {
   const [dragPosition, setDragPosition] = useState(initialPosition);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   const handleMouseDown = (e) => {
-    // Calculate the offset between the mouse position and the element's top-left corner
-    setDragOffset({
-      x: e.clientX - dragPosition.x,
-      y: e.clientY - dragPosition.y,
-    });
-    setIsDragging(true);
+    if (selectedTool == 'select') { 
+      setDragOffset({
+        x: e.clientX - dragPosition.x,
+        y: e.clientY - dragPosition.y,
+      });
+      setIsDragging(true);
+    }
   };
 
   const handleMouseMove = (e) => {
-    if (isDragging) {
-      // Update the position based on the mouse movement
-      setDragPosition({
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y,
-      });
+    if (selectedTool == 'select') { 
+      if (isDragging) {
+        // Update the position based on the mouse movement
+        setDragPosition({
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y,
+        });
+      }
     }
   };
 
   const handleMouseUp = () => {
-    if (isDragging) {
-      setIsDragging(false); // Stop dragging
+    if (selectedTool == 'select') { 
+      if (isDragging) {
+        setIsDragging(false); // Stop dragging
+      }
     }
   };
 

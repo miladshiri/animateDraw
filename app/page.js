@@ -5,6 +5,7 @@ import WaveRectangle from "@/components/WaveRectangle";
 import AnimatedRec from "@/components/AnimatedRec";
 import React, { useState, useEffect } from "react";
 import ShapeWrapper from "@/components/ShapeWrapper";
+import Toolbar from "@/components/Toolbar";
 
 export default function Home() {
   const panMode = true;
@@ -13,6 +14,8 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState(false); // Dragging state
   const [startDragPos, setStartDragPos] = useState({ x: 0, y: 0 }); // Mouse position when dragging starts
 
+  const [selectedTool, setSelectedTool] = useState('');
+  const [shapes, setShapes] = useState([]);
 
   const handleWheel = (e) => {
     e.preventDefault();
@@ -23,24 +26,32 @@ export default function Home() {
   };
 
   const handleMouseDown = (e) => {
-    if (!panMode) return;
     e.preventDefault();
-    setIsDragging(true);
-    setStartDragPos({ x: e.clientX - position.x, y: e.clientY - position.y });
+
+    console.log(selectedTool);
+    if (selectedTool == 'pan') {
+      setIsDragging(true);
+      setStartDragPos({ x: e.clientX - position.x, y: e.clientY - position.y });
+    }
+    else if (selectedTool == 'square') {
+      console.log('place new square');
+    }
   };
 
   const handleMouseMove = (e) => {
-    if (!panMode) return;
-    if (!isDragging) return;
-    setPosition({
-      x: e.clientX - startDragPos.x,
-      y: e.clientY - startDragPos.y,
-    });
+    if (selectedTool == 'pan') {
+      if (!isDragging) return;
+      setPosition({
+        x: e.clientX - startDragPos.x,
+        y: e.clientY - startDragPos.y,
+      });
+    }
   };
 
   const handleMouseUp = () => {
-    if (!panMode) return;
-    setIsDragging(false);
+    if (selectedTool == 'pan') {
+      setIsDragging(false);
+    }
   };
 
   const initialPosition1 = { x: 0, y: 100 };
@@ -71,12 +82,13 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
+      <Toolbar setSelectedTool={setSelectedTool}/>
       {/* <WaveRectangle /> */}
       {/* <AnimatedRec scale={scale} initialPosition={initialPosition1} position={position}/>
       <AnimatedRec scale={scale} initialPosition={initialPosition2} position={position}/> */}
-      <ShapeWrapper ShapeComponent={AnimatedRec} initialSize={initialSize1} scale={scale} initialPosition={initialPosition1} position={position} />
-      <ShapeWrapper ShapeComponent={AnimatedRec} initialSize={initialSize2} scale={scale} initialPosition={initialPosition2} position={position} />
-      <ShapeWrapper ShapeComponent={AnimatedRec} initialSize={initialSize3} scale={scale} initialPosition={initialPosition3} position={position} />
+      <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize1} scale={scale} initialPosition={initialPosition1} position={position} />
+      <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize2} scale={scale} initialPosition={initialPosition2} position={position} />
+      <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize3} scale={scale} initialPosition={initialPosition3} position={position} />
       {scale}
     </div>
   );
