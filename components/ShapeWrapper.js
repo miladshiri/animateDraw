@@ -75,7 +75,16 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, scale, initial
     <div
       onMouseDown={handleMouseDown}
       style={{
-        cursor: isDragging ? 'grabbing' : 'grab',
+        cursor: (() => {
+          if (selectedTool === 'pan') return 'move';
+          if (selectedTool === 'select') {
+            if (isDragging) return 'grabbing';
+            return 'grab';
+          }
+          else {
+            return 'default';
+          }
+        })(),
         userSelect: 'none', // Prevent text selection while dragging
       }}
     >

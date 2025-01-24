@@ -109,6 +109,7 @@ export default function Home() {
         display: "flex",      // Flexbox for centering
         alignItems: "center", // Center content vertically
         justifyContent: "center", // Center content horizontally
+        cursor: selectedTool == 'pan' ? 'move' : 'default'
     }}
 
       onWheel={handleWheel}
