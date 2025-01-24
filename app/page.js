@@ -81,7 +81,12 @@ export default function Home() {
     }
     else if (selectedTool == 'square') {
       if (drawing && currentRect) {
-        setShapes((prev) => [...prev, currentRect]);
+        setShapes((prev) => [...prev, {
+          x: currentRect.x / scale,
+          y: currentRect.y / scale,
+          w: currentRect.width / scale,
+          h: currentRect.height / scale,
+        }]);
         setDrawing(false);
         setCurrentRect(null);
       }
@@ -127,13 +132,13 @@ export default function Home() {
       
       {shapes.map((shape, index) => (
 
-            <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.width, h:shape.height}} scale={scale} position={{x:shape.x, y:shape.y}} />
+            <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} initialPosition={{x:shape.x, y:shape.y}} panOffset={panOffsetDrag} />
       ))}
 
 
        {/* Render the rectangle being drawn */}
        {drawing && currentRect && (
-          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentRect.width, h:currentRect.height}} scale={scale} position={{x:currentRect.x, y:currentRect.y}} />
+          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentRect.width / scale, h:currentRect.height / scale}} scale={scale} initialPosition={{x:currentRect.x / scale, y:currentRect.y / scale}} panOffset={panOffsetDrag} />
        )}
 
       {scale}
