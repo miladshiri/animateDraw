@@ -8,18 +8,19 @@ import ShapeWrapper from "@/components/ShapeWrapper";
 import Toolbar from "@/components/Toolbar";
 
 export default function Home() {
-  const panMode = true;
-  const [scale, setScale] = useState(1); // Zoom scale
-  const [position, setPosition] = useState({ x: 0, y: 0 }); // Drag position
-  const [isDragging, setIsDragging] = useState(false); // Dragging state
-  const [startDragPos, setStartDragPos] = useState({ x: 0, y: 0 }); // Mouse position when dragging starts
+
+  const [scale, setScale] = useState(1); 
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 }); 
+  const [panOffsetDrag, setPanOffsetDrag] = useState({ x: 0, y: 0 }); 
+  const [isDragging, setIsDragging] = useState(false); 
+  const [startDragPos, setStartDragPos] = useState({ x: 0, y: 0 }); 
 
   const [selectedTool, setSelectedTool] = useState('');
   const [shapes, setShapes] = useState([]);
 
-  const [drawing, setDrawing] = useState(false); // Track drawing state
-  const [currentRect, setCurrentRect] = useState(null); // Rectangle being drawn
-  const containerRef = useRef(null);
+  const [drawing, setDrawing] = useState(false); 
+  const [currentRect, setCurrentRect] = useState(null);
+
   
   const handleWheel = (e) => {
     e.preventDefault();
@@ -35,12 +36,12 @@ export default function Home() {
     console.log(selectedTool);
     if (selectedTool == 'pan') {
       setIsDragging(true);
-      setStartDragPos({ x: e.clientX - position.x, y: e.clientY - position.y });
+      setStartDragPos({ x: e.clientX, y: e.clientY });
     }
     else if (selectedTool == 'square') {
       console.log('place new square');
-      const startX = e.clientX / scale;
-      const startY = e.clientY / scale;
+      const startX = e.clientX;
+      const startY = e.clientY;
 
       setDrawing(true);
       setCurrentRect({ x: startX, y: startY, width: 0, height: 0 });
@@ -50,15 +51,15 @@ export default function Home() {
   const handleMouseMove = (e) => {
     if (selectedTool == 'pan') {
       if (!isDragging) return;
-      setPosition({
-        x: e.clientX - startDragPos.x,
-        y: e.clientY - startDragPos.y,
+      setPanOffsetDrag({
+        x: (e.clientX - startDragPos.x) / scale + panOffset.x,
+        y: (e.clientY - startDragPos.y) / scale + panOffset.y,
       });
     }
     else if (selectedTool == 'square') {
       if (!drawing || !currentRect) return;
-        const currentX = e.clientX / scale;
-        const currentY = e.clientY / scale;
+        const currentX = e.clientX;
+        const currentY = e.clientY;
     
         const width = currentX - currentRect.x;
         const height = currentY - currentRect.y;
@@ -76,6 +77,7 @@ export default function Home() {
   const handleMouseUp = () => {
     if (selectedTool == 'pan') {
       setIsDragging(false);
+      setPanOffset(panOffsetDrag);
     }
     else if (selectedTool == 'square') {
       if (drawing && currentRect) {
@@ -118,19 +120,19 @@ export default function Home() {
       {/* <WaveRectangle /> */}
       {/* <AnimatedRec scale={scale} initialPosition={initialPosition1} position={position}/>
       <AnimatedRec scale={scale} initialPosition={initialPosition2} position={position}/> */}
-      <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize1} scale={scale} initialPosition={initialPosition1} position={position} />
-      <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize2} scale={scale} initialPosition={initialPosition2} position={position} />
-      <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize3} scale={scale} initialPosition={initialPosition3} position={position} />
+      <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize1} scale={scale} initialPosition={initialPosition1} panOffset={panOffsetDrag} />
+      <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize2} scale={scale} initialPosition={initialPosition2} panOffset={panOffsetDrag} />
+      <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={initialSize3} scale={scale} initialPosition={initialPosition3} panOffset={panOffsetDrag} />
       
       {shapes.map((shape, index) => (
 
-            <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.width, h:shape.height}} scale={scale} initialPosition={{x:shape.x, y:shape.y}} position={position} />
+            <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.width, h:shape.height}} scale={scale} position={{x:shape.x, y:shape.y}} />
       ))}
 
 
        {/* Render the rectangle being drawn */}
        {drawing && currentRect && (
-          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentRect.width, h:currentRect.height}} scale={scale} initialPosition={{x:currentRect.x, y:currentRect.y}} position={position} />
+          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentRect.width, h:currentRect.height}} scale={scale} position={{x:currentRect.x, y:currentRect.y}} />
        )}
 
       {scale}

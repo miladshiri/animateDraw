@@ -3,12 +3,12 @@ import { motion } from "framer-motion";
 
 import React, { useState, useEffect } from "react";
 
-const AnimatedRec = ({initialSize, scale, initialPosition, position, dragPosition}) => {
+const AnimatedRec = ({size, scale, position}) => {
   const path = [
     { x: -10 * scale, y: -10 * scale }, // Top-left corner
-    { x: (initialSize.w - 20) * scale, y: -10 * scale }, // Top-right corner
-    { x: (initialSize.w - 20) * scale, y: (initialSize.h - 20) * scale }, // Bottom-right corner
-    { x: -10 * scale, y: (initialSize.h - 20) * scale }, // Bottom-left corner
+    { x: (size.w - 20) * scale, y: -10 * scale }, // Top-right corner
+    { x: (size.w - 20) * scale, y: (size.h - 20) * scale }, // Bottom-right corner
+    { x: -10 * scale, y: (size.h - 20) * scale }, // Bottom-left corner
     { x: -10 * scale, y: -10 * scale }, // Back to top-left
   ];
 
@@ -17,10 +17,10 @@ const AnimatedRec = ({initialSize, scale, initialPosition, position, dragPositio
       style={{
         backgroundColor: "red",
         position: "absolute",
-        top: `${(position.y  + initialPosition.y) * scale + dragPosition.y}px`, // Apply drag position
-        left: `${(position.x + initialPosition.x) * scale + dragPosition.x}px`, // Apply drag position
-        width: `${initialSize.w * scale}px`, // Scaled width
-        height: `${initialSize.h * scale}px`, // Scaled height
+        top: `${position.y * scale}px`, // Apply drag position
+        left: `${position.x * scale}px`, // Apply drag position
+        width: `${size.w * scale}px`, // Scaled width
+        height: `${size.h * scale}px`, // Scaled height
         border: `${10 * scale}px solid rgb(66, 5, 48)`, // Scaled border
         userSelect: "none", // Prevent text selection while dragging
       }}
