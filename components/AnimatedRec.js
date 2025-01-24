@@ -3,26 +3,26 @@ import { motion } from "framer-motion";
 
 import React, { useState, useEffect } from "react";
 
-const AnimatedRec = ({size, scale, position}) => {
+const AnimatedRec = ({size, scale}) => {
   const path = [
-    { x: -10 * scale, y: -10 * scale }, // Top-left corner
-    { x: (size.w - 20) * scale, y: -10 * scale }, // Top-right corner
-    { x: (size.w - 20) * scale, y: (size.h - 20) * scale }, // Bottom-right corner
-    { x: -10 * scale, y: (size.h - 20) * scale }, // Bottom-left corner
-    { x: -10 * scale, y: -10 * scale }, // Back to top-left
+    { x: -10 * scale, y: -10 * scale },
+    { x: (size.w - 20) * scale, y: -10 * scale },
+    { x: (size.w - 20) * scale, y: (size.h - 20) * scale },
+    { x: -10 * scale, y: (size.h - 20) * scale },
+    { x: -10 * scale, y: -10 * scale },
   ];
 
   return (
     <div
       style={{
         backgroundColor: "red",
-        position: "absolute",
-        top: `${position.y * scale}px`, // Apply drag position
-        left: `${position.x * scale}px`, // Apply drag position
-        width: `${size.w * scale}px`, // Scaled width
-        height: `${size.h * scale}px`, // Scaled height
-        border: `${10 * scale}px solid rgb(66, 5, 48)`, // Scaled border
-        userSelect: "none", // Prevent text selection while dragging
+        position: "relative",
+        top: `0px`, 
+        left: `0px`,
+        width: `100%`,
+        height: `100%`,
+        border: `${10 * scale}px solid rgb(66, 5, 48)`,
+        userSelect: "none",
       }}
     >
       <>
@@ -34,7 +34,7 @@ const AnimatedRec = ({size, scale, position}) => {
           width: `${10 * scale}px`, // Scaled circle size
           height: `${10 * scale}px`, // Scaled circle size
           backgroundColor: "#aaaaaa",
-          borderRadius: "50%", // To make it a circle
+          borderRadius: "10%", // To make it a circle
         }}
         animate={{
           x: path.map((point) => point.x),
