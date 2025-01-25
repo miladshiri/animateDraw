@@ -32,7 +32,8 @@ export default function Home() {
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 }); 
   const [panOffsetDrag, setPanOffsetDrag] = useState({ x: 0, y: 0 }); 
   const [isDragging, setIsDragging] = useState(false); 
-  const [startDragPos, setStartDragPos] = useState({ x: 0, y: 0 }); 
+  const [startDragPos, setStartDragPos] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
 
   const [selectedTool, setSelectedTool] = useState('');
 
@@ -44,6 +45,13 @@ export default function Home() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [isSelecting, setIsSelecting] = useState(false);
 
+  useEffect(() => {
+    if (selectedTool != 'selected') {
+      setSelectionBox({x:0, y:0, width:0, height:0});
+      setSelectionDragBox([]);
+    }
+  }, [selectedTool])
+
   const handleWheel = (e) => {
     e.preventDefault();
     setScale((prevScale) => {
@@ -52,13 +60,19 @@ export default function Home() {
     });
   };
 
+  const initialPan = useRef(null);
+
   const handleMouseDown = (e) => {
     e.preventDefault();
 
     console.log(selectedTool);
     if (selectedTool == 'pan') {
-      setIsDragging(true);
-      setStartDragPos({ x: e.clientX, y: e.clientY });
+      setIsPanning(true);
+      initialPan.current = {
+        startX: e.clientX,
+        startY: e.clientY,
+        initialAllShapes: [...allShapes],
+      }
     }
     else if (selectedTool == 'select') {
       const isCtrlPressed = e.ctrlKey || e.metaKey;
@@ -91,11 +105,21 @@ export default function Home() {
 
   const handleMouseMove = (e) => {
     if (selectedTool == 'pan') {
-      if (!isDragging) return;
+      if (!isPanning || !initialPan.current) return;
       setPanOffsetDrag({
         x: (e.clientX - startDragPos.x) / scale + panOffset.x,
         y: (e.clientY - startDragPos.y) / scale + panOffset.y,
       });
+      const { startX, startY, initialAllShapes } = initialPan.current;
+      const xDiff = e.clientX - startX;
+      const yDiff = e.clientY - startY;
+      const shapesUpdatedWithPan = initialAllShapes.map((shape)=> ({
+        ...shape,
+        x: shape.x + xDiff,
+        y: shape.y + yDiff
+      }));
+
+      setAllShapes(shapesUpdatedWithPan);
     }
     else if (selectedTool == 'select') {
       if (!isSelecting) return;
@@ -135,8 +159,7 @@ export default function Home() {
 
   const handleMouseUp = () => {
     if (selectedTool == 'pan') {
-      setIsDragging(false);
-      setPanOffset(panOffsetDrag);
+      setIsPanning(false);
     }
     else if (selectedTool == 'select') {
       setIsSelecting(false);
@@ -333,10 +356,10 @@ export default function Home() {
     updateShapesWithSelect.forEach((shape) => {
       if (shape.selected) {
           isAnySelected = true;
-          minX = Math.min(minX, shape.x);
-          minY = Math.min(minY, shape.y);
-          maxX = Math.max(maxX, shape.x + shape.w);
-          maxY = Math.max(maxY, shape.y + shape.h);
+          minX = Math.min(minX, shape.x + panOffset.x);
+          minY = Math.min(minY, shape.y + panOffset.y);
+          maxX = Math.max(maxX, shape.x + shape.w + panOffset.x);
+          maxY = Math.max(maxY, shape.y + shape.h + panOffset.y);
         }
     });
 
@@ -377,12 +400,12 @@ export default function Home() {
       <Toolbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
 
       {allShapes.map((shape, index) => (
-        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} initialPosition={{x:shape.x, y:shape.y}} panOffset={panOffsetDrag} onClick={(event) => handleShapeClick(shape.id, event)}/>
+        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
       ))}
 
        {/* Render the shape being drawn */}
        {drawing && currentShape && (
-          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.width / scale, h:currentShape.height / scale}} scale={scale} initialPosition={{x:currentShape.x / scale, y:currentShape.y / scale}} panOffset={panOffsetDrag} />
+          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.width / scale, h:currentShape.height / scale}} scale={scale} finalPosition={{x:currentShape.x / scale, y:currentShape.y / scale}} />
        )}
 
        {/* Selection Box */}

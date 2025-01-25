@@ -2,18 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 
-const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, initialPosition, scale, panOffset, onClick}) => {
+const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition, scale, onClick}) => {
   const [selected, setSelected] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [finalPosition, setFinalPosition] = useState(initialPosition);
-
-  useEffect(() => {
-    const updatedPosition = {
-      x: initialPosition.x + panOffset.x,
-      y: initialPosition.y + panOffset.y,
-    };
-    setFinalPosition(updatedPosition);
-  }, [initialPosition, panOffset])
 
   return (
     <div
