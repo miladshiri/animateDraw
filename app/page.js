@@ -61,7 +61,6 @@ export default function Home() {
   const handleMouseDown = (e) => {
     e.preventDefault();
 
-    console.log(selectedTool);
     if (selectedTool == 'pan') {
       setIsPanning(true);
       initialPan.current = {
@@ -93,7 +92,7 @@ export default function Home() {
 
       setDrawing(true);
       const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-      console.log(uniqueId)
+
       setCurrentShape({id: uniqueId ,x: startX, y: startY, width: 0, height: 0, selected: false });
     }
 
@@ -165,8 +164,6 @@ export default function Home() {
       var isAnySelected = false;
       if (box) {
         allShapes.forEach((shape) => {
-          console.log(shape);
-          console.log(box);
           if (
             box.x / scale < shape.x &&
             box.x / scale + box.width / scale > shape.x + shape.w &&
@@ -185,7 +182,6 @@ export default function Home() {
             }
         });
         setAllShapes(updateShapes);
-        console.log(updateShapes);
       }
       setSelectionDragBox(null);
 
@@ -193,7 +189,6 @@ export default function Home() {
         setSelectionBox(null);
       }
       else {
-        console.log(minX, minY, maxX, maxY)
         setSelectionBox({
           x: minX - 10,
           y: minY - 10,
