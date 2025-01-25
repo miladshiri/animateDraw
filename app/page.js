@@ -48,6 +48,8 @@ export default function Home() {
       setStartDragPos({ x: e.clientX, y: e.clientY });
     }
     else if (selectedTool == 'select') {
+      const isCtrlPressed = e.ctrlKey || e.metaKey;
+      if (isCtrlPressed) return;
       if (isResizing.current) return;
 
       setIsSelecting(true);
@@ -67,7 +69,9 @@ export default function Home() {
       const startY = e.clientY;
 
       setDrawing(true);
-      setCurrentShape({ x: startX, y: startY, width: 0, height: 0 });
+      const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+      console.log(uniqueId)
+      setCurrentShape({id: uniqueId ,x: startX, y: startY, width: 0, height: 0, selected: false });
     }
 
   };
@@ -172,10 +176,12 @@ export default function Home() {
     else if (selectedTool == 'square') {
       if (drawing && currentShape) {
         setAllShapes((prev) => [...prev, {
+          id: currentShape.id,
           x: currentShape.x / scale,
           y: currentShape.y / scale,
           w: currentShape.width / scale,
           h: currentShape.height / scale,
+          selected: false
         }]);
         setDrawing(false);
         setCurrentShape(null);
@@ -235,9 +241,6 @@ export default function Home() {
     setAllShapes(resizedItems);
   };
 
-  useEffect(() => {
-    // console.log(allShapes);
-  }, allShapes)
 
   const handleMouseUpBottomRight = () => {
     isResizing.current = false;
@@ -290,6 +293,52 @@ export default function Home() {
 
   }
 
+  const handleShapeClick = (id, e) => {
+    e.stopPropagation();
+    if (selectedTool != 'select') return;
+    const isCtrlPressed = e.ctrlKey || e.metaKey;
+
+    const updateShapesWithSelect = allShapes.map((shape) => {
+        if (isCtrlPressed) {
+          // Toggle the clicked shape without affecting others
+          return shape.id === id
+            ? { ...shape, selected: !shape.selected }
+            : shape;
+        } else {
+          // Select only the clicked shape, deselect others
+          return { ...shape, selected: shape.id === id };
+        }
+      });
+
+    setAllShapes(updateShapesWithSelect);
+
+    var minX = Infinity;
+    var minY = Infinity;
+    var maxX = 0;
+    var maxY = 0;
+    var isAnySelected = false;
+    updateShapesWithSelect.forEach((shape) => {
+      if (shape.selected) {
+          isAnySelected = true;
+          minX = Math.min(minX, shape.x);
+          minY = Math.min(minY, shape.y);
+          maxX = Math.max(maxX, shape.x + shape.w);
+          maxY = Math.max(maxY, shape.y + shape.h);
+        }
+    });
+
+    if (!isAnySelected) {
+      setSelectionBox(null);
+    }
+    else {
+      setSelectionBox({
+        x: minX - 10,
+        y: minY - 10,
+        width: Math.abs(maxX - minX) + 20,
+        height: Math.abs(maxY - minY) + 20,
+      })
+    }
+  };
 
   return (
     <div
@@ -315,7 +364,7 @@ export default function Home() {
       <Toolbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
 
       {allShapes.map((shape, index) => (
-        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} initialPosition={{x:shape.x, y:shape.y}} panOffset={panOffsetDrag} />
+        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} initialPosition={{x:shape.x, y:shape.y}} panOffset={panOffsetDrag} onClick={(event) => handleShapeClick(shape.id, event)}/>
       ))}
 
        {/* Render the shape being drawn */}

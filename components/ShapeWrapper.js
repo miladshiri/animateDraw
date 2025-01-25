@@ -2,16 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 
-const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, initialPosition, scale, panOffset}) => {
+const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, initialPosition, scale, panOffset, onClick}) => {
   const [selected, setSelected] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [finalPosition, setFinalPosition] = useState(initialPosition);
-
-  const handleMouseDown = (e) => {
-    if (selectedTool == 'select') { 
-      setSelected(true);
-    }
-  };
 
   useEffect(() => {
     const updatedPosition = {
@@ -23,23 +17,13 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, initialPositio
 
   return (
     <div
-      onMouseDown={handleMouseDown}
+      onClick={onClick}
       style={{
         position: "absolute",
         top: `${finalPosition.y * scale}px`,
         left: `${finalPosition.x * scale}px`,
         width: `${initialSize.w * scale}px`,
         height: `${initialSize.h * scale}px`,
-        cursor: (() => {
-          if (selectedTool === 'pan') return 'move';
-          if (selectedTool === 'select') {
-            if (isDragging) return 'grabbing';
-            return 'grab';
-          }
-          else {
-            return 'default';
-          }
-        })(),
       }}
     >       
     {selected && (
@@ -55,64 +39,6 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, initialPositio
           }}
         ></div>
       )}
-
-{selected && (
-        <>
-          {/* Top-left corner */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '-5px',
-              left: '-5px',
-              width: '10px',
-              height: '10px',
-              backgroundColor: 'white',
-              border: '1px solid black',
-              borderRadius: '50%',
-            }}
-          />
-          {/* Top-right corner */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '-5px',
-              right: '-5px',
-              width: '10px',
-              height: '10px',
-              backgroundColor: 'white',
-              border: '1px solid black',
-              borderRadius: '50%',
-            }}
-          />
-          {/* Bottom-left corner */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '-5px',
-              left: '-5px',
-              width: '10px',
-              height: '10px',
-              backgroundColor: 'white',
-              border: '1px solid black',
-              borderRadius: '50%',
-            }}
-          />
-          {/* Bottom-right corner */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '-5px',
-              right: '-5px',
-              width: '10px',
-              height: '10px',
-              backgroundColor: 'white',
-              border: '1px solid black',
-              borderRadius: '50%',
-            }}
-          />
-        </>
-      )}
-
       <ShapeComponent size={initialSize} scale={scale} position={finalPosition} />
     </div>
   );
