@@ -9,8 +9,8 @@ import Toolbar from "@/components/Toolbar";
 
 export default function Home() {
   const defaultShapes = [
-    {x:100, y:50, w: 100, h:70},
-    {x:400, y:250, w: 30, h:170}
+    {id: 1, x: 100, y: 150, w: 100, h: 170, selected: false},
+    {id: 2, x: 400, y: 250, w: 130, h: 170, selected: false}
   ]
   
   const [allShapes, setAllShapes] = useState(defaultShapes);
@@ -26,6 +26,7 @@ export default function Home() {
   const [drawing, setDrawing] = useState(false); 
   const [currentShape, setCurrentShape] = useState(null);
 
+  const [selectionDragBox, setSelectionDragBox] = useState(null);
   const [selectionBox, setSelectionBox] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [isSelecting, setIsSelecting] = useState(false);
@@ -34,7 +35,7 @@ export default function Home() {
     e.preventDefault();
     setScale((prevScale) => {
       const newScale = prevScale + (e.deltaY > 0 ? -0.1 : 0.1);
-      return Math.min(Math.max(newScale, 0.5), 2);
+      return Math.min(Math.max(newScale, 0.4), 3);
     });
   };
 
@@ -47,11 +48,13 @@ export default function Home() {
       setStartDragPos({ x: e.clientX, y: e.clientY });
     }
     else if (selectedTool == 'select') {
+      if (isResizing.current) return;
+
       setIsSelecting(true);
       const startX = e.clientX;
       const startY = e.clientY;
   
-      setSelectionBox({
+      setSelectionDragBox({
         x: startX,
         y: startY,
         width: 0,
@@ -79,16 +82,17 @@ export default function Home() {
     }
     else if (selectedTool == 'select') {
       if (!isSelecting) return;
+      if (isResizing.current) return;
 
       const currentX = e.clientX;
       const currentY = e.clientY;
 
-      const width = currentX - selectionBox.x;
-      const height = currentY - selectionBox.y;
+      const width = currentX - selectionDragBox.x;
+      const height = currentY - selectionDragBox.y;
 
-      setSelectionBox({
-        x: Math.min(currentX, selectionBox.x),
-        y: Math.min(currentY, selectionBox.y),
+      setSelectionDragBox({
+        x: Math.min(currentX, selectionDragBox.x),
+        y: Math.min(currentY, selectionDragBox.y),
         width: Math.abs(width),
         height: Math.abs(height),
       });
@@ -118,9 +122,14 @@ export default function Home() {
     }
     else if (selectedTool == 'select') {
       setIsSelecting(false);
-      const box = selectionBox;
+      const box = selectionDragBox;
+      const updateShapes = [];
+      var minX = Infinity;
+      var minY = Infinity;
+      var maxX = 0;
+      var maxY = 0;
+      var isAnySelected = false;
       if (box) {
-        const selected = [];
         allShapes.forEach((shape) => {
           console.log(shape);
           console.log(box);
@@ -130,13 +139,34 @@ export default function Home() {
             box.y / scale < shape.y &&
             box.y / scale + box.height / scale > shape.y + shape.h
           ) {
-            selected.push(shape);
+              updateShapes.push({...shape, selected: true});
+              isAnySelected = true;
+              minX = Math.min(minX, shape.x);
+              minY = Math.min(minY, shape.y);
+              maxX = Math.max(maxX, shape.x + shape.w);
+              maxY = Math.max(maxY, shape.y + shape.h);
+            }
+            else {
+              updateShapes.push({...shape, selected: false});
             }
         });
-        setSelectedItems(selected);
-        console.log(selected);
+        setAllShapes(updateShapes);
+        console.log(updateShapes);
       }
-      setSelectionBox(null);
+      setSelectionDragBox(null);
+
+      if (!isAnySelected) {
+        setSelectionBox(null);
+      }
+      else {
+        console.log(minX, minY, maxX, maxY)
+        setSelectionBox({
+          x: minX - 10,
+          y: minY - 10,
+          width: Math.abs(maxX - minX) + 20,
+          height: Math.abs(maxY - minY) + 20,
+        })
+      }
     }
     else if (selectedTool == 'square') {
       if (drawing && currentShape) {
@@ -150,6 +180,70 @@ export default function Home() {
         setCurrentShape(null);
       }
     }
+  };
+
+  const containerRef = useRef(null);
+  const isResizing = useRef(false);
+  const initialSize = useRef(null);
+
+  const handleMouseDownBottomRight = (e) => {
+    console.log('move corner');
+    e.preventDefault();
+    isResizing.current = true;
+
+    // Store initial container and mouse positions
+    initialSize.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      initialWidth: selectionBox.width,
+      initialHeight: selectionBox.height,
+      initialX: selectionBox.x,
+      initialY: selectionBox.y,
+      initialAllShapes: [...allShapes],
+    };
+
+    document.addEventListener("mousemove", handleMouseMoveBottomRight);
+    document.addEventListener("mouseup", handleMouseUpBottomRight);
+  };
+
+  const handleMouseMoveBottomRight = (e) => {
+    if (!isResizing.current || !initialSize.current) return;
+
+    const { startX, startY, initialWidth, initialHeight, initialX, initialY, initialAllShapes } = initialSize.current;
+
+    // Calculate the new size of the container
+    const newWidth = Math.max(initialWidth + (e.clientX - startX), 1); // Minimum width: 50px
+    const newHeight = Math.max(initialHeight + (e.clientY - startY), 1); // Minimum height: 50px
+
+    // Calculate resize ratios
+    const widthRatio = newWidth / initialWidth;
+    const heightRatio = newHeight / initialHeight;
+
+    // Update elements based on resize ratios
+    const resizedItems = initialAllShapes.map((shape) => ({
+      ...shape,
+      x: shape.selected ? ((shape.x - initialX) * widthRatio + initialX) : shape.x,
+      y: shape.selected ? ((shape.y - initialY) * heightRatio + initialY) : shape.y,
+      w: shape.selected ? shape.w * widthRatio : shape.w,
+      h: shape.selected ? shape.h * heightRatio : shape.h,
+    }));
+
+    console.log(resizedItems);
+
+    // Update state
+    setSelectionBox({ x: selectionBox.x, y: selectionBox.y, width: newWidth, height: newHeight });
+    setAllShapes(resizedItems);
+  };
+
+  useEffect(() => {
+    // console.log(allShapes);
+  }, allShapes)
+
+  const handleMouseUpBottomRight = () => {
+    console.log(allShapes);
+    isResizing.current = false;
+    document.removeEventListener("mousemove", handleMouseMoveBottomRight);
+    document.removeEventListener("mouseup", handleMouseUpBottomRight);
   };
 
 
@@ -186,19 +280,89 @@ export default function Home() {
        )}
 
        {/* Selection Box */}
-      {selectionBox && (
+      {selectionDragBox && (
         <div
           style={{
             position: "absolute",
-            top: `${selectionBox.y}px`,
-            left: `${selectionBox.x}px`,
-            width: `${selectionBox.width}px`,
-            height: `${selectionBox.height}px`,
+            top: `${selectionDragBox.y}px`,
+            left: `${selectionDragBox.x}px`,
+            width: `${selectionDragBox.width}px`,
+            height: `${selectionDragBox.height}px`,
             backgroundColor: "rgba(0, 120, 215, 0.2)",
-            border: "1px solid #0078d7",
+            border: "2px solid rgb(0, 68, 140)",
             pointerEvents: "none",
           }}
         ></div>
+      )}
+
+        {selectionBox && (
+        <div
+          style={{
+            position: "absolute",
+            top: `${selectionBox.y * scale}px`,
+            left: `${selectionBox.x * scale}px`,
+            width: `${selectionBox.width * scale}px`,
+            height: `${selectionBox.height * scale}px`,
+            backgroundColor: "rgba(0, 120, 215, 0.2)",
+            border: "2px dotted rgb(0, 68, 140)",
+          }}
+        >
+          {/* Top-left corner */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '-5px',
+              left: '-5px',
+              width: '10px',
+              height: '10px',
+              backgroundColor: 'white',
+              border: '1px solid black',
+              borderRadius: '50%',
+            }}
+          />
+          {/* Top-right corner */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '-5px',
+              right: '-5px',
+              width: '10px',
+              height: '10px',
+              backgroundColor: 'white',
+              border: '1px solid black',
+              borderRadius: '50%',
+            }}
+          />
+          {/* Bottom-left corner */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '-5px',
+              left: '-5px',
+              width: '10px',
+              height: '10px',
+              backgroundColor: 'white',
+              border: '1px solid black',
+              borderRadius: '50%',
+            }}
+          />
+          {/* Bottom-right corner */}
+          <div
+            onMouseDown={handleMouseDownBottomRight}
+            style={{
+              position: 'absolute',
+              bottom: '-5px',
+              right: '-5px',
+              width: '10px',
+              height: '10px',
+              backgroundColor: 'white',
+              border: '1px solid black',
+              borderRadius: '50%',
+              cursor: 'nwse-resize',
+            }}
+          ></div>
+
+        </div>
       )}
 
       {scale}
