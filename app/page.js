@@ -83,6 +83,7 @@ export default function Home() {
     else if (selectedTool == 'select') {
       if (!isSelecting) return;
       if (isResizing.current) return;
+      if (isDraggingSelectionBox.current) return;
 
       const currentX = e.clientX;
       const currentY = e.clientY;
@@ -184,10 +185,10 @@ export default function Home() {
 
   const containerRef = useRef(null);
   const isResizing = useRef(false);
+  const isDraggingSelectionBox = useRef(false);
   const initialSize = useRef(null);
 
   const handleMouseDownBottomRight = (e) => {
-    console.log('move corner');
     e.preventDefault();
     isResizing.current = true;
 
@@ -222,13 +223,11 @@ export default function Home() {
     // Update elements based on resize ratios
     const resizedItems = initialAllShapes.map((shape) => ({
       ...shape,
-      x: shape.selected ? ((shape.x - initialX) * widthRatio + initialX) : shape.x,
-      y: shape.selected ? ((shape.y - initialY) * heightRatio + initialY) : shape.y,
-      w: shape.selected ? shape.w * widthRatio : shape.w,
-      h: shape.selected ? shape.h * heightRatio : shape.h,
+      x: shape.selected ? Math.round((shape.x - initialX) * widthRatio + initialX) : shape.x,
+      y: shape.selected ? Math.round((shape.y - initialY) * heightRatio + initialY) : shape.y,
+      w: shape.selected ? Math.round(shape.w * widthRatio) : shape.w,
+      h: shape.selected ? Math.round(shape.h * heightRatio) : shape.h,
     }));
-
-    console.log(resizedItems);
 
     // Update state
     setSelectionBox({ x: selectionBox.x, y: selectionBox.y, width: newWidth, height: newHeight });
@@ -240,11 +239,55 @@ export default function Home() {
   }, allShapes)
 
   const handleMouseUpBottomRight = () => {
-    console.log(allShapes);
     isResizing.current = false;
     document.removeEventListener("mousemove", handleMouseMoveBottomRight);
     document.removeEventListener("mouseup", handleMouseUpBottomRight);
   };
+
+
+  const handleMouseDownSelectionBox = (e) => {
+    e.preventDefault();
+    isDraggingSelectionBox.current = true;
+
+    // Store initial container and mouse positions
+    initialSize.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      initialWidth: selectionBox.width,
+      initialHeight: selectionBox.height,
+      initialX: selectionBox.x,
+      initialY: selectionBox.y,
+      initialAllShapes: [...allShapes],
+    };
+
+    document.addEventListener("mousemove", handleMouseMoveSelectionBox);
+    document.addEventListener("mouseup", handleMouseUpSelectionBox);
+  }
+
+  const handleMouseMoveSelectionBox = (e) => {
+    if (!isDraggingSelectionBox.current || !initialSize.current) return;
+
+    const { startX, startY, initialWidth, initialHeight, initialX, initialY, initialAllShapes } = initialSize.current;
+    const xDiff = (e.clientX - startX);
+    const yDiff = (e.clientY - startY)
+    // Update elements based on resize ratios
+    const resizedItems = initialAllShapes.map((shape) => ({
+      ...shape,
+      x: shape.selected ? (shape.x + xDiff) : shape.x,
+      y: shape.selected ? (shape.y + yDiff) : shape.y,
+    }));
+
+    // Update state
+    setSelectionBox({ x: selectionBox.x + xDiff, y: selectionBox.y + yDiff, width: selectionBox.width, height: selectionBox.height });
+    setAllShapes(resizedItems);
+  }
+
+  const handleMouseUpSelectionBox = (e) => {
+    isDraggingSelectionBox.current = false;
+    document.removeEventListener("mousemove", handleMouseMoveSelectionBox);
+    document.removeEventListener("mouseup", handleMouseUpSelectionBox);
+
+  }
 
 
   return (
@@ -297,6 +340,7 @@ export default function Home() {
 
         {selectionBox && (
         <div
+          onMouseDown={handleMouseDownSelectionBox}
           style={{
             position: "absolute",
             top: `${selectionBox.y * scale}px`,
@@ -305,6 +349,7 @@ export default function Home() {
             height: `${selectionBox.height * scale}px`,
             backgroundColor: "rgba(0, 120, 215, 0.2)",
             border: "2px dotted rgb(0, 68, 140)",
+            cursor: "grab"
           }}
         >
           {/* Top-left corner */}
