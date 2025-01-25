@@ -29,10 +29,6 @@ export default function Home() {
     localStorage.setItem("scale", JSON.stringify(scale));
   }, [allShapes, scale]);
   
-  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 }); 
-  const [panOffsetDrag, setPanOffsetDrag] = useState({ x: 0, y: 0 }); 
-  const [isDragging, setIsDragging] = useState(false); 
-  const [startDragPos, setStartDragPos] = useState({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
 
   const [selectedTool, setSelectedTool] = useState('');
@@ -352,10 +348,10 @@ export default function Home() {
     updateShapesWithSelect.forEach((shape) => {
       if (shape.selected) {
           isAnySelected = true;
-          minX = Math.min(minX, shape.x + panOffset.x);
-          minY = Math.min(minY, shape.y + panOffset.y);
-          maxX = Math.max(maxX, shape.x + shape.w + panOffset.x);
-          maxY = Math.max(maxY, shape.y + shape.h + panOffset.y);
+          minX = Math.min(minX, shape.x);
+          minY = Math.min(minY, shape.y);
+          maxX = Math.max(maxX, shape.x + shape.w);
+          maxY = Math.max(maxY, shape.y + shape.h);
         }
     });
 
