@@ -106,17 +106,14 @@ export default function Home() {
   const handleMouseMove = (e) => {
     if (selectedTool == 'pan') {
       if (!isPanning || !initialPan.current) return;
-      setPanOffsetDrag({
-        x: (e.clientX - startDragPos.x) / scale + panOffset.x,
-        y: (e.clientY - startDragPos.y) / scale + panOffset.y,
-      });
+
       const { startX, startY, initialAllShapes } = initialPan.current;
       const xDiff = e.clientX - startX;
       const yDiff = e.clientY - startY;
       const shapesUpdatedWithPan = initialAllShapes.map((shape)=> ({
         ...shape,
-        x: shape.x + xDiff,
-        y: shape.y + yDiff
+        x: shape.x + xDiff / scale,
+        y: shape.y + yDiff / scale,
       }));
 
       setAllShapes(shapesUpdatedWithPan);
@@ -225,7 +222,6 @@ export default function Home() {
     }
   };
 
-  const containerRef = useRef(null);
   const isResizing = useRef(false);
   const isDraggingSelectionBox = useRef(false);
   const initialSize = useRef(null);
@@ -256,8 +252,8 @@ export default function Home() {
     const { startX, startY, initialWidth, initialHeight, initialX, initialY, initialAllShapes } = initialSize.current;
 
     // Calculate the new size of the container
-    const newWidth = Math.max(initialWidth + (e.clientX - startX), 1); // Minimum width: 50px
-    const newHeight = Math.max(initialHeight + (e.clientY - startY), 1); // Minimum height: 50px
+    const newWidth = Math.max(initialWidth + (e.clientX - startX) / scale, 1); // Minimum width: 50px
+    const newHeight = Math.max(initialHeight + (e.clientY - startY) / scale, 1); // Minimum height: 50px
 
     // Calculate resize ratios
     const widthRatio = newWidth / initialWidth;
@@ -313,12 +309,12 @@ export default function Home() {
     // Update elements based on resize ratios
     const resizedItems = initialAllShapes.map((shape) => ({
       ...shape,
-      x: shape.selected ? (shape.x + xDiff) : shape.x,
-      y: shape.selected ? (shape.y + yDiff) : shape.y,
+      x: shape.selected ? (shape.x + xDiff / scale) : shape.x,
+      y: shape.selected ? (shape.y + yDiff / scale) : shape.y,
     }));
 
     // Update state
-    setSelectionBox({ x: selectionBox.x + xDiff, y: selectionBox.y + yDiff, width: selectionBox.width, height: selectionBox.height });
+    setSelectionBox({ x: selectionBox.x + xDiff / scale, y: selectionBox.y + yDiff / scale, width: selectionBox.width, height: selectionBox.height });
     setAllShapes(resizedItems);
   }
 
