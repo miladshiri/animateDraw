@@ -190,6 +190,7 @@ export default function Home() {
 
   const handleMouseDownBottomRight = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     isResizing.current = true;
 
     // Store initial container and mouse positions
