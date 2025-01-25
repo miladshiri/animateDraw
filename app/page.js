@@ -13,9 +13,22 @@ export default function Home() {
     {id: 2, x: 400, y: 250, w: 130, h: 170, selected: false}
   ]
   
-  const [allShapes, setAllShapes] = useState(defaultShapes);
+  const [allShapes, setAllShapes] = useState(() => {
+    const savedShapes = localStorage.getItem("shapes");
+    return savedShapes ? JSON.parse(savedShapes) : defaultShapes;
+  });
 
-  const [scale, setScale] = useState(1); 
+  // Load scale state from localStorage or fallback to default
+  const [scale, setScale] = useState(() => {
+    const savedScale = localStorage.getItem("scale");
+    return savedScale ? JSON.parse(savedScale) : 1;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("shapes", JSON.stringify(allShapes));
+    localStorage.setItem("scale", JSON.stringify(scale));
+  }, [allShapes, scale]);
+  
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 }); 
   const [panOffsetDrag, setPanOffsetDrag] = useState({ x: 0, y: 0 }); 
   const [isDragging, setIsDragging] = useState(false); 
