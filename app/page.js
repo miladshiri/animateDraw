@@ -173,6 +173,21 @@ export default function Home() {
     }
   };
 
+  const worldToScreen = ({x, y}) => {
+    return {
+      x: (x - offset.x) * scale,
+      y: (y - offset.y) * scale,
+    }
+  }
+
+  const xWorldToScreen = (x) => {
+    return (x - offset.x) * scale;
+  }
+
+  const yWorldToScreen = (y) => {
+    return (y - offset.y) * scale;
+  }
+
   const handleMouseUp = () => {
     if (selectedTool == 'pan') {
       setIsPanning(false);
@@ -188,11 +203,13 @@ export default function Home() {
       var isAnySelected = false;
       if (box) {
         allShapes.forEach((shape) => {
+          const shapeScreenCoordinates = worldToScreen({ x: shape.x, y: shape.y });
+
           if (
-            box.x / scale < shape.x &&
-            box.x / scale + box.width / scale > shape.x + shape.w &&
-            box.y / scale < shape.y &&
-            box.y / scale + box.height / scale > shape.y + shape.h
+            box.x < xWorldToScreen(shape.x) &&
+            box.x + box.width > xWorldToScreen(shape.x) + shape.w * scale &&
+            box.y < yWorldToScreen(shape.y) &&
+            box.y  + box.height  > yWorldToScreen(shape.y) + shape.h * scale
           ) {
               updateShapes.push({...shape, selected: true});
               isAnySelected = true;
@@ -214,10 +231,10 @@ export default function Home() {
       }
       else {
         setSelectionBox({
-          x: minX - 10,
-          y: minY - 10,
-          width: Math.abs(maxX - minX) + 20,
-          height: Math.abs(maxY - minY) + 20,
+          x: minX,
+          y: minY,
+          width: Math.abs(maxX - minX),
+          height: Math.abs(maxY - minY),
         })
       }
     }
@@ -329,7 +346,7 @@ export default function Home() {
     }));
 
     // Update state
-    setSelectionBox({ x: selectionBox.x + xDiff / scale, y: selectionBox.y + yDiff / scale, width: selectionBox.width, height: selectionBox.height });
+    setSelectionBox({ x: selectionBox.x + xDiff / scale , y: selectionBox.y + yDiff / scale , width: selectionBox.width, height: selectionBox.height });
     setAllShapes(resizedItems);
   }
 
@@ -439,10 +456,10 @@ export default function Home() {
           onMouseDown={handleMouseDownSelectionBox}
           style={{
             position: "absolute",
-            top: `${selectionBox.y * scale}px`,
-            left: `${selectionBox.x * scale}px`,
-            width: `${selectionBox.width * scale}px`,
-            height: `${selectionBox.height * scale}px`,
+            top: `${(selectionBox.y - offset.y - 10) * scale}px`,
+            left: `${(selectionBox.x - offset.x - 10) * scale}px`,
+            width: `${(selectionBox.width + 20) * scale}px`,
+            height: `${(selectionBox.height + 20) * scale}px`,
             backgroundColor: "rgba(0, 120, 215, 0.2)",
             border: "2px dotted rgb(0, 68, 140)",
             cursor: "grab"
