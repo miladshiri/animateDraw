@@ -11,8 +11,8 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition,
       onClick={onClick}
       style={{
         position: "absolute",
-        top: `${(finalPosition.y - offset.y / 2) * scale }px`,
-        left: `${(finalPosition.x - offset.x / 2) * scale }px`,
+        top: `${(finalPosition.y - offset.y) * scale }px`,
+        left: `${(finalPosition.x - offset.x) * scale }px`,
         width: `${initialSize.w * scale}px`,
         height: `${initialSize.h * scale}px`,
       }}

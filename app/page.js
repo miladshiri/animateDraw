@@ -55,11 +55,11 @@ export default function Home() {
   const handleWheel = (e) => {
     e.preventDefault();
   
-    const scaleDiff = e.deltaY > 0 ? -0.05 : 0.05;
-  
+    // const scaleDiff = e.deltaY > 0 ? -0.05 : 0.05;
+    const scaleDiff = e.deltaY > 0 ? 0.9 : 1.1;
     setScale((prevScale) => {
-      const newScale = Math.min(Math.max(prevScale + scaleDiff, 0.4), 3); // Clamp the scale
-      
+      const newScale = Math.min(Math.max(prevScale * scaleDiff, 0.4), 3); // Clamp the scale
+
       setOffset((prevOffset) => {
         // Adjust the offset to keep the mouse pointer fixed relative to content
         
@@ -68,11 +68,12 @@ export default function Home() {
 
         const m_after_zoom_x = e.clientX / newScale + prevOffset.x;
         const m_after_zoom_y = e.clientY / newScale + prevOffset.y;
+        console.log(prevOffset.x)
+        console.log((m_before_zoom_x - m_after_zoom_x))
+        const newOffsetX = prevOffset.x + (m_before_zoom_x - m_after_zoom_x) / 2;
+        const newOffsetY = prevOffset.y + (m_before_zoom_y - m_after_zoom_y) / 2;
 
-        const newOffsetX = prevOffset.x + (m_before_zoom_x - m_after_zoom_x);
-        const newOffsetY = prevOffset.y + (m_before_zoom_y - m_after_zoom_y);
-
-        return { x: newOffsetX, y: newOffsetY };
+        return { x: newOffsetX, y: newOffsetY};
       });
   
       return newScale;
