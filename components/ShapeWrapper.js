@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition, scale, onClick}) => {
+const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition, scale, offset, onClick}) => {
   const [selected, setSelected] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -11,8 +11,8 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition,
       onClick={onClick}
       style={{
         position: "absolute",
-        top: `${finalPosition.y * scale}px`,
-        left: `${finalPosition.x * scale}px`,
+        top: `${(finalPosition.y - offset.y / 2) * scale }px`,
+        left: `${(finalPosition.x - offset.x / 2) * scale }px`,
         width: `${initialSize.w * scale}px`,
         height: `${initialSize.h * scale}px`,
       }}

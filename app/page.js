@@ -16,13 +16,16 @@ export default function Home() {
   const [allShapes, setAllShapes] = useState(() => {
     const savedShapes = localStorage.getItem("shapes");
     return savedShapes ? JSON.parse(savedShapes) : defaultShapes;
-  });
+  }, []);
 
   // Load scale state from localStorage or fallback to default
   const [scale, setScale] = useState(() => {
     const savedScale = localStorage.getItem("scale");
     return savedScale ? JSON.parse(savedScale) : 1;
   });
+
+    // Load scale state from localStorage or fallback to default
+    const [offset, setOffset] = useState({x:0, y:0});
 
   useEffect(() => {
     localStorage.setItem("shapes", JSON.stringify(allShapes));
@@ -48,15 +51,35 @@ export default function Home() {
     }
   }, [selectedTool])
 
+
   const handleWheel = (e) => {
     e.preventDefault();
+  
+    const scaleDiff = e.deltaY > 0 ? -0.05 : 0.05;
+  
     setScale((prevScale) => {
-      const newScale = prevScale + (e.deltaY > 0 ? -0.1 : 0.1);
-      return Math.min(Math.max(newScale, 0.4), 3);
+      const newScale = Math.min(Math.max(prevScale + scaleDiff, 0.4), 3); // Clamp the scale
+      
+      setOffset((prevOffset) => {
+        // Adjust the offset to keep the mouse pointer fixed relative to content
+        
+        const m_before_zoom_x = e.clientX / prevScale + prevOffset.x;
+        const m_before_zoom_y = e.clientY / prevScale + prevOffset.y;
+
+        const m_after_zoom_x = e.clientX / newScale + prevOffset.x;
+        const m_after_zoom_y = e.clientY / newScale + prevOffset.y;
+
+        const newOffsetX = prevOffset.x + (m_before_zoom_x - m_after_zoom_x);
+        const newOffsetY = prevOffset.y + (m_before_zoom_y - m_after_zoom_y);
+
+        return { x: newOffsetX, y: newOffsetY };
+      });
+  
+      return newScale;
     });
   };
 
-  const initialPan = useRef(null);
+    const initialPan = useRef(null);
 
   const handleMouseDown = (e) => {
     e.preventDefault();
@@ -378,7 +401,6 @@ export default function Home() {
         justifyContent: "center",
         cursor: selectedTool == 'pan' ? 'move' : 'default'
     }}
-
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -387,12 +409,12 @@ export default function Home() {
       <Toolbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
 
       {allShapes.map((shape, index) => (
-        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
+        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} offset={offset} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
       ))}
 
        {/* Render the shape being drawn */}
        {drawing && currentShape && (
-          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.width / scale, h:currentShape.height / scale}} scale={scale} finalPosition={{x:currentShape.x / scale, y:currentShape.y / scale}} />
+          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.width / scale, h:currentShape.height / scale}} scale={scale} offset={offset} finalPosition={{x:currentShape.x / scale, y:currentShape.y / scale}} />
        )}
 
        {/* Selection Box */}
