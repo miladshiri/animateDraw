@@ -42,7 +42,7 @@ const AnimatedRec = ({size, scale}) => {
         }}
         transition={{
           repeat: Infinity,
-          duration: 5 / scale, // Speed adjusted by scale
+          duration: 8 / scale, // Speed adjusted by scale
           ease: "linear",
         }}
       />

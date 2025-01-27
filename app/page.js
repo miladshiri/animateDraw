@@ -417,6 +417,24 @@ export default function Home() {
     }
   };
 
+  // Handle keydown event for the Delete key
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Delete") {
+        setAllShapes((prevShapes) => prevShapes.filter((shape) => !shape.selected));
+        setSelectionBox(null);
+      }
+    };
+
+    // Attach event listener
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <div
     style={{
