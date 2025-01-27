@@ -253,14 +253,16 @@ export default function Home() {
     }
     else if (selectedTool == 'square') {
       if (drawing && currentShape) {
-        setAllShapes((prev) => [...prev, {
-          id: currentShape.id,
-          x: currentShape.x,
-          y: currentShape.y,
-          w: currentShape.width,
-          h: currentShape.height,
-          selected: false
-        }]);
+        if (currentShape.width > 0 && currentShape.height > 0) {
+          setAllShapes((prev) => [...prev, {
+            id: currentShape.id,
+            x: currentShape.x,
+            y: currentShape.y,
+            w: currentShape.width,
+            h: currentShape.height,
+            selected: false
+          }]);
+        }
         setDrawing(false);
         setCurrentShape(null);
       }
