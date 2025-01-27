@@ -48,6 +48,31 @@ export default function Home() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [isSelecting, setIsSelecting] = useState(false);
 
+
+  const worldToScreen = ({x, y}) => {
+    return {
+      x: (x - offset.x) * scale,
+      y: (y - offset.y) * scale,
+    }
+  }
+
+  const xWorldToScreen = (x) => {
+    return (x - offset.x) * scale;
+  }
+
+  const yWorldToScreen = (y) => {
+    return (y - offset.y) * scale;
+  }
+
+  const xScreenToWorld = (x) => {
+    return (x / scale ) + offset.x;
+  }
+
+  const yScreenToWorld = (y) => {
+    return (y / scale ) + offset.y;
+  }
+
+
   useEffect(() => {
     if (selectedTool != 'selected') {
       setSelectionBox({x:0, y:0, width:0, height:0});
@@ -121,7 +146,7 @@ export default function Home() {
       setDrawing(true);
       const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
-      setCurrentShape({id: uniqueId ,x: startX, y: startY, width: 0, height: 0, selected: false });
+      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), width: 0, height: 0, selected: false });
     }
 
   };
@@ -161,8 +186,8 @@ export default function Home() {
     }
     else if (selectedTool == 'square') {
       if (!drawing || !currentShape) return;
-        const currentX = e.clientX;
-        const currentY = e.clientY;
+        const currentX = xScreenToWorld(e.clientX);
+        const currentY = yScreenToWorld(e.clientY);
     
         const width = currentX - currentShape.x;
         const height = currentY - currentShape.y;
@@ -176,21 +201,6 @@ export default function Home() {
         }));
     }
   };
-
-  const worldToScreen = ({x, y}) => {
-    return {
-      x: (x - offset.x) * scale,
-      y: (y - offset.y) * scale,
-    }
-  }
-
-  const xWorldToScreen = (x) => {
-    return (x - offset.x) * scale;
-  }
-
-  const yWorldToScreen = (y) => {
-    return (y - offset.y) * scale;
-  }
 
   const handleMouseUp = () => {
     if (selectedTool == 'pan') {
@@ -246,10 +256,10 @@ export default function Home() {
       if (drawing && currentShape) {
         setAllShapes((prev) => [...prev, {
           id: currentShape.id,
-          x: currentShape.x / scale,
-          y: currentShape.y / scale,
-          w: currentShape.width / scale,
-          h: currentShape.height / scale,
+          x: currentShape.x,
+          y: currentShape.y,
+          w: currentShape.width,
+          h: currentShape.height,
           selected: false
         }]);
         setDrawing(false);
@@ -436,7 +446,7 @@ export default function Home() {
 
        {/* Render the shape being drawn */}
        {drawing && currentShape && (
-          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.width / scale, h:currentShape.height / scale}} scale={scale} offset={offset} finalPosition={{x:currentShape.x / scale, y:currentShape.y / scale}} />
+          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.width, h:currentShape.height}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
        )}
 
        {/* Selection Box */}
