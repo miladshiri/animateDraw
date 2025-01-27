@@ -97,8 +97,7 @@ export default function Home() {
 
         const m_after_zoom_x = e.clientX / newScale + prevOffset.x;
         const m_after_zoom_y = e.clientY / newScale + prevOffset.y;
-        console.log(prevOffset.x)
-        console.log((m_before_zoom_x - m_after_zoom_x))
+
         const newOffsetX = prevOffset.x + (m_before_zoom_x - m_after_zoom_x) / 2;
         const newOffsetY = prevOffset.y + (m_before_zoom_y - m_after_zoom_y) / 2;
 
