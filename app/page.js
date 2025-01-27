@@ -457,7 +457,7 @@ export default function Home() {
             left: `${selectionDragBox.x}px`,
             width: `${selectionDragBox.width}px`,
             height: `${selectionDragBox.height}px`,
-            backgroundColor: "#2a2a2a",
+            backgroundColor: "rgba(0, 68, 140, 0.35)",
             border: "2px solid rgb(0, 68, 140)",
             pointerEvents: "none",
           }}

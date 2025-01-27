@@ -4,37 +4,50 @@ import { motion } from "framer-motion";
 import React, { useState, useEffect } from "react";
 
 const AnimatedRec = ({size, scale}) => {
+  const factor = 0.2;
+  const path = [
+    { x: 0, y: 0 },
+    { x: (size.w - size.w * factor) * scale, y: 0 },
+    { x: (size.w - size.w * factor) * scale, y: (size.h - size.h * factor) * scale },
+    { x: 0 , y: (size.h - size.h * factor) * scale },
+    { x: 0, y: 0 },
+  ];
 
   return (
     <div
       style={{
-        backgroundColor: "red",
+        backgroundColor: "transparent",
         position: "relative",
         top: `0px`, 
         left: `0px`,
         width: `100%`,
         height: `100%`,
-        textAlign: 'center',
+        border: `${2 * scale}px solid #51b39a`,
         userSelect: "none",
-        overflow: "hidden",
       }}
     >
       <>
-      <div
+      <motion.div
         style={{
-          top: "50%",
-          left: "50%",
           position: "absolute",
-          content: "",
-          width: `${Math.max(size.w, size.h) * scale * 2}px`, 
-          height: `${Math.min(size.w, size.h) * scale / 1.6}px`,
-          background: "#4caf50",
-          transform: "translate(-50%, -50%) rotate(45deg)",
-          animation: "rotateAround 4s linear infinite",
-
+          top: 0,
+          left: 0,
+          width: `${size.w * factor * scale}px`, // Scaled circle size
+          height: `${size.h * factor * scale}px`, // Scaled circle size
+          backgroundColor: "#aaaaaa",
+          borderRadius: "0%", // To make it a circle
         }}
-      >
-      </div>
+        animate={{
+          x: path.map((point) => point.x),
+          y: path.map((point) => point.y),
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 0.2 / scale, // Speed adjusted by scale
+          ease: "linear",
+        }}
+      />
+      </>
       <div
         style={{
           position: "absolute",
@@ -42,23 +55,7 @@ const AnimatedRec = ({size, scale}) => {
           background: "#2a2a2a"
 
         }}  
-      >
-
-      </div>
-      </>
-
-      {/* CSS keyframe animation */}
-      <style jsx>{`
-        @keyframes rotateAround {
-          from {
-            transform: translate(-50%, -50%) rotate(0deg);
-          }
-          to {
-            transform: translate(-50%, -50%) rotate(360deg);
-          }
-        }
-      `}</style>
-
+      ></div>
     </div>
   );
 };
