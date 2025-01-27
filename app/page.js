@@ -24,13 +24,17 @@ export default function Home() {
     return savedScale ? JSON.parse(savedScale) : 1;
   });
 
-    // Load scale state from localStorage or fallback to default
-    const [offset, setOffset] = useState({x:0, y:0});
+  // Load scale state from localStorage or fallback to default
+  const [offset, setOffset] = useState(() => {
+    const savedOffset = localStorage.getItem("offset");
+    return savedOffset ? JSON.parse(savedOffset) : {x:0, y:0};
+  });
 
   useEffect(() => {
     localStorage.setItem("shapes", JSON.stringify(allShapes));
     localStorage.setItem("scale", JSON.stringify(scale));
-  }, [allShapes, scale]);
+    localStorage.setItem("offset", JSON.stringify(offset));
+  }, [allShapes, scale, offset]);
   
   const [isPanning, setIsPanning] = useState(false);
 
@@ -396,10 +400,10 @@ export default function Home() {
     }
     else {
       setSelectionBox({
-        x: minX - 10,
-        y: minY - 10,
-        width: Math.abs(maxX - minX) + 20,
-        height: Math.abs(maxY - minY) + 20,
+        x: minX,
+        y: minY,
+        width: Math.abs(maxX - minX),
+        height: Math.abs(maxY - minY),
       })
     }
   };
