@@ -35,6 +35,6 @@ body {
 .wave-rectangle {
   width: 200px;
   height: 100px;
-  background-color: #3498db;
+  background-color: #0a1d2a;
   animation: wave 2s ease-in-out infinite;
 }

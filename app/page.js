@@ -426,7 +426,7 @@ export default function Home() {
         width: "100vw",
         height: "100vh",
         overflow: "hidden",
-        backgroundColor: "#3498db",
+        backgroundColor:"rgb(7, 23, 34)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -457,7 +457,7 @@ export default function Home() {
             left: `${selectionDragBox.x}px`,
             width: `${selectionDragBox.width}px`,
             height: `${selectionDragBox.height}px`,
-            backgroundColor: "rgba(0, 120, 215, 0.2)",
+            backgroundColor: "#2a2a2a",
             border: "2px solid rgb(0, 68, 140)",
             pointerEvents: "none",
           }}

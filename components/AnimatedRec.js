@@ -4,13 +4,6 @@ import { motion } from "framer-motion";
 import React, { useState, useEffect } from "react";
 
 const AnimatedRec = ({size, scale}) => {
-  const path = [
-    { x: -10 * scale, y: -10 * scale },
-    { x: (size.w - 20) * scale, y: -10 * scale },
-    { x: (size.w - 20) * scale, y: (size.h - 20) * scale },
-    { x: -10 * scale, y: (size.h - 20) * scale },
-    { x: -10 * scale, y: -10 * scale },
-  ];
 
   return (
     <div
@@ -21,32 +14,51 @@ const AnimatedRec = ({size, scale}) => {
         left: `0px`,
         width: `100%`,
         height: `100%`,
-        border: `${10 * scale}px solid rgb(66, 5, 48)`,
+        textAlign: 'center',
         userSelect: "none",
+        overflow: "hidden",
       }}
     >
       <>
-      <motion.div
+      <div
+        style={{
+          top: "50%",
+          left: "50%",
+          position: "absolute",
+          content: "",
+          width: `${Math.max(size.w, size.h) * scale * 2}px`, 
+          height: `${Math.min(size.w, size.h) * scale / 1.6}px`,
+          background: "#4caf50",
+          transform: "translate(-50%, -50%) rotate(45deg)",
+          animation: "rotateAround 4s linear infinite",
+
+        }}
+      >
+      </div>
+      <div
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: `${10 * scale}px`, // Scaled circle size
-          height: `${10 * scale}px`, // Scaled circle size
-          backgroundColor: "#aaaaaa",
-          borderRadius: "10%", // To make it a circle
-        }}
-        animate={{
-          x: path.map((point) => point.x),
-          y: path.map((point) => point.y),
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 5 / scale, // Speed adjusted by scale
-          ease: "linear",
-        }}
-      />
+          inset: `${5 * scale}px`,
+          background: "#2a2a2a"
+
+        }}  
+      >
+
+      </div>
       </>
+
+      {/* CSS keyframe animation */}
+      <style jsx>{`
+        @keyframes rotateAround {
+          from {
+            transform: translate(-50%, -50%) rotate(0deg);
+          }
+          to {
+            transform: translate(-50%, -50%) rotate(360deg);
+          }
+        }
+      `}</style>
+
     </div>
   );
 };
