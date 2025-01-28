@@ -492,8 +492,12 @@ export default function Home() {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Delete") {
-        setAllShapes((prevShapes) => prevShapes.filter((shape) => !shape.selected));
-        setSelectionBox(null);
+        const selectedShapes = allShapes.filter((shape) => shape.selected);
+        if (selectedShapes.length > 0)  {
+          setAllShapes((prevShapes) => prevShapes.filter((shape) => !shape.selected));
+          setSelectionBox(null);
+          pushToHistory(allShapes);
+        }
       }
     };
 
@@ -504,7 +508,7 @@ export default function Home() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [allShapes]);
 
   const stopPropagation = (e) => {
     e.stopPropagation();
