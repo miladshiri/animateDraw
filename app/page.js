@@ -39,7 +39,6 @@ export default function Home() {
 
   const [selectionDragBox, setSelectionDragBox] = useState(null);
   const [selectionBox, setSelectionBox] = useState(null);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [isSelecting, setIsSelecting] = useState(false);
 
   const [history, setHistory] = useState([]);
@@ -108,7 +107,7 @@ export default function Home() {
 
   useEffect(() => {
     if (selectedTool != 'selected') {
-      setSelectionBox({x:0, y:0, width:0, height:0});
+      setSelectionBox(null);
       setSelectionDragBox([]);
     }
   }, [selectedTool])
@@ -202,8 +201,11 @@ export default function Home() {
     else if (selectedTool == 'select') {
       if (!isSelecting) return;
       if (isResizing.current) return;
-      if (isDraggingSelectionBox.current) return;
-
+      if (isDraggingSelectionBox.current) {
+        setSelectionDragBox(null);
+        return;
+      };
+      console.log("inside mouse move selection")
       const currentX = e.clientX;
       const currentY = e.clientY;
 
@@ -248,6 +250,7 @@ export default function Home() {
       var maxX = 0;
       var maxY = 0;
       var isAnySelected = false;
+
       if (box) {
         allShapes.forEach((shape) => {
           const shapeScreenCoordinates = worldToScreen({ x: shape.x, y: shape.y });
