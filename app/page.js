@@ -52,28 +52,23 @@ export default function Home() {
   }, [allShapes, scale, offset]);
 
   const pushToHistory = (newShapes) => {
+    console.log('push to history called')
     // Save the current state to history and clear the redo stack
     setHistory((prev) => [...prev, allShapes]);
     setRedoStack([]);
   };
 
   const undo = (e) => {
+    console.log('undo called')
     e.stopPropagation();
     if (history.length > 0) {
       const previousState = history[history.length - 1];
-      console.log("in undo previous state")
-      console.log(previousState);
       setHistory((prev) => prev.slice(0, -1)); // Remove the last state
       setRedoStack((prev) => [allShapes, ...prev]); // Save the current state in redo stack
       setAllShapes(previousState);
       calculateSelectionBox(previousState);
     }
   };
-
-  useEffect(() => {
-    console.log('redoStackEffect')
-    console.log(redoStack)
-  }, [redoStack])
 
   const redo = (e) => {
     e.stopPropagation();
@@ -83,7 +78,6 @@ export default function Home() {
       setRedoStack((prev) => prev.slice(1)); // Remove the first state
       setHistory((prev) => [...prev, allShapes]); // Save the current state in history
       setAllShapes(nextState);
-      console.log('in redo')
       calculateSelectionBox(nextState);
     }
   };
@@ -114,7 +108,6 @@ export default function Home() {
 
   useEffect(() => {
     if (selectedTool != 'selected') {
-      console.log('disable selection box')
       setSelectionBox({x:0, y:0, width:0, height:0});
       setSelectionDragBox([]);
     }
@@ -276,8 +269,14 @@ export default function Home() {
               updateShapes.push({...shape, selected: false});
             }
         });
-        setAllShapes(updateShapes);
-        pushToHistory(updateShapes);
+
+        const previousIsAnySelected = allShapes.some((shape) => shape.selected);
+        if (previousIsAnySelected || isAnySelected) {
+          setAllShapes(updateShapes);
+          console.log('push to hisotry inside mouseup')
+          pushToHistory(updateShapes);
+        }
+
       }
       setSelectionDragBox(null);
 
@@ -323,12 +322,9 @@ export default function Home() {
     });
 
     if (!isAnySelected) {
-      console.log('any selected?')
-      console.log(isAnySelected)
       setSelectionBox(null);
     }
     else {
-      console.log('setSelectionBox True')
       setSelectionBox({
         x: minX,
         y: minY,
@@ -433,10 +429,11 @@ export default function Home() {
     // Update state
     setSelectionBox({ x: selectionBox.x + xDiff / scale , y: selectionBox.y + yDiff / scale , width: selectionBox.width, height: selectionBox.height });
     setAllShapes(resizedItems);
-    pushToHistory(resizedItems);
   }
 
   const handleMouseUpSelectionBox = (e) => {
+    console.log("mouse up selection")
+    pushToHistory(allShapes);
     isDraggingSelectionBox.current = false;
     document.removeEventListener("mousemove", handleMouseMoveSelectionBox);
     document.removeEventListener("mouseup", handleMouseUpSelectionBox);
@@ -482,7 +479,6 @@ export default function Home() {
       setSelectionBox(null);
     }
     else {
-      console.log('set selection handle shape click')
       setSelectionBox({
         x: minX,
         y: minY,
