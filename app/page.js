@@ -462,8 +462,8 @@ export default function Home() {
 
     var minX = Infinity;
     var minY = Infinity;
-    var maxX = 0;
-    var maxY = 0;
+    var maxX = -Infinity;
+    var maxY = -Infinity;
     var isAnySelected = false;
     updateShapesWithSelect.forEach((shape) => {
       if (shape.selected) {
