@@ -150,7 +150,7 @@ export default function Home() {
       initialPan.current = {
         startX: e.clientX,
         startY: e.clientY,
-        initialAllShapes: [...allShapes],
+        initialOffset: offset,
       }
     }
     else if (selectedTool == 'select') {
@@ -186,17 +186,14 @@ export default function Home() {
     if (selectedTool == 'pan') {
       if (!isPanning || !initialPan.current) return;
 
-      const { startX, startY, initialAllShapes } = initialPan.current;
+      const { startX, startY, initialOffset } = initialPan.current;
       const xDiff = e.clientX - startX;
       const yDiff = e.clientY - startY;
-      const shapesUpdatedWithPan = initialAllShapes.map((shape)=> ({
-        ...shape,
-        x: shape.x + xDiff / scale,
-        y: shape.y + yDiff / scale,
-      }));
+      setOffset((prev) => ({
+        x: initialOffset.x - xDiff / scale,
+        y: initialOffset.y - yDiff / scale,
+      }))
 
-      setAllShapes(shapesUpdatedWithPan);
-      pushToHistory(shapesUpdatedWithPan);
     }
     else if (selectedTool == 'select') {
       if (!isSelecting) return;
