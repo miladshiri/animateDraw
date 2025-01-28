@@ -30,42 +30,6 @@ export default function Home() {
     return savedOffset ? JSON.parse(savedOffset) : {x:0, y:0};
   });
 
-  useEffect(() => {
-    localStorage.setItem("shapes", JSON.stringify(allShapes));
-    localStorage.setItem("scale", JSON.stringify(scale));
-    localStorage.setItem("offset", JSON.stringify(offset));
-  }, [allShapes, scale, offset]);
-
-  const [history, setHistory] = useState([]);
-  const [redoStack, setRedoStack] = useState([]);
-
-  const pushToHistory = (newShapes) => {
-    // Save the current state to history and clear the redo stack
-    setHistory((prev) => [...prev, allShapes]);
-    setRedoStack([]);
-  };
-
-  const undo = () => {
-    if (history.length > 0) {
-      const previousState = history[history.length - 1];
-      
-      setHistory((prev) => prev.slice(0, -1)); // Remove the last state
-      setRedoStack((prev) => [allShapes, ...prev]); // Save the current state in redo stack
-      setAllShapes(previousState);
-    }
-  };
-
-  const redo = () => {
-    if (redoStack.length > 0) {
-      const nextState = redoStack[0];
-      
-      setRedoStack((prev) => prev.slice(1)); // Remove the first state
-      setHistory((prev) => [...prev, allShapes]); // Save the current state in history
-      setAllShapes(nextState);
-    }
-  };
-
-  
   const [isPanning, setIsPanning] = useState(false);
 
   const [selectedTool, setSelectedTool] = useState('');
@@ -78,6 +42,51 @@ export default function Home() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [isSelecting, setIsSelecting] = useState(false);
 
+  const [history, setHistory] = useState([]);
+  const [redoStack, setRedoStack] = useState([]);
+
+  useEffect(() => {
+    localStorage.setItem("shapes", JSON.stringify(allShapes));
+    localStorage.setItem("scale", JSON.stringify(scale));
+    localStorage.setItem("offset", JSON.stringify(offset));
+  }, [allShapes, scale, offset]);
+
+  const pushToHistory = (newShapes) => {
+    // Save the current state to history and clear the redo stack
+    setHistory((prev) => [...prev, allShapes]);
+    setRedoStack([]);
+  };
+
+  const undo = (e) => {
+    e.stopPropagation();
+    if (history.length > 0) {
+      const previousState = history[history.length - 1];
+      console.log("in undo previous state")
+      console.log(previousState);
+      setHistory((prev) => prev.slice(0, -1)); // Remove the last state
+      setRedoStack((prev) => [allShapes, ...prev]); // Save the current state in redo stack
+      setAllShapes(previousState);
+      calculateSelectionBox(previousState);
+    }
+  };
+
+  useEffect(() => {
+    console.log('redoStackEffect')
+    console.log(redoStack)
+  }, [redoStack])
+
+  const redo = (e) => {
+    e.stopPropagation();
+    if (redoStack.length > 0) {
+      const nextState = redoStack[0];
+      
+      setRedoStack((prev) => prev.slice(1)); // Remove the first state
+      setHistory((prev) => [...prev, allShapes]); // Save the current state in history
+      setAllShapes(nextState);
+      console.log('in redo')
+      calculateSelectionBox(nextState);
+    }
+  };
 
   const worldToScreen = ({x, y}) => {
     return {
@@ -105,6 +114,7 @@ export default function Home() {
 
   useEffect(() => {
     if (selectedTool != 'selected') {
+      console.log('disable selection box')
       setSelectionBox({x:0, y:0, width:0, height:0});
       setSelectionDragBox([]);
     }
@@ -194,6 +204,7 @@ export default function Home() {
       }));
 
       setAllShapes(shapesUpdatedWithPan);
+      pushToHistory(shapesUpdatedWithPan);
     }
     else if (selectedTool == 'select') {
       if (!isSelecting) return;
@@ -266,6 +277,7 @@ export default function Home() {
             }
         });
         setAllShapes(updateShapes);
+        pushToHistory(updateShapes);
       }
       setSelectionDragBox(null);
 
@@ -292,6 +304,39 @@ export default function Home() {
       }
     }
   };
+
+
+  const calculateSelectionBox = (shapes) => {
+    var minX = Infinity;
+    var minY = Infinity;
+    var maxX = 0;
+    var maxY = 0;
+    var isAnySelected = false;
+    shapes.filter((shape) => shape.selected).forEach((shape) => {
+      
+      isAnySelected = true;
+      minX = Math.min(minX, shape.x);
+      minY = Math.min(minY, shape.y);
+      maxX = Math.max(maxX, shape.x + shape.w);
+      maxY = Math.max(maxY, shape.y + shape.h);
+
+    });
+
+    if (!isAnySelected) {
+      console.log('any selected?')
+      console.log(isAnySelected)
+      setSelectionBox(null);
+    }
+    else {
+      console.log('setSelectionBox True')
+      setSelectionBox({
+        x: minX,
+        y: minY,
+        width: Math.abs(maxX - minX),
+        height: Math.abs(maxY - minY),
+      })
+    }
+  }
 
   const isResizing = useRef(false);
   const isDraggingSelectionBox = useRef(false);
@@ -347,6 +392,7 @@ export default function Home() {
 
   const handleMouseUpBottomRight = () => {
     isResizing.current = false;
+    pushToHistory(allShapes);
     document.removeEventListener("mousemove", handleMouseMoveBottomRight);
     document.removeEventListener("mouseup", handleMouseUpBottomRight);
   };
@@ -387,6 +433,7 @@ export default function Home() {
     // Update state
     setSelectionBox({ x: selectionBox.x + xDiff / scale , y: selectionBox.y + yDiff / scale , width: selectionBox.width, height: selectionBox.height });
     setAllShapes(resizedItems);
+    pushToHistory(resizedItems);
   }
 
   const handleMouseUpSelectionBox = (e) => {
@@ -414,6 +461,7 @@ export default function Home() {
       });
 
     setAllShapes(updateShapesWithSelect);
+    pushToHistory(updateShapesWithSelect);
 
     var minX = Infinity;
     var minY = Infinity;
@@ -434,6 +482,7 @@ export default function Home() {
       setSelectionBox(null);
     }
     else {
+      console.log('set selection handle shape click')
       setSelectionBox({
         x: minX,
         y: minY,
@@ -460,6 +509,11 @@ export default function Home() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  const stopPropagation = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  }
 
   return (
     <div
@@ -489,8 +543,8 @@ export default function Home() {
           backgroundColor: "rgba(246, 235, 235, 0.95)",
         }}  
       >
-        <button onMouseDown={(event) => undo()} disabled={history.length === 0}>Undo</button>
-        <button onMouseDown={(event) => redo()} disabled={redoStack.length === 0}>Redo</button>
+        <button onMouseUp={(event) => stopPropagation(event)} onMouseDown={(event) => undo(event)} disabled={history.length === 0}>Undo</button>
+        <button onMouseUp={(event) => stopPropagation(event)} onMouseDown={(event) => redo(event)} disabled={redoStack.length === 0}>Redo</button>
       </div>
       <Toolbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
 
