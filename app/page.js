@@ -35,6 +35,36 @@ export default function Home() {
     localStorage.setItem("scale", JSON.stringify(scale));
     localStorage.setItem("offset", JSON.stringify(offset));
   }, [allShapes, scale, offset]);
+
+  const [history, setHistory] = useState([]);
+  const [redoStack, setRedoStack] = useState([]);
+
+  const pushToHistory = (newShapes) => {
+    // Save the current state to history and clear the redo stack
+    setHistory((prev) => [...prev, allShapes]);
+    setRedoStack([]);
+  };
+
+  const undo = () => {
+    if (history.length > 0) {
+      const previousState = history[history.length - 1];
+      
+      setHistory((prev) => prev.slice(0, -1)); // Remove the last state
+      setRedoStack((prev) => [allShapes, ...prev]); // Save the current state in redo stack
+      setAllShapes(previousState);
+    }
+  };
+
+  const redo = () => {
+    if (redoStack.length > 0) {
+      const nextState = redoStack[0];
+      
+      setRedoStack((prev) => prev.slice(1)); // Remove the first state
+      setHistory((prev) => [...prev, allShapes]); // Save the current state in history
+      setAllShapes(nextState);
+    }
+  };
+
   
   const [isPanning, setIsPanning] = useState(false);
 
@@ -255,6 +285,7 @@ export default function Home() {
       if (drawing && currentShape) {
         if (currentShape.w > 0 && currentShape.h > 0) {
           setAllShapes((prev) => [...prev, currentShape]);
+          pushToHistory(currentShape);
         }
         setDrawing(false);
         setCurrentShape(null);
@@ -450,6 +481,17 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
+      <div
+        style={{
+          position: "fixed",
+          top: "10px", // margin from the top
+          left: "10%",
+          backgroundColor: "rgba(246, 235, 235, 0.95)",
+        }}  
+      >
+        <button onMouseDown={(event) => undo()} disabled={history.length === 0}>Undo</button>
+        <button onMouseDown={(event) => redo()} disabled={redoStack.length === 0}>Redo</button>
+      </div>
       <Toolbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
 
       {allShapes.map((shape, index) => (
