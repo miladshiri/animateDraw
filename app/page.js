@@ -145,7 +145,7 @@ export default function Home() {
       setDrawing(true);
       const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
-      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), width: 0, height: 0, selected: false });
+      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false });
     }
 
   };
@@ -193,8 +193,8 @@ export default function Home() {
     
         setCurrentShape((prev) => ({
           ...prev,
-          width: Math.abs(width),
-          height: Math.abs(height),
+          w: Math.abs(width),
+          h: Math.abs(height),
           x: width < 0 ? currentX : prev.x,
           y: height < 0 ? currentY : prev.y,
         }));
@@ -253,15 +253,8 @@ export default function Home() {
     }
     else if (selectedTool == 'square') {
       if (drawing && currentShape) {
-        if (currentShape.width > 0 && currentShape.height > 0) {
-          setAllShapes((prev) => [...prev, {
-            id: currentShape.id,
-            x: currentShape.x,
-            y: currentShape.y,
-            w: currentShape.width,
-            h: currentShape.height,
-            selected: false
-          }]);
+        if (currentShape.w > 0 && currentShape.h > 0) {
+          setAllShapes((prev) => [...prev, currentShape]);
         }
         setDrawing(false);
         setCurrentShape(null);
@@ -465,7 +458,7 @@ export default function Home() {
 
        {/* Render the shape being drawn */}
        {drawing && currentShape && (
-          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.width, h:currentShape.height}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
+          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
        )}
 
        {/* Selection Box */}
