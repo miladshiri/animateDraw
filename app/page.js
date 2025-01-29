@@ -81,6 +81,25 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey || event.metaKey) {
+        if (event.key === "z") {
+          event.preventDefault(); // Prevent default browser undo
+          undo(event);
+        } else if (event.key === "x") {
+          event.preventDefault(); // Prevent default cut action
+          redo(event);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [undo, redo]);
+
   const worldToScreen = ({x, y}) => {
     return {
       x: (x - offset.x) * scale,
@@ -535,19 +554,14 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <div
-        style={{
-          position: "fixed",
-          top: "10px", // margin from the top
-          left: "10%",
-          backgroundColor: "rgba(246, 235, 235, 0.95)",
-        }}  
-      >
-        <button onMouseUp={(event) => stopPropagation(event)} onMouseDown={(event) => undo(event)} disabled={history.length === 0}>Undo</button>
-        <button onMouseUp={(event) => stopPropagation(event)} onMouseDown={(event) => redo(event)} disabled={redoStack.length === 0}>Redo</button>
-      </div>
-      <Toolbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
-
+      <Toolbar
+        setSelectedTool={setSelectedTool}
+        selectedTool={selectedTool}
+        undo={undo}
+        redo={redo}
+        history={history}
+        redoStack={redoStack}
+      />
       {allShapes.map((shape, index) => (
         <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} offset={offset} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
       ))}

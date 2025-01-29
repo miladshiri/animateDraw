@@ -38,3 +38,34 @@ body {
   background-color: #0a1d2a;
   animation: wave 2s ease-in-out infinite;
 }
+
+
+.toolbar button {
+  border: none;
+  padding: 6px;
+  transition: 0.2s ease-in-out;
+  color: #ededed;
+}
+
+.toolbar button:hover {
+  background-color: #4f63e0;
+  transition: 0.2s ease-in-out;
+  border-radius: 5px;
+}
+
+.toolbar button:disabled {
+  opacity: 0.5;
+  color: #aaaaaa;
+}
+
+.isSelected {
+  background-color: #223ce5;
+  border-radius: 5px;
+}
+
+.toolbar-separator {
+  width: 1px; /* Thin vertical line */
+  height: 34px; /* Adjust height as needed */
+  background-color: #aaaaaa; /* Light gray */
+  margin: 0 10px; /* Space around separator */
+}

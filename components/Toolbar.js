@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { Undo, Redo, Move, SquareDashedMousePointer, Shapes } from "lucide-react";
 
-const Toolbar = ({ setSelectedTool, selectedTool }) => {
+const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack }) => {
   const toolbarStyle = {
     position: "fixed",
     top: "10px", // margin from the top
@@ -41,12 +42,34 @@ const Toolbar = ({ setSelectedTool, selectedTool }) => {
   }
 
   return (
-    <div style={toolbarStyle}>
-      <div onMouseDown={(event) => handleMouseDown(event, "pan")} style={shapeStyle("circle", selectedTool == 'pan')}>Pan</div>
-      <div onMouseDown={(event) => handleMouseDown(event, "select")} style={shapeStyle("circle", selectedTool == 'select')}>Select</div>
-      <div onMouseDown={(event) => handleMouseDown(event, "square")} style={shapeStyle("square", selectedTool == 'square')}>Rect</div>
-      <div style={shapeStyle("circle")}>A</div>
-      <div style={shapeStyle("rectangle")}>C</div>
+    <div className="toolbar" style={toolbarStyle}>
+      <button onMouseDown={(event) => handleMouseDown(event, "pan")} className={selectedTool === "pan" ? "isSelected" : ""} >
+        <Move size={20} strokeWidth={1} />
+      </button>
+      <button onMouseDown={(event) => handleMouseDown(event, "select")} className={selectedTool === "select" ? "isSelected" : ""}>
+        <SquareDashedMousePointer size={20} strokeWidth={1} />
+      </button>
+      <button onMouseDown={(event) => handleMouseDown(event, "square")} className={selectedTool === "square" ? "isSelected" : ""}>
+        <Shapes size={20} strokeWidth={1} />
+      </button>
+
+      <div className="toolbar-separator"></div>
+
+      <button
+        onMouseUp={(event) => event.stopPropagation()}
+        onMouseDown={(event) => undo(event)}
+        disabled={history.length === 0}
+      >
+        <Undo size={20} strokeWidth={1} />
+      </button>
+
+      <button
+        onMouseUp={(event) => event.stopPropagation()}
+        onMouseDown={(event) => redo(event)}
+        disabled={redoStack.length === 0}
+      >
+        <Redo size={20} strokeWidth={1} />
+      </button>
     </div>
   );
 };
