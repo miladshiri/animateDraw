@@ -48,7 +48,7 @@ body {
 }
 
 .toolbar button:hover {
-  background-color: #4f63e0;
+  background-color: #223ce5b0;
   transition: 0.2s ease-in-out;
   border-radius: 5px;
 }
