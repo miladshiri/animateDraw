@@ -269,8 +269,8 @@ export default function Home() {
       const updateShapes = [];
       var minX = Infinity;
       var minY = Infinity;
-      var maxX = 0;
-      var maxY = 0;
+      var maxX = -Infinity;
+      var maxY = -Infinity;
       var isAnySelected = false;
 
       if (box) {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Undo, Redo, Move, SquareDashedMousePointer, Shapes } from "lucide-react";
+import { ZoomIn, ZoomOut } from "lucide-react";
 
 const ZoomToolbar = ({ scale, zoomInOut }) => {
   const toolbarStyle = {
@@ -37,7 +37,7 @@ const ZoomToolbar = ({ scale, zoomInOut }) => {
         onMouseUp={(event) => event.stopPropagation()}
         onMouseDown={(event) => zoomIn(event)}
       >
-        <Undo size={20} strokeWidth={1} />
+        <ZoomIn size={20} strokeWidth={1} />
       </button>
 
       <div
@@ -50,7 +50,7 @@ const ZoomToolbar = ({ scale, zoomInOut }) => {
         onMouseUp={(event) => event.stopPropagation()}
         onMouseDown={(event) => zoomOut(event)}
       >
-        <Redo size={20} strokeWidth={1} />
+        <ZoomOut size={20} strokeWidth={1} />
       </button>
     </div>
   );
