@@ -360,8 +360,8 @@ export default function Home() {
   const calculateSelectionBox = (shapes) => {
     var minX = Infinity;
     var minY = Infinity;
-    var maxX = 0;
-    var maxY = 0;
+    var maxX = -Infinity;
+    var maxY = -Infinity;
     var isAnySelected = false;
     shapes.filter((shape) => shape.selected).forEach((shape) => {
       
