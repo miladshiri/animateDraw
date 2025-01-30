@@ -7,6 +7,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ShapeWrapper from "@/components/ShapeWrapper";
 import Toolbar from "@/components/Toolbar";
 import ZoomToolbar from "@/components/ZoomToolbar";
+import Cube3d from "@/components/Cube3d";
 
 
 export default function Home() {
@@ -596,6 +597,7 @@ export default function Home() {
       />
 
       <ZoomToolbar scale={scale} zoomInOut={zoomInOut} />
+      <Cube3d />
       
       {allShapes.map((shape, index) => (
         <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} offset={offset} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
