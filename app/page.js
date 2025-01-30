@@ -416,8 +416,13 @@ export default function Home() {
     const { startX, startY, initialWidth, initialHeight, initialX, initialY, initialAllShapes } = initialSize.current;
 
     // Calculate the new size of the container
-    const newWidth = Math.max(initialWidth + (e.clientX - startX) / scale, 1); // Minimum width: 50px
-    const newHeight = Math.max(initialHeight + (e.clientY - startY) / scale, 1); // Minimum height: 50px
+    var newWidth = Math.max(initialWidth + (e.clientX - startX) / scale, 1);
+    var newHeight = Math.max(initialHeight + (e.clientY - startY) / scale, 1);
+
+    if (e.ctrlKey || e.metaKey) {
+      newWidth = Math.max(initialWidth + ((e.clientX - startX) + (e.clientY - startY)) / 2 / scale, 1);
+      newHeight = Math.max(initialHeight + ((e.clientX - startX) + (e.clientY - startY)) / 2 / scale, 1);
+    }
 
     // Calculate resize ratios
     const widthRatio = newWidth / initialWidth;
