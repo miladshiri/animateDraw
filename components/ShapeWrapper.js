@@ -1,10 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 
 const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition, scale, offset, onClick}) => {
   const [selected, setSelected] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [finalSize, setFinalSize] = useState({});
+
+  useEffect(() => {
+    setFinalSize({
+      w: initialSize.w * scale,
+      h: initialSize.h * scale,
+    })
+  }, [initialSize])
 
   return (
     <div
@@ -16,7 +24,7 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition,
         width: `${initialSize.w * scale}px`,
         height: `${initialSize.h * scale}px`,
       }}
-    >       
+    >
     {selected && (
         <div
           style={{
@@ -30,7 +38,7 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition,
           }}
         ></div>
       )}
-      <ShapeComponent size={initialSize} scale={scale} position={finalPosition} />
+      <ShapeComponent size={finalSize} scale={scale} position={finalPosition} />
     </div>
   );
 };

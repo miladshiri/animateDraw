@@ -3,13 +3,13 @@ import { motion } from "framer-motion";
 
 import React, { useState, useEffect } from "react";
 
-const AnimatedRec = ({size, scale}) => {
+const AnimatedRec = ({size}) => {
   const factor = 0.2;
   const path = [
     { x: 0, y: 0 },
-    { x: (size.w - size.w * factor) * scale, y: 0 },
-    { x: (size.w - size.w * factor) * scale, y: (size.h - size.h * factor) * scale },
-    { x: 0 , y: (size.h - size.h * factor) * scale },
+    { x: (size.w - size.w * factor), y: 0 },
+    { x: (size.w - size.w * factor), y: (size.h - size.h * factor) },
+    { x: 0 , y: (size.h - size.h * factor) },
     { x: 0, y: 0 },
   ];
 
@@ -22,7 +22,7 @@ const AnimatedRec = ({size, scale}) => {
         left: `0px`,
         width: `100%`,
         height: `100%`,
-        border: `${2 * scale}px solid #51b39a`,
+        border: `${(size.w + size.h) / 340}px solid #51b39a`,
         userSelect: "none",
       }}
     >
@@ -32,10 +32,10 @@ const AnimatedRec = ({size, scale}) => {
           position: "absolute",
           top: 0,
           left: 0,
-          width: `${size.w * factor * scale}px`, // Scaled circle size
-          height: `${size.h * factor * scale}px`, // Scaled circle size
+          width: `${size.w * factor}px`,
+          height: `${size.h * factor}px`,
           backgroundColor: "#aaaaaa",
-          borderRadius: "0%", // To make it a circle
+          borderRadius: "0%",
         }}
         animate={{
           x: path.map((point) => point.x),
@@ -43,7 +43,7 @@ const AnimatedRec = ({size, scale}) => {
         }}
         transition={{
           repeat: Infinity,
-          duration: 0.2 / scale, // Speed adjusted by scale
+          duration: 0.4,
           ease: "linear",
         }}
       />
@@ -51,7 +51,7 @@ const AnimatedRec = ({size, scale}) => {
       <div
         style={{
           position: "absolute",
-          inset: `${5 * scale}px`,
+          inset: `${(size.w + size.h) / 140}px`,
           background: "#2a2a2a"
 
         }}  

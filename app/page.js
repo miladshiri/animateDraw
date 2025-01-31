@@ -2,12 +2,12 @@
 import Image from "next/image";
 
 import WaveRectangle from "@/components/WaveRectangle";
-import AnimatedRec from "@/components/AnimatedRec";
+import AnimatedRec from "@/components/shapes/AnimatedRec";
 import React, { useState, useEffect, useRef } from "react";
 import ShapeWrapper from "@/components/ShapeWrapper";
 import Toolbar from "@/components/Toolbar";
 import ZoomToolbar from "@/components/ZoomToolbar";
-import Cube3d from "@/components/Cube3d";
+import Cube3d from "@/components/shapes/Cube3d";
 
 
 export default function Home() {
