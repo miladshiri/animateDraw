@@ -3,7 +3,7 @@ import React from "react";
 
 import { Home, Info, Mail } from "lucide-react"; // Import Lucide icons
 
-export default function Tabs({tabs}) {
+export default function Tabs({tabs, setShapeToCreate}) {
   const [activeTab, setActiveTab] = useState(0);
 
   // // Tab data with icons
@@ -33,6 +33,7 @@ export default function Tabs({tabs}) {
         {tabs[activeTab].assets.map((asset, index) => (
  
             <div
+              onClick={() => setShapeToCreate({component: asset.component})}
               key={index}
               style={{
                 width: "30px",

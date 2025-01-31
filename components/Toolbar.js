@@ -36,8 +36,6 @@ const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack
 
   const handleMouseDown = (e, tool) => {
     e.stopPropagation();
-
-    console.log(`${tool} selcted`);
     setSelectedTool(tool);
   }
 
@@ -49,7 +47,7 @@ const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack
       <button onMouseDown={(event) => handleMouseDown(event, "select")} className={selectedTool === "select" ? "isSelected" : ""}>
         <SquareDashedMousePointer size={20} strokeWidth={1} />
       </button>
-      <button onMouseDown={(event) => handleMouseDown(event, "square")} className={selectedTool === "square" ? "isSelected" : ""}>
+      <button onMouseDown={(event) => handleMouseDown(event, "shape")} className={selectedTool === "shape" ? "isSelected" : ""}>
         <Shapes size={20} strokeWidth={1} />
       </button>
 

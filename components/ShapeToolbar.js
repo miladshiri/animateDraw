@@ -2,7 +2,7 @@ import AnimatedRec from "./shapes/AnimatedRec";
 import Tabs from "./Tabs";
 import { Home, Info, Mail } from "lucide-react"; // Import Lucide icons
 
-const ShapeToolbar = () => {
+const ShapeToolbar = ({setShapeToCreate}) => {
 
   const shapeCategories = [
     {name:"square", icon: <Home />, assets: 
@@ -44,7 +44,7 @@ const ShapeToolbar = () => {
         zIndex: 1000, // Ensures it stays on top of other elements
       }}
     >
-      <Tabs tabs={shapeCategories}/>
+      <Tabs tabs={shapeCategories} setShapeToCreate={setShapeToCreate}/>
       
     </div>
   )

@@ -47,6 +47,8 @@ export default function Home() {
   const [history, setHistory] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
 
+  const [shapeToCreate, setShapeToCreate] = useState({component: AnimatedRec});
+
   useEffect(() => {
     localStorage.setItem("shapes", JSON.stringify(allShapes));
     localStorage.setItem("scale", JSON.stringify(scale));
@@ -222,7 +224,7 @@ export default function Home() {
       });
   
     }
-    else if (selectedTool == 'square') {
+    else if (selectedTool == 'shape') {
       const startX = e.clientX;
       const startY = e.clientY;
 
@@ -268,7 +270,7 @@ export default function Home() {
         height: Math.abs(height),
       });
     }
-    else if (selectedTool == 'square') {
+    else if (selectedTool == 'shape') {
       if (!drawing || !currentShape) return;
         const currentX = xScreenToWorld(e.clientX);
         const currentY = yScreenToWorld(e.clientY);
@@ -344,7 +346,7 @@ export default function Home() {
         })
       }
     }
-    else if (selectedTool == 'square') {
+    else if (selectedTool == 'shape') {
       if (drawing && currentShape) {
         if (currentShape.w > 0 && currentShape.h > 0) {
           setAllShapes((prev) => [...prev, currentShape]);
@@ -601,13 +603,13 @@ export default function Home() {
         redoStack={redoStack}
       />
 
-      <ShapeToolbar />
+      <ShapeToolbar setShapeToCreate={setShapeToCreate}/>
 
       <ZoomToolbar scale={scale} zoomInOut={zoomInOut} />
       <Cube3d />
       
       {allShapes.map((shape, index) => (
-        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} offset={offset} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
+        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={shapeToCreate.component} initialSize={{w:shape.w, h:shape.h}} scale={scale} offset={offset} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
       ))}
 <div
   style={{
@@ -622,7 +624,7 @@ export default function Home() {
 </div>
        {/* Render the shape being drawn */}
        {drawing && currentShape && (
-          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
+          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={shapeToCreate.component} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
        )}
 
        {/* Selection Box */}
