@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, use } from "react";
+import AnimatedRec from "./shapes/AnimatedRec";
+
 
 const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition, scale, offset, onClick}) => {
   const [selected, setSelected] = useState(false);
@@ -39,6 +41,7 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition,
         ></div>
       )}
       <ShapeComponent size={finalSize} scale={scale} position={finalPosition} />
+
     </div>
   );
 };

@@ -8,7 +8,7 @@ import ShapeWrapper from "@/components/ShapeWrapper";
 import Toolbar from "@/components/Toolbar";
 import ZoomToolbar from "@/components/ZoomToolbar";
 import Cube3d from "@/components/shapes/Cube3d";
-
+import ShapeToolbar from "@/components/ShapeToolbar";
 
 export default function Home() {
   const defaultShapes = [
@@ -601,13 +601,25 @@ export default function Home() {
         redoStack={redoStack}
       />
 
+      <ShapeToolbar />
+
       <ZoomToolbar scale={scale} zoomInOut={zoomInOut} />
       <Cube3d />
       
       {allShapes.map((shape, index) => (
         <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:shape.w, h:shape.h}} scale={scale} offset={offset} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
       ))}
+<div
+  style={{
+    position: "absolute",
+    top: `0px`,
+    left: `0px`,
+    width: `150px`,
+    height: `150px`,
+  }}
+>
 
+</div>
        {/* Render the shape being drawn */}
        {drawing && currentShape && (
           <ShapeWrapper selectedTool={selectedTool} ShapeComponent={AnimatedRec} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
