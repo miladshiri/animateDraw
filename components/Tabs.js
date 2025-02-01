@@ -1,17 +1,10 @@
 import { useState } from "react";
 import React from "react";
-
-import { Home, Info, Mail } from "lucide-react"; // Import Lucide icons
+import { getComponentByName } from "./shapeToComponentMapping";
 
 export default function Tabs({tabs, setShapeToCreate}) {
   const [activeTab, setActiveTab] = useState(0);
 
-  // // Tab data with icons
-  // const tabs = [
-  //   { icon: <Home size={24} />, content: "Welcome to the Home tab!" },
-  //   { icon: <Info size={24} />, content: "Learn more about us in this tab." },
-  //   { icon: <Mail size={24} />, content: "Reach out to us through this tab." },
-  // ];
 
   return (
     <div className="tabs-container">
@@ -33,7 +26,7 @@ export default function Tabs({tabs, setShapeToCreate}) {
         {tabs[activeTab].assets.map((asset, index) => (
  
             <div
-              onClick={() => setShapeToCreate({component: asset.component})}
+              onClick={() => setShapeToCreate(asset.component)}
               key={index}
               style={{
                 width: "30px",
@@ -41,7 +34,7 @@ export default function Tabs({tabs, setShapeToCreate}) {
                 margin: "4px",
               }}
             >
-              {React.createElement(asset.component, {size:{w:30, h:30}}) }
+              {React.createElement(getComponentByName(asset.component), {size:{w:30, h:30}}) }
             </div>
         ))}
       </div>

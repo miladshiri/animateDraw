@@ -1,4 +1,6 @@
 import AnimatedRec from "./shapes/AnimatedRec";
+import Cube3d from "./shapes/Cube3d";
+
 import Tabs from "./Tabs";
 import { Home, Info, Mail } from "lucide-react"; // Import Lucide icons
 
@@ -7,15 +9,8 @@ const ShapeToolbar = ({setShapeToCreate}) => {
   const shapeCategories = [
     {name:"square", icon: <Home />, assets: 
       [
-        {name:"amazing", component: AnimatedRec},
-        {name:"amazing", component: AnimatedRec},
-        {name:"amazing", component: AnimatedRec},
-        {name:"amazing", component: AnimatedRec},
-        {name:"amazing", component: AnimatedRec},
-        {name:"amazing", component: AnimatedRec},
-        {name:"amazing", component: AnimatedRec},
-        {name:"amazing", component: AnimatedRec},
-      ]
+        {name:"amazing", component: "AnimatedRec"},
+        {name:"amazing", component: "Cube3d"},      ]
     },
     {name:"circle", icon: <Info />, assets: [
 

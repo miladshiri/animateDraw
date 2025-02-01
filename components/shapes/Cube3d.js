@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const Cube3d = ({}) => {
+const Cube3d = ({size}) => {
+  
+  const [edgeSize, setEdgeSize] = useState(0);
+
+  useEffect(() => {
+    setEdgeSize((size.w + size.h) / 2);
+  }, [size])
+
   const spanStyle = i => ({
     position: 'absolute',
     top: 0,
@@ -8,7 +15,7 @@ const Cube3d = ({}) => {
     width: '100%',
     height: '100%',
     background: 'linear-gradient(#151515, #00ee00)',
-    transform: `rotateY(calc(90deg * ${i})) translateZ(150px)`,
+    transform: `rotateY(calc(90deg * ${i})) translateZ(${edgeSize/2}px)`,
   });
 
   return (
@@ -18,14 +25,40 @@ const Cube3d = ({}) => {
         className="cube"
         style={{
           position: "relative",
-          width: "300px",
-          height: "300px",
+          width: `${edgeSize}px`,
+          height: `${edgeSize}px`,
           transformStyle: "preserve-3d",
           animation: "animate 6s linear infinite",
         }}
       >
-        <div className='top'></div>
-        <div className='body'>
+        <div
+          style={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              width: `${edgeSize}px`,
+              height: `${edgeSize}px`,
+              background: "#0f0",
+              transform: `rotateX(90deg) translateZ(-${edgeSize * 3/4}px)`,
+              filter: `blur(${edgeSize/10}px)`,
+          }}
+        ></div>
+        <div className='top'
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            width: `${edgeSize}px`,
+            height: `${edgeSize}px`,
+            background: "#222",
+            transform: `rotateX(90deg) translateZ(${edgeSize/2}px)`,
+            transformStyle: "preserve-3d",
+          }}
+        
+        ></div>
+        <div className='body'
+          style={{ position: 'absolute', width: '100%', height: '100%', transformStyle: 'preserve-3d' }}
+        >
           {[0, 1, 2, 3].map(i => (
             <span key={i} style={spanStyle(i)}></span>
           ))}
@@ -35,14 +68,14 @@ const Cube3d = ({}) => {
 <style>
 {`
 
-.cube div{
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-transform-style: preserve-3d;
-}
+// .cube div{
+// position: absolute;
+// top: 0;
+// left: 0;
+// width: 100%;
+// height: 100%;
+// transform-style: preserve-3d;
+// }
 
 @keyframes animate {
   0% {
@@ -54,26 +87,20 @@ transform-style: preserve-3d;
 }
 
 .top {
-position: absolute;
-top: 0;
-left: 0;
-width: 300px;
-height: 300px;
-background: #222;
-transform: rotateX(90deg) translateZ(150px);
+
 }
 
-.top::before {
-content: '';
-position: absolute;
-top: 0;
-left: 0;
-width: 300px;
-height: 300px;
-background: #0f0;
-transform: translateZ(-380px);
-filter: blur(20px);
-}
+// .top::before {
+// content: '';
+// position: absolute;
+// top: 0;
+// left: 0;
+// width: ${edgeSize}px;
+// height: ${edgeSize}px;
+// background: #0f0;
+// transform: translateZ(-${edgeSize / 4}px);
+// filter: blur(${edgeSize/10}px);
+// }
 
 `}
 </style>

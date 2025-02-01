@@ -12,8 +12,8 @@ import ShapeToolbar from "@/components/ShapeToolbar";
 
 export default function Home() {
   const defaultShapes = [
-    {id: 1, x: 100, y: 150, w: 100, h: 170, selected: false},
-    {id: 2, x: 400, y: 250, w: 130, h: 170, selected: false}
+    {id: 1, x: 100, y: 150, w: 100, h: 170, component: "AnimatedRec", selected: false},
+    {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false}
   ]
   
   const [allShapes, setAllShapes] = useState(() => {
@@ -47,7 +47,7 @@ export default function Home() {
   const [history, setHistory] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
 
-  const [shapeToCreate, setShapeToCreate] = useState({component: AnimatedRec});
+  const [shapeToCreate, setShapeToCreate] = useState("AnimatedRec");
 
   useEffect(() => {
     localStorage.setItem("shapes", JSON.stringify(allShapes));
@@ -231,7 +231,7 @@ export default function Home() {
       setDrawing(true);
       const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
-      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false });
+      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate });
     }
 
   };
@@ -256,7 +256,7 @@ export default function Home() {
         setSelectionDragBox(null);
         return;
       };
-      console.log("inside mouse move selection")
+
       const currentX = e.clientX;
       const currentY = e.clientY;
 
@@ -562,7 +562,7 @@ export default function Home() {
   // Handle keydown event for the Delete key
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === "Delete") {
+      if (event.key === "Delete" || event.key === "Backspace") {
         const selectedShapes = allShapes.filter((shape) => shape.selected);
         if (selectedShapes.length > 0)  {
           setAllShapes((prevShapes) => prevShapes.filter((shape) => !shape.selected));
@@ -618,10 +618,9 @@ export default function Home() {
       <ShapeToolbar setShapeToCreate={setShapeToCreate}/>
 
       <ZoomToolbar scale={scale} zoomInOut={zoomInOut} />
-      <Cube3d />
       
       {allShapes.map((shape, index) => (
-        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={shapeToCreate.component} initialSize={{w:shape.w, h:shape.h}} scale={scale} offset={offset} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
+        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={shape.component} initialSize={{w:shape.w, h:shape.h}} scale={scale} offset={offset} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
       ))}
 <div
   style={{
@@ -636,7 +635,7 @@ export default function Home() {
 </div>
        {/* Render the shape being drawn */}
        {drawing && currentShape && (
-          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={shapeToCreate.component} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
+          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={currentShape.component} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
        )}
 
        {/* Selection Box */}
