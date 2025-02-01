@@ -63,9 +63,36 @@ body {
   border-radius: 5px;
 }
 
+.isSelectedSecondary {
+  background-color: #424242;
+  border-radius: 5px;
+}
+
 .toolbar-separator {
   width: 1px; /* Thin vertical line */
   height: 34px; /* Adjust height as needed */
   background-color: #aaaaaa; /* Light gray */
   margin: 0 10px; /* Space around separator */
 }
+
+
+.shape-toolbar {
+  position: fixed;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  height: 50%;
+  width: 18%;
+  background-color: rgba(48, 48, 48, 0.95);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 2px;
+  z-index: 1000;
+}
+
+.tab-content div:hover {
+  background-color: rgb(83, 83, 83);
+  transition: 0.2s ease-in-out;
+  border-radius: 5px;
+}
+

@@ -615,7 +615,7 @@ export default function Home() {
         redoStack={redoStack}
       />
 
-      <ShapeToolbar setShapeToCreate={setShapeToCreate}/>
+      <ShapeToolbar setShapeToCreate={setShapeToCreate} shapeToCreate={shapeToCreate}/>
 
       <ZoomToolbar scale={scale} zoomInOut={zoomInOut} />
       

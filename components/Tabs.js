@@ -2,7 +2,7 @@ import { useState } from "react";
 import React from "react";
 import { getComponentByName } from "./shapeToComponentMapping";
 
-export default function Tabs({tabs, setShapeToCreate}) {
+export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
   const [activeTab, setActiveTab] = useState(0);
 
 
@@ -24,17 +24,28 @@ export default function Tabs({tabs, setShapeToCreate}) {
       {/* Tab Content */}
       <div className="tab-content">
         {tabs[activeTab].assets.map((asset, index) => (
- 
+            <div
+              key={index}
+              className={shapeToCreate === asset.component ? "isSelectedSecondary" : ""}
+              style={{
+                width: "60px",
+                height: "60px",
+                margin: "1px",
+                display: "flex",
+                justifyContent: "center",  /* Centers horizontally */
+                alignItems: "center",  
+              }}
+            >
             <div
               onClick={() => setShapeToCreate(asset.component)}
-              key={index}
               style={{
                 width: "30px",
                 height: "30px",
-                margin: "4px",
+                margin: "1px",
               }}
             >
               {React.createElement(getComponentByName(asset.component), {size:{w:30, h:30}}) }
+            </div>
             </div>
         ))}
       </div>
