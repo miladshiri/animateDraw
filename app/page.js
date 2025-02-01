@@ -272,19 +272,31 @@ export default function Home() {
     }
     else if (selectedTool == 'shape') {
       if (!drawing || !currentShape) return;
-        const currentX = xScreenToWorld(e.clientX);
-        const currentY = yScreenToWorld(e.clientY);
-    
-        const width = currentX - currentShape.x;
-        const height = currentY - currentShape.y;
-    
-        setCurrentShape((prev) => ({
-          ...prev,
-          w: Math.abs(width),
-          h: Math.abs(height),
-          x: width < 0 ? currentX : prev.x,
-          y: height < 0 ? currentY : prev.y,
-        }));
+      const currentX = xScreenToWorld(e.clientX);
+      const currentY = yScreenToWorld(e.clientY);
+  
+      const width = currentX - currentShape.x;
+      const height = currentY - currentShape.y;
+
+      const newShape = {
+        ...currentShape,
+        w: Math.abs(width),
+        h: Math.abs(height),
+        x: width < 0 ? currentX : currentShape.x,
+        y: height < 0 ? currentY : currentShape.y,
+      };
+
+      setCurrentShape((prev) => {
+        if (
+          prev.w === newShape.w &&
+          prev.h === newShape.h &&
+          prev.x === newShape.x &&
+          prev.y === newShape.y
+        ) {
+          return prev;
+        }
+        return newShape;
+      });
     }
   };
 
