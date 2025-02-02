@@ -592,6 +592,16 @@ export default function Home() {
     };
   }, [allShapes]);
 
+  const changeShapeSettingByName = (name, value) => {
+    setAllShapes((prevShapes) =>
+      prevShapes.map((shape) =>
+        shape.id === selectedShape.id
+          ? { ...shape, settings: { ...shape.settings, [name]: value } }
+          : shape
+      )
+    );
+  };
+
   const stopPropagation = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -631,7 +641,7 @@ export default function Home() {
       }
 
       {selectedShape && selectedTool === 'select' &&
-        <ShapeSettings selectedShape={selectedShape}/>
+        <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName}/>
       }
 
       <ZoomToolbar scale={scale} zoomInOut={zoomInOut} />

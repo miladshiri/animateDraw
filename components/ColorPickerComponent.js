@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 
-const ColorPickerComponent = ({initialColor}) => {
+const ColorPickerComponent = ({initialColor, changeShapeSettingByName, settingName}) => {
   const [color, setColor] = useState(initialColor); // Default color
   const [showPicker, setShowPicker] = useState(false);
 
   const handleColorBoxClick = (e) => {
     e.stopPropagation();
-    console.log('box clicked');
     setShowPicker(!showPicker);
   }
+
+  useEffect(() => {
+    changeShapeSettingByName(settingName, color);
+  }, [color])
 
   return (
     <div style={{ position: "relative", display: "inline-block" }}>
@@ -18,7 +21,7 @@ const ColorPickerComponent = ({initialColor}) => {
         onMouseDown={handleColorBoxClick}
         onMouseUp={(e) => e.stopPropagation()}
         style={{
-          width: "30px",
+          width: "180px",
           height: "30px",
           backgroundColor: color,
           border: "2px solid #000",
