@@ -28,8 +28,8 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
               key={index}
               className={shapeToCreate === asset.component ? "isSelectedSecondary" : ""}
               style={{
-                width: "60px",
-                height: "60px",
+                width: "50px",
+                height: "50px",
                 margin: "1px",
                 display: "flex",
                 justifyContent: "center",  /* Centers horizontally */
@@ -39,46 +39,18 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
             <div
               onClick={() => setShapeToCreate(asset.component)}
               style={{
-                width: "30px",
-                height: "30px",
+                width: "25px",
+                height: "25px",
                 margin: "1px",
               }}
             >
-              {React.createElement(getComponentByName(asset.component), {size:{w:30, h:30}}) }
+              {React.createElement(getComponentByName(asset.component), {size:{w:25, h:25}}) }
             </div>
             </div>
         ))}
       </div>
 
-      {/* Styles */}
-      <style jsx>{`
-        .tabs-container {
-          position: absolute,
-          width: 100%;
-          max-width: 500px;
-          margin: auto;
-          text-align: center;
-          background: rgba(48, 48, 48, 0.95);
-          padding: 2px;
-          border-radius: 10px;
-        }
-        .tabs-header {
-          display: flex;
-          justify-content: center;
-          gap: 15px;
-          margin-bottom: 15px;
-          border-bottom: 1px solid #aaaaaa;
-        }
-        .tab-content {
-          padding: 5px;
-          font-size: 18px;
-          color: #ededed;
-          background: rgba(48, 48, 48, 0.95);
-          border-radius: 5px;
-          display: grid;
-          grid-template-columns: auto auto auto auto;
-        }
-      `}</style>
+
     </div>
   );
 }

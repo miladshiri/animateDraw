@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import React, { useState, useEffect } from "react";
 
-const AnimatedRec = ({size}) => {
+const AnimatedRec = ({size, shapeSettings}) => {
   const factor = 0.2;
   const path = [
     { x: 0, y: 0 },
@@ -22,7 +22,7 @@ const AnimatedRec = ({size}) => {
         left: `0px`,
         width: `100%`,
         height: `100%`,
-        border: `${(size.w + size.h) / 340}px solid #51b39a`,
+        border: `${(size.w + size.h) / 340}px solid ${shapeSettings ? shapeSettings.borderColor :"#51b39a"}`,
         userSelect: "none",
       }}
     >

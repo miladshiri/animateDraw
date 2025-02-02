@@ -1,21 +1,19 @@
 "use client";
-import Image from "next/image";
 
-import WaveRectangle from "@/components/WaveRectangle";
-import AnimatedRec from "@/components/shapes/AnimatedRec";
 import React, { useState, useEffect, useRef } from "react";
 import ShapeWrapper from "@/components/ShapeWrapper";
 import Toolbar from "@/components/Toolbar";
 import ZoomToolbar from "@/components/ZoomToolbar";
-import Cube3d from "@/components/shapes/Cube3d";
 import ShapeToolbar from "@/components/ShapeToolbar";
+import ShapeSettings from "@/components/ShapeSettings";
 
 export default function Home() {
   const defaultShapes = [
-    {id: 1, x: 100, y: 150, w: 100, h: 170, component: "AnimatedRec", selected: false},
-    {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false}
+    {id: 1, x: 100, y: 150, w: 100, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", backgroundColor: "#23432", borderColor: "#51b39a"}},
+    {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", backgroundColor: "#23432", borderColor: "#11b33a"}}
   ]
-  
+
+
   const [allShapes, setAllShapes] = useState(() => {
     const savedShapes = localStorage.getItem("shapes");
     return savedShapes ? JSON.parse(savedShapes) : defaultShapes;
@@ -48,6 +46,13 @@ export default function Home() {
   const [redoStack, setRedoStack] = useState([]);
 
   const [shapeToCreate, setShapeToCreate] = useState("AnimatedRec");
+
+  const [selectedShape, setSelectedShape] = useState(null);
+
+  useEffect(() => {
+    console.log(selectedShape);
+  }, [selectedShape])
+  
 
   useEffect(() => {
     localStorage.setItem("shapes", JSON.stringify(allShapes));
@@ -231,7 +236,7 @@ export default function Home() {
       setDrawing(true);
       const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
-      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate });
+      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate, settings: {} });
     }
 
   };
@@ -348,6 +353,7 @@ export default function Home() {
 
       if (!isAnySelected) {
         setSelectionBox(null);
+        setSelectedShape(null);
       }
       else {
         setSelectionBox({
@@ -528,6 +534,11 @@ export default function Home() {
         }
       });
 
+      if (!isCtrlPressed) {
+        const shape = allShapes.filter((shape) => shape.id === id)[0];
+        setSelectedShape(shape);
+      }
+
     setAllShapes(updateShapesWithSelect);
     pushToHistory(updateShapesWithSelect);
 
@@ -615,12 +626,28 @@ export default function Home() {
         redoStack={redoStack}
       />
 
-      <ShapeToolbar setShapeToCreate={setShapeToCreate} shapeToCreate={shapeToCreate}/>
+      {selectedTool === 'shape' &&
+        <ShapeToolbar setShapeToCreate={setShapeToCreate} shapeToCreate={shapeToCreate}/>
+      }
+
+      {selectedShape && selectedTool === 'select' &&
+        <ShapeSettings selectedShape={selectedShape}/>
+      }
 
       <ZoomToolbar scale={scale} zoomInOut={zoomInOut} />
       
       {allShapes.map((shape, index) => (
-        <ShapeWrapper key={index} selectedTool={selectedTool} ShapeComponent={shape.component} initialSize={{w:shape.w, h:shape.h}} scale={scale} offset={offset} finalPosition={{x:shape.x, y:shape.y}} onClick={(event) => handleShapeClick(shape.id, event)}/>
+        <ShapeWrapper
+          key={index}
+          selectedTool={selectedTool}
+          ShapeComponent={shape.component}
+          initialSize={{w:shape.w, h:shape.h}}
+          scale={scale}
+          offset={offset}
+          finalPosition={{x:shape.x, y:shape.y}}
+          onClick={(event) => handleShapeClick(shape.id, event)}
+          shapeSettings={shape.settings}
+        />
       ))}
 <div
   style={{
