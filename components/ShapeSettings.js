@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import ColorPickerComponent from "./ColorPickerComponent";
 
 const ShapeSettings = ({selectedShape, changeShapeSettingByName}) => {
+
+  const [animationSpeed, setAnimationSpeed] = useState(selectedShape.settings?.animationSpeed)
+
+  useEffect(()=> {
+    changeShapeSettingByName("animationSpeed", animationSpeed);
+  }, [animationSpeed])
 
   const handleMouseDown = (event) => {
     event.stopPropagation();
@@ -29,15 +35,22 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName}) => {
 
       {selectedShape.settings.backgroundColor && (
         <div>
-        <div className="toolbar-title">Background Color</div>
-        <div className="toolbar-setting">
-          <ColorPickerComponent initialColor={selectedShape.settings.backgroundColor}  changeShapeSettingByName={changeShapeSettingByName} settingName={"backgroundColor"} />
+          <div className="toolbar-title">Background Color</div>
+          <div className="toolbar-setting">
+            <ColorPickerComponent initialColor={selectedShape.settings.backgroundColor}  changeShapeSettingByName={changeShapeSettingByName} settingName={"backgroundColor"} />
+          </div>
         </div>
-      </div>
       )}
 
       {selectedShape.settings.animationSpeed && (
-        <div className="toolbar-title">Animation Speed</div>
+        <div>
+          <div className="toolbar-title">Animation Speed</div>
+          <div className="toolbar-setting">
+            <button onClick={()=> {setAnimationSpeed('slow')}} className={animationSpeed === 'slow' ? "isSelected" : ""} >Slow</button>
+            <button onClick={()=> {setAnimationSpeed('normal')}} className={animationSpeed === 'normal' ? "isSelected" : ""} >Normal</button>
+            <button onClick={()=> {setAnimationSpeed('fast')}} className={animationSpeed === 'fast' ? "isSelected" : ""} >Fast</button>
+          </div>
+        </div>
       )}
 
     </div>

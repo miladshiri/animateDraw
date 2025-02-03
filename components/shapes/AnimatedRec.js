@@ -1,9 +1,28 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useMemo } from "react";
 
 import React, { useState, useEffect } from "react";
 
 const AnimatedRec = ({size, shapeSettings}) => {
+  
+  const speed = useMemo(() => {
+    if (shapeSettings.animationSpeed === "slow") return 5;
+    if (shapeSettings.animationSpeed === "normal") return 1;
+    return 0.4;
+  }, [shapeSettings.animationSpeed]);
+
+  // var speed = 1;
+  // if (shapeSettings.animationSpeed == 'slow') {
+  //   speed = 5;
+  // }
+  // else if (shapeSettings.animationSpeed == 'normal') {
+  //   speed = 1;
+  // }
+  // else {
+  //   speed = 0.4;
+  // }
+
   const factor = 0.2;
   const bar = (size.w + size.h) / 140;
   const path = [
@@ -29,6 +48,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
       }}
     >
       <>
+      <AnimatePresence mode="wait"> 
       <motion.div
         style={{
           position: "absolute",
@@ -45,10 +65,11 @@ const AnimatedRec = ({size, shapeSettings}) => {
         }}
         transition={{
           repeat: Infinity,
-          duration: 0.4,
+          duration: speed,
           ease: "linear",
         }}
       />
+      </AnimatePresence>
       </>
       <div
         style={{
