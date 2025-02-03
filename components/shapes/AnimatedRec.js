@@ -5,12 +5,13 @@ import React, { useState, useEffect } from "react";
 
 const AnimatedRec = ({size, shapeSettings}) => {
   const factor = 0.2;
+  const bar = (size.w + size.h) / 140;
   const path = [
-    { x: 0, y: 0 },
-    { x: (size.w - size.w * factor), y: 0 },
-    { x: (size.w - size.w * factor), y: (size.h - size.h * factor) },
-    { x: 0 , y: (size.h - size.h * factor) },
-    { x: 0, y: 0 },
+    { x: - size.w * factor + bar, y: - size.h * factor + bar },
+    { x: size.w - 2 * bar, y: - size.h * factor + bar },
+    { x: size.w - 2 * bar , y: size.h - 2 * bar},
+    { x: - size.w * factor + bar, y: size.h - 2 * bar },
+    { x: - size.w * factor + bar, y: - size.h * factor + bar },
   ];
 
   return (
@@ -22,8 +23,9 @@ const AnimatedRec = ({size, shapeSettings}) => {
         left: `0px`,
         width: `100%`,
         height: `100%`,
-        border: `${(size.w + size.h) / 340}px solid ${shapeSettings ? shapeSettings.borderColor :"#51b39a"}`,
+        border: `${(size.w + size.h) / 340}px solid ${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : "#51b39a") : "#51b39a"}`,
         userSelect: "none",
+        overflow: "hidden",
       }}
     >
       <>
@@ -52,7 +54,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
         style={{
           position: "absolute",
           inset: `${(size.w + size.h) / 140}px`,
-          background: "#2a2a2a"
+          background: `${shapeSettings ? (shapeSettings.backgroundColor ? shapeSettings.backgroundColor : "#2a2a2a") : "#2a2a2a"}`
 
         }}  
       ></div>
