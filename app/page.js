@@ -13,6 +13,11 @@ export default function Home() {
     {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", backgroundColor: "#23432", borderColor: "#11b33a"}}
   ]
 
+  const defaultSettings = {
+    "AnimatedRec": {animationSpeed: "fast", backgroundColor: "#23432", borderColor: "#51b39a"}
+  }
+
+
 
   const [allShapes, setAllShapes] = useState(() => {
     const savedShapes = localStorage.getItem("shapes");
@@ -235,8 +240,8 @@ export default function Home() {
 
       setDrawing(true);
       const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-
-      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate, settings: {} });
+      console.log(defaultSettings[shapeToCreate])
+      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate, settings: defaultSettings[shapeToCreate] });
     }
 
   };
