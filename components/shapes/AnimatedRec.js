@@ -5,23 +5,19 @@ import { useMemo } from "react";
 import React, { useState, useEffect } from "react";
 
 const AnimatedRec = ({size, shapeSettings}) => {
-  
-  const speed = useMemo(() => {
-    if (shapeSettings.animationSpeed === "slow") return 5;
-    if (shapeSettings.animationSpeed === "normal") return 1;
-    return 0.4;
-  }, [shapeSettings.animationSpeed]);
 
-  // var speed = 1;
-  // if (shapeSettings.animationSpeed == 'slow') {
-  //   speed = 5;
-  // }
-  // else if (shapeSettings.animationSpeed == 'normal') {
-  //   speed = 1;
-  // }
-  // else {
-  //   speed = 0.4;
-  // }
+  var speed = 1;
+  if (shapeSettings) {
+    if (shapeSettings.animationSpeed == 'slow') {
+      speed = 2;
+    }
+    else if (shapeSettings.animationSpeed == 'normal') {
+      speed = 1;
+    }
+    else {
+      speed = 0.4;
+    }
+  }
 
   const factor = 0.2;
   const bar = (size.w + size.h) / 140;
@@ -38,7 +34,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
       style={{
         backgroundColor: "transparent",
         position: "relative",
-        top: `0px`, 
+        top: `0px`,
         left: `0px`,
         width: `100%`,
         height: `100%`,
@@ -50,6 +46,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
       <>
       <AnimatePresence mode="wait"> 
       <motion.div
+        key={speed}
         style={{
           position: "absolute",
           top: 0,
