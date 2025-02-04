@@ -9,12 +9,13 @@ import ShapeSettings from "@/components/ShapeSettings";
 
 export default function Home() {
   const defaultShapes = [
-    {id: 1, x: 100, y: 150, w: 100, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", backgroundColor: "#626262", borderColor: "#14f4bc"}},
-    {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", backgroundColor: "#000000", borderColor: "#e10f4e"}}
+    {id: 1, x: 100, y: 150, w: 100, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", shapeColor: "#626262", borderColor: "#14f4bc"}},
+    {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", shapeColor: "#000000", borderColor: "#e10f4e"}}
   ]
 
   const defaultSettings = {
-    "AnimatedRec": {animationSpeed: "fast", backgroundColor: "#2a2a2a", borderColor: "#51b39a"}
+    "AnimatedRec": {animationSpeed: "fast", shapeColor: "#2a2a2a", borderColor: "#51b39a"},
+    "Cube3d": {animationSpeed: "fast", shapeColor: "#00ee00"}
   }
 
 

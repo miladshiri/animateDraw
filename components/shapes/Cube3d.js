@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const Cube3d = ({size}) => {
+const Cube3d = ({size, shapeSettings}) => {
   
   const [edgeSize, setEdgeSize] = useState(0);
 
@@ -14,7 +14,7 @@ const Cube3d = ({size}) => {
     left: 0,
     width: '100%',
     height: '100%',
-    background: 'linear-gradient(#151515, #00ee00)',
+    background: `linear-gradient(#151515, ${shapeSettings ? shapeSettings.shapeColor: "#00ee00"})`,
     transform: `rotateY(calc(90deg * ${i})) translateZ(${edgeSize/2}px)`,
   });
 
@@ -38,9 +38,9 @@ const Cube3d = ({size}) => {
               left: "0",
               width: `${edgeSize}px`,
               height: `${edgeSize}px`,
-              background: "#0f0",
+              background: `${shapeSettings ? shapeSettings.shapeColor: "#00ee00"}`,
               transform: `rotateX(90deg) translateZ(-${edgeSize * 3/4}px)`,
-              filter: `blur(${edgeSize/10}px)`,
+              filter: `blur(${edgeSize/6}px)`,
           }}
         ></div>
         <div className='top'

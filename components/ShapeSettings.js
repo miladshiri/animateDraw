@@ -25,11 +25,11 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName}) => {
       onMouseUp={handleMouseUp}
     >
 
-      {selectedShape.settings.backgroundColor && (
+      {selectedShape.settings.shapeColor && (
         <div className="toolbar-item">
           <div className="toolbar-title">Shape Color</div>
           <div className="toolbar-setting">
-            <ColorPickerComponent initialColor={selectedShape.settings.backgroundColor}  changeShapeSettingByName={changeShapeSettingByName} settingName={"backgroundColor"} />
+            <ColorPickerComponent initialColor={selectedShape.settings.shapeColor}  changeShapeSettingByName={changeShapeSettingByName} settingName={"shapeColor"} />
           </div>
         </div>
       )}

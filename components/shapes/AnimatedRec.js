@@ -75,7 +75,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
         style={{
           position: "absolute",
           inset: `${(size.w + size.h) / 140}px`,
-          background: `${shapeSettings ? (shapeSettings.backgroundColor ? shapeSettings.backgroundColor : "#2a2a2a") : "#2a2a2a"}`
+          background: `${shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : "#2a2a2a") : "#2a2a2a"}`
 
         }}  
       ></div>
