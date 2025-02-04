@@ -24,8 +24,18 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName}) => {
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
+
+      {selectedShape.settings.backgroundColor && (
+        <div className="toolbar-item">
+          <div className="toolbar-title">Shape Color</div>
+          <div className="toolbar-setting">
+            <ColorPickerComponent initialColor={selectedShape.settings.backgroundColor}  changeShapeSettingByName={changeShapeSettingByName} settingName={"backgroundColor"} />
+          </div>
+        </div>
+      )}
+
       {selectedShape.settings.borderColor && (
-        <div>
+        <div className="toolbar-item">
           <div className="toolbar-title">Border Color</div>
           <div className="toolbar-setting">
             <ColorPickerComponent initialColor={selectedShape.settings.borderColor} changeShapeSettingByName={changeShapeSettingByName} settingName={"borderColor"}/>
@@ -33,17 +43,8 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName}) => {
         </div>
       )}
 
-      {selectedShape.settings.backgroundColor && (
-        <div>
-          <div className="toolbar-title">Background Color</div>
-          <div className="toolbar-setting">
-            <ColorPickerComponent initialColor={selectedShape.settings.backgroundColor}  changeShapeSettingByName={changeShapeSettingByName} settingName={"backgroundColor"} />
-          </div>
-        </div>
-      )}
-
       {selectedShape.settings.animationSpeed && (
-        <div>
+        <div className="toolbar-item">
           <div className="toolbar-title">Animation Speed</div>
           <div className="toolbar-setting">
             <button onClick={()=> {setAnimationSpeed('no-animation')}} className={animationSpeed === 'no-animation' ? "isSelected" : ""} >Off</button>

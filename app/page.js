@@ -9,8 +9,8 @@ import ShapeSettings from "@/components/ShapeSettings";
 
 export default function Home() {
   const defaultShapes = [
-    {id: 1, x: 100, y: 150, w: 100, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", backgroundColor: "#23432", borderColor: "#51b39a"}},
-    {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", backgroundColor: "#23432", borderColor: "#11b33a"}}
+    {id: 1, x: 100, y: 150, w: 100, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", backgroundColor: "#626262", borderColor: "#14f4bc"}},
+    {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", backgroundColor: "#000000", borderColor: "#e10f4e"}}
   ]
 
   const defaultSettings = {
