@@ -14,8 +14,11 @@ const AnimatedRec = ({size, shapeSettings}) => {
     else if (shapeSettings.animationSpeed == 'normal') {
       speed = 1;
     }
-    else {
+    else if (shapeSettings.animationSpeed == 'fast') {
       speed = 0.4;
+    }
+    else {
+      speed = 0;
     }
   }
 
@@ -44,7 +47,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
       }}
     >
       <>
-      <AnimatePresence mode="wait"> 
+      {speed > 0 && (
       <motion.div
         key={speed}
         style={{
@@ -66,7 +69,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
           ease: "linear",
         }}
       />
-      </AnimatePresence>
+      )}
       </>
       <div
         style={{

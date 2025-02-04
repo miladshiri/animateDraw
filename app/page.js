@@ -14,7 +14,7 @@ export default function Home() {
   ]
 
   const defaultSettings = {
-    "AnimatedRec": {animationSpeed: "fast", backgroundColor: "#23432", borderColor: "#51b39a"}
+    "AnimatedRec": {animationSpeed: "fast", backgroundColor: "#2a2a2a", borderColor: "#51b39a"}
   }
 
 
@@ -689,7 +689,7 @@ export default function Home() {
             left: `${selectionDragBox.x}px`,
             width: `${selectionDragBox.width}px`,
             height: `${selectionDragBox.height}px`,
-            backgroundColor: "rgba(0, 68, 140, 0.35)",
+            backgroundColor: "rgba(0, 68, 140, 0.09)",
             border: "2px solid rgb(0, 68, 140)",
             pointerEvents: "none",
           }}
@@ -705,7 +705,7 @@ export default function Home() {
             left: `${(selectionBox.x - offset.x - 10) * scale}px`,
             width: `${(selectionBox.width + 20) * scale}px`,
             height: `${(selectionBox.height + 20) * scale}px`,
-            backgroundColor: "rgba(0, 120, 215, 0.2)",
+            backgroundColor: "rgba(0, 118, 215, 0.05)",
             border: "2px dotted rgb(0, 68, 140)",
             cursor: "grab"
           }}
