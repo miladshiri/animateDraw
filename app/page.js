@@ -18,31 +18,6 @@ export default function Home() {
     "Cube3d": {animationSpeed: "fast", shapeColor: "#00ee00"}
   }
 
-  useEffect(() => {
-    const handlePaste = async (event) => {
-      const items = event.clipboardData.items;
-      for (const item of items) {
-        if (item.type.startsWith("image")) {
-          const blob = item.getAsFile();
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const img = new Image();
-            img.src = e.target.result;
-
-            const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-            const imageShape = {id: uniqueId ,x: xScreenToWorld(event.clientX), y: yScreenToWorld(event.clientY), w: img.width, h: img.height, selected: false, component: 'SimpleImage', settings:{imageSrc: e.target.result} };
-            setAllShapes((prev) => [...prev, imageShape]);
-            pushToHistory(imageShape);
-          }
-
-          reader.readAsDataURL(blob);
-          break;
-        }
-      }
-    };
-    window.addEventListener("paste", handlePaste);
-    return () => window.removeEventListener("paste", handlePaste);
-  }, []);
 
 
 
@@ -80,6 +55,8 @@ export default function Home() {
   const [shapeToCreate, setShapeToCreate] = useState("AnimatedRec");
 
   const [selectedShape, setSelectedShape] = useState(null);
+
+  const [pasteImage, setPasteImage] = useState(null);
 
   useEffect(() => {
     console.log(selectedShape);
@@ -634,6 +611,44 @@ export default function Home() {
       )
     );
   };
+
+  const handlePaste = (e) => {
+    e.preventDefault()
+
+    const items = e.clipboardData.items;
+    for (const item of items) {
+      if (item.type.startsWith("image")) {
+        const blob = item.getAsFile();
+        const reader = new FileReader();
+        reader.onload = (e) => {          
+          setPasteImage(e.target.result);
+        }
+
+        reader.readAsDataURL(blob);
+        break;
+      }
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, []);
+
+  useEffect(() => {
+    if (pasteImage) {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const img = new Image();
+    img.src = pasteImage;
+    const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+    const imageShape = {id: uniqueId ,x: xScreenToWorld(centerX) - img.width/2, y: yScreenToWorld(centerY) - img.height/2, w: img.width, h: img.height, selected: false, component: 'SimpleImage', settings:{imageSrc: pasteImage} };
+    setAllShapes((prev) => [...prev, imageShape]);
+    pushToHistory(imageShape);
+    setPasteImage(null);
+    }
+  }, [pasteImage])
+
 
   const stopPropagation = (e) => {
     e.stopPropagation();
