@@ -6,6 +6,7 @@ import Toolbar from "@/components/Toolbar";
 import ZoomToolbar from "@/components/ZoomToolbar";
 import ShapeToolbar from "@/components/ShapeToolbar";
 import ShapeSettings from "@/components/ShapeSettings";
+import { getImageFromIndexedDB, saveImageToIndexedDB } from "@/utils/indexedDBHelper";
 
 export default function Home() {
   const defaultShapes = [
@@ -57,6 +58,7 @@ export default function Home() {
   const [selectedShape, setSelectedShape] = useState(null);
 
   const [pasteImage, setPasteImage] = useState(null);
+  const [pasteImageId, setPasteImageId] = useState(null);
 
   useEffect(() => {
     console.log(selectedShape);
@@ -174,7 +176,6 @@ export default function Home() {
   }
 
   const handleWheel = (e) => {
-    e.preventDefault();
     if (e.ctrlKey || e.metaKey) {
       const yDiff = e.deltaY > 0 ? -1 : 1;
       setOffset((prevOffset) => {
@@ -614,21 +615,36 @@ export default function Home() {
 
   const handlePaste = (e) => {
     e.preventDefault()
-
     const items = e.clipboardData.items;
     for (const item of items) {
       if (item.type.startsWith("image")) {
-        const blob = item.getAsFile();
-        const reader = new FileReader();
-        reader.onload = (e) => {          
-          setPasteImage(e.target.result);
-        }
-
-        reader.readAsDataURL(blob);
+        const file = item.getAsFile();
+        storeImage(file);
         break;
       }
     }
   }
+
+  const storeImage = async (file) => {
+    const id = await saveImageToIndexedDB(file);
+    setPasteImageId(id);
+  };
+
+  const loadImageAsBase64 = async (id) => {
+    const file = await getImageFromIndexedDB(id);
+    if (!file) {
+      console.error("No file found for ID:", id);
+      return null;
+    }
+  
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result); // Return base64 string
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
 
   useEffect(() => {
     window.addEventListener("paste", handlePaste);
@@ -636,18 +652,43 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (pasteImage) {
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    const img = new Image();
-    img.src = pasteImage;
-    const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-    const imageShape = {id: uniqueId ,x: xScreenToWorld(centerX) - img.width/2, y: yScreenToWorld(centerY) - img.height/2, w: img.width, h: img.height, selected: false, component: 'SimpleImage', settings:{imageSrc: pasteImage} };
-    setAllShapes((prev) => [...prev, imageShape]);
-    pushToHistory(imageShape);
-    setPasteImage(null);
-    }
-  }, [pasteImage])
+    const pasteImageFunction = async () => {
+  
+      if (pasteImageId) {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+  
+        const img = new Image();
+        img.src = await loadImageAsBase64(pasteImageId); // Ensure we get the image URL
+        
+        img.onload = () => {
+          const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+          
+          const imageShape = {
+            id: uniqueId,
+            x: xScreenToWorld(centerX) - img.width / 2,
+            y: yScreenToWorld(centerY) - img.height / 2,
+            w: img.width,
+            h: img.height,
+            selected: false,
+            component: 'SimpleImage',
+            settings: { imageId: pasteImageId },
+          };
+  
+          console.log(imageShape);
+          setAllShapes((prev) => [...prev, imageShape]);
+          pushToHistory(imageShape);
+          setPasteImage(null);
+        };
+  
+        img.onerror = (err) => {
+          console.error("Failed to load image:", err);
+        };
+      }
+    };
+  
+    pasteImageFunction();
+  }, [pasteImageId]);
 
 
   const stopPropagation = (e) => {
