@@ -691,6 +691,30 @@ export default function Home() {
   }, [pasteImageId]);
 
 
+  const handleDrop = (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith("image")) {
+        storeImage(file);
+      }
+    }
+  };
+  
+  // Prevent default behavior for drag over (so the page doesn't open the file)
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  useEffect(() => {
+    window.addEventListener("dragover", handleDragOver);
+    window.addEventListener("drop", handleDrop);
+    return () => {
+      window.removeEventListener("dragover", handleDragOver);
+      window.removeEventListener("drop", handleDrop);
+    };
+  }, []);
+
   const stopPropagation = (e) => {
     e.stopPropagation();
     e.preventDefault();
