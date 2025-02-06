@@ -31,7 +31,12 @@ const SimpleImage = ({size, shapeSettings}) => {
     }}
     >
       {shapeSettings.imageId && (
-        <img src={imageSrc} width={size.w} height={size.height}/>
+        <img 
+          style={{
+            width: `100%`,
+            height: `100%`,
+          }}
+        src={imageSrc}/>
       )
     }
     </div>
