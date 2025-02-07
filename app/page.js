@@ -747,6 +747,7 @@ export default function Home() {
         redo={redo}
         history={history}
         redoStack={redoStack}
+        storeImage={storeImage}
       />
 
       {selectedTool === 'shape' &&

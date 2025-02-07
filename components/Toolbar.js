@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { Undo, Redo, Move, SquareDashedMousePointer, Shapes } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Undo, Redo, Move, SquareDashedMousePointer, Shapes, Image } from "lucide-react";
 
-const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack }) => {
+const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack, storeImage }) => {
   const toolbarStyle = {
     position: "fixed",
     top: "10px", // margin from the top
@@ -39,6 +39,15 @@ const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack
     setSelectedTool(tool);
   }
 
+  const fileInputRef = useRef(null);
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image")) {
+      storeImage(file);
+    }
+  };
+
   return (
     <div className="toolbar" style={toolbarStyle}>
       <button onMouseDown={(event) => handleMouseDown(event, "pan")} className={selectedTool === "pan" ? "isSelected" : ""} >
@@ -49,6 +58,16 @@ const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack
       </button>
       <button onMouseDown={(event) => handleMouseDown(event, "shape")} className={selectedTool === "shape" ? "isSelected" : ""}>
         <Shapes size={20} strokeWidth={1} />
+      </button>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFileUpload}
+        style={{ display: "none" }}
+        ref={fileInputRef}
+      />
+      <button onClick={() => fileInputRef.current.click()}>
+        <Image size={20} strokeWidth={1} />
       </button>
 
       <div className="toolbar-separator"></div>
@@ -68,6 +87,7 @@ const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack
       >
         <Redo size={20} strokeWidth={1} />
       </button>
+
     </div>
   );
 };
