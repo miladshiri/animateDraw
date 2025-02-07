@@ -451,7 +451,7 @@ export default function Home() {
 
     if (e.ctrlKey || e.metaKey) {
       newWidth = Math.max(initialWidth + ((e.clientX - startX) + (e.clientY - startY)) / 2 / scale, 1);
-      newHeight = Math.max(initialHeight + ((e.clientX - startX) + (e.clientY - startY)) / 2 / scale, 1);
+      newHeight = Math.max(initialHeight + ((e.clientX - startX) + (e.clientY - startY)) / 2 / scale * initialHeight/initialWidth, 1);
     }
 
     // Calculate resize ratios
@@ -810,10 +810,10 @@ export default function Home() {
           onMouseDown={handleMouseDownSelectionBox}
           style={{
             position: "absolute",
-            top: `${(selectionBox.y - offset.y - 10) * scale}px`,
-            left: `${(selectionBox.x - offset.x - 10) * scale}px`,
-            width: `${(selectionBox.width + 20) * scale}px`,
-            height: `${(selectionBox.height + 20) * scale}px`,
+            top: `${(selectionBox.y - offset.y - 4) * scale}px`,
+            left: `${(selectionBox.x - offset.x - 4) * scale}px`,
+            width: `${(selectionBox.width + 8) * scale}px`,
+            height: `${(selectionBox.height + 8) * scale}px`,
             backgroundColor: "rgba(0, 118, 215, 0.05)",
             border: "2px dotted rgb(0, 68, 140)",
             cursor: "grab"
