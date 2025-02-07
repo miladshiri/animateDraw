@@ -182,7 +182,7 @@ export default function Home() {
         // Adjust the offset to keep the mouse pointer fixed relative to content
 
         const newOffsetX = prevOffset.x;
-        const newOffsetY = prevOffset.y + yDiff / scale * 6;
+        const newOffsetY = prevOffset.y + yDiff / scale * 26;
 
         return { x: newOffsetX, y: newOffsetY};
       });
@@ -193,7 +193,7 @@ export default function Home() {
       setOffset((prevOffset) => {
         // Adjust the offset to keep the mouse pointer fixed relative to content
 
-        const newOffsetX = prevOffset.x + xDiff / scale * 6;
+        const newOffsetX = prevOffset.x + xDiff / scale * 26;
         const newOffsetY = prevOffset.y;
 
         return { x: newOffsetX, y: newOffsetY};
