@@ -869,10 +869,10 @@ export default function Home() {
           onMouseDown={handleMouseDownSelectionBox}
           style={{
             position: "absolute",
-            top: `${(selectionBox.y - offset.y - 4) * scale}px`,
-            left: `${(selectionBox.x - offset.x - 4) * scale}px`,
-            width: `${(selectionBox.width + 8) * scale}px`,
-            height: `${(selectionBox.height + 8) * scale}px`,
+            top: `${(selectionBox.y - offset.y - 1) * scale}px`,
+            left: `${(selectionBox.x - offset.x - 1) * scale}px`,
+            width: `${(selectionBox.width + 2) * scale}px`,
+            height: `${(selectionBox.height + 2) * scale}px`,
             backgroundColor: "rgba(0, 118, 215, 0.05)",
             border: "2px dotted rgb(0, 68, 140)",
             cursor: "grab"
@@ -889,8 +889,20 @@ export default function Home() {
               height: '10px',
               backgroundColor: 'white',
               border: '1px solid black',
-              borderRadius: '50%',
+              borderRadius: '10%',
               cursor: 'nwse-resize',
+            }}
+          />
+          <div
+            onMouseDown={(e) => handleCornerMouseDown(e, "topEdge")}
+            style={{
+              position: 'absolute',
+              top: '-2px',
+              width: '100%',
+              height: '2px',
+              backgroundColor: 'white',
+              cursor: 'ns-resize',
+
             }}
           />
           {/* Top-right corner */}
@@ -904,23 +916,19 @@ export default function Home() {
               height: '10px',
               backgroundColor: 'white',
               border: '1px solid black',
-              borderRadius: '50%',
+              borderRadius: '10%',
               cursor: 'nesw-resize',
             }}
           />
-          {/* Bottom-left corner */}
           <div
-            onMouseDown={(e) => handleCornerMouseDown(e, "bottomLeft")}
+            onMouseDown={(e) => handleCornerMouseDown(e, "rightEdge")}
             style={{
               position: 'absolute',
-              bottom: '-5px',
-              left: '-5px',
-              width: '10px',
-              height: '10px',
+              right: '-2px',
+              height: '100%',
+              width: '2px',
               backgroundColor: 'white',
-              border: '1px solid black',
-              borderRadius: '50%',
-              cursor: 'nesw-resize',
+              cursor: 'ew-resize',
             }}
           />
           {/* Bottom-right corner */}
@@ -934,10 +942,48 @@ export default function Home() {
               height: '10px',
               backgroundColor: 'white',
               border: '1px solid black',
-              borderRadius: '50%',
+              borderRadius: '10%',
               cursor: 'nwse-resize',
             }}
           ></div>
+          <div
+            onMouseDown={(e) => handleCornerMouseDown(e, "bottomEdge")}
+            style={{
+              position: 'absolute',
+              bottom: '-2px',
+              width: '100%',
+              height: '2px',
+              backgroundColor: 'white',
+              cursor: 'ns-resize',
+            }}
+          />
+          {/* Bottom-left corner */}
+          <div
+            onMouseDown={(e) => handleCornerMouseDown(e, "bottomLeft")}
+            style={{
+              position: 'absolute',
+              bottom: '-5px',
+              left: '-5px',
+              width: '10px',
+              height: '10px',
+              backgroundColor: 'white',
+              border: '1px solid black',
+              borderRadius: '10%',
+              cursor: 'nesw-resize',
+            }}
+          />
+          <div
+            onMouseDown={(e) => handleCornerMouseDown(e, "leftEdge")}
+            style={{
+              position: 'absolute',
+              left: '-2px',
+              height: '100%',
+              width: '2px',
+              backgroundColor: 'white',
+              cursor: 'ew-resize',
+            }}
+          />
+          
 
         </div>
       )}
