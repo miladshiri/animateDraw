@@ -20,8 +20,6 @@ export default function Home() {
   }
 
 
-
-
   const [allShapes, setAllShapes] = useState(() => {
     const savedShapes = localStorage.getItem("shapes");
     return savedShapes ? JSON.parse(savedShapes) : defaultShapes;
@@ -681,7 +679,7 @@ export default function Home() {
     );
   };
 
-  const handlePaste = (e) => {
+  const handleImagePaste = (e) => {
     e.preventDefault()
     const items = e.clipboardData.items;
     for (const item of items) {
@@ -715,8 +713,8 @@ export default function Home() {
 
 
   useEffect(() => {
-    window.addEventListener("paste", handlePaste);
-    return () => window.removeEventListener("paste", handlePaste);
+    window.addEventListener("paste", handleImagePaste);
+    return () => window.removeEventListener("paste", handleImagePaste);
   }, []);
 
   useEffect(() => {
