@@ -9,7 +9,7 @@ const ZoomToolbar = ({ scale, zoomInOut }) => {
     bottom: "10px", // margin from the top
     right: "1px",
     transform: "translateX(-10%)",
-    width: "10%", // 1/4 of the screen width
+    width: "150px", // 1/4 of the screen width
     backgroundColor: "rgba(48, 48, 48, 0.95)",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // Shadow effect
     borderRadius: "8px", // Slightly rounded corners

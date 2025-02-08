@@ -9,7 +9,7 @@ const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack
     top: "10px", // margin from the top
     left: "50%",
     transform: "translateX(-50%)",
-    width: "25%", // 1/4 of the screen width
+    width: "300px", // 1/4 of the screen width
     backgroundColor: "rgba(48, 48, 48, 0.95)",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // Shadow effect
     borderRadius: "8px", // Slightly rounded corners
