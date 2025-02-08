@@ -469,18 +469,27 @@ export default function Home() {
     } else if (corner === "bottomLeft") {
       newWidth = Math.max(initialWidth - deltaX, 1);
       newHeight = Math.max(initialHeight + deltaY, 1);
-      newX = initialX + deltaX; // Move x position left
+      newX = initialX + deltaX;
     } else if (corner === "topRight") {
       newWidth = Math.max(initialWidth + deltaX, 1);
       newHeight = Math.max(initialHeight - deltaY, 1);
-      newY = initialY + deltaY; // Move y position up
+      newY = initialY + deltaY;
     } else if (corner === "topLeft") {
       newWidth = Math.max(initialWidth - deltaX, 1);
       newHeight = Math.max(initialHeight - deltaY, 1);
-      newX = initialX + deltaX; // Move x position left
-      newY = initialY + deltaY; // Move y position up
+      newX = initialX + deltaX;
+      newY = initialY + deltaY;
+    } else if (corner === "topEdge") {
+      newHeight = Math.max(initialHeight - deltaY, 1);
+      newY = initialY + deltaY;
+    } else if (corner === "bottomEdge") {
+      newHeight = Math.max(initialHeight + deltaY, 1);
+    } else if (corner === "rightEdge") {
+      newWidth = Math.max(initialWidth + deltaX, 1);
+    } else if (corner === "leftEdge") {
+      newWidth = Math.max(initialWidth - deltaX, 1);
+      newX = initialX + deltaX;
     }
-  
 
     if (e.ctrlKey || e.metaKey) {
       var factor = 1;
