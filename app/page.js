@@ -420,7 +420,7 @@ export default function Home() {
   const isDraggingSelectionBox = useRef(false);
   const initialSize = useRef(null);
 
-  const handleMouseDownBottomRight = (e) => {
+  const handleCornerMouseDown = (e, corner) => {
     e.preventDefault();
     e.stopPropagation();
     isResizing.current = true;
@@ -434,24 +434,76 @@ export default function Home() {
       initialX: selectionBox.x,
       initialY: selectionBox.y,
       initialAllShapes: [...allShapes],
+      corner,
     };
 
-    document.addEventListener("mousemove", handleMouseMoveBottomRight);
-    document.addEventListener("mouseup", handleMouseUpBottomRight);
+    document.addEventListener("mousemove", handleCornerMouseMove);
+    document.addEventListener("mouseup", handleCornerMouseUp);
   };
 
-  const handleMouseMoveBottomRight = (e) => {
+  const handleCornerMouseMove = (e) => {
     if (!isResizing.current || !initialSize.current) return;
 
-    const { startX, startY, initialWidth, initialHeight, initialX, initialY, initialAllShapes } = initialSize.current;
+    const { startX, startY, initialWidth, initialHeight, initialX, initialY, initialAllShapes, corner } = initialSize.current;
 
+    let newWidth = initialWidth;
+    let newHeight = initialHeight;
+    let newX = initialX;
+    let newY = initialY;
+    
     // Calculate the new size of the container
-    var newWidth = Math.max(initialWidth + (e.clientX - startX) / scale, 1);
-    var newHeight = Math.max(initialHeight + (e.clientY - startY) / scale, 1);
+    // var newWidth = Math.max(initialWidth + (e.clientX - startX) / scale, 1);
+    // var newHeight = Math.max(initialHeight + (e.clientY - startY) / scale, 1);
+    const deltaX = (e.clientX - startX) / scale;
+    const deltaY = (e.clientY - startY) / scale;
+  
+    if (corner === "bottomRight") {
+      newWidth = Math.max(initialWidth + deltaX, 1);
+      newHeight = Math.max(initialHeight + deltaY, 1);
+    } else if (corner === "bottomLeft") {
+      newWidth = Math.max(initialWidth - deltaX, 1);
+      newHeight = Math.max(initialHeight + deltaY, 1);
+      newX = initialX + deltaX; // Move x position left
+    } else if (corner === "topRight") {
+      newWidth = Math.max(initialWidth + deltaX, 1);
+      newHeight = Math.max(initialHeight - deltaY, 1);
+      newY = initialY + deltaY; // Move y position up
+    } else if (corner === "topLeft") {
+      newWidth = Math.max(initialWidth - deltaX, 1);
+      newHeight = Math.max(initialHeight - deltaY, 1);
+      newX = initialX + deltaX; // Move x position left
+      newY = initialY + deltaY; // Move y position up
+    }
+  
 
     if (e.ctrlKey || e.metaKey) {
-      newWidth = Math.max(initialWidth + ((e.clientX - startX) + (e.clientY - startY)) / 2 / scale, 1);
-      newHeight = Math.max(initialHeight + ((e.clientX - startX) + (e.clientY - startY)) / 2 / scale * initialHeight/initialWidth, 1);
+      var factor = 1;
+      if (corner == "topRight" || corner == "bottomLeft") factor = -1;
+
+      const commonPart = (factor * (e.clientX - startX) + (e.clientY - startY)) / 2 / scale;
+      const deltaX = commonPart;
+      const deltaY = commonPart * initialHeight/initialWidth;
+      if (corner == "topLeft") {
+        newWidth = Math.max(initialWidth - deltaX, 1);
+        newHeight = Math.max(initialHeight - deltaY, 1);
+        newX = initialX + deltaX;
+        newY = initialY + deltaY;
+      } else if (corner == "topRight") {
+        newWidth = Math.max(initialWidth - deltaX, 1);
+        newHeight = Math.max(initialHeight - deltaY, 1);
+        newX = initialX;
+        newY = initialY + deltaY;
+      } else if (corner == "bottomRight") {
+        newWidth = Math.max(initialWidth + deltaX, 1);
+        newHeight = Math.max(initialHeight + deltaY, 1);
+        newX = initialX;
+        newY = initialY;
+      } else if (corner == "bottomLeft") {
+        newWidth = Math.max(initialWidth + deltaX, 1);
+        newHeight = Math.max(initialHeight + deltaY, 1);
+        newX = initialX - deltaX;
+        newY = initialY;
+      }
     }
 
     // Calculate resize ratios
@@ -461,23 +513,23 @@ export default function Home() {
     // Update elements based on resize ratios
     const resizedItems = initialAllShapes.map((shape) => ({
       ...shape,
-      x: shape.selected ? Math.round((shape.x - initialX) * widthRatio + initialX) : shape.x,
-      y: shape.selected ? Math.round((shape.y - initialY) * heightRatio + initialY) : shape.y,
+      x: shape.selected ? Math.round((shape.x - initialX) * widthRatio + newX) : shape.x,
+      y: shape.selected ? Math.round((shape.y - initialY) * heightRatio + newY) : shape.y,
       w: shape.selected ? Math.round(shape.w * widthRatio) : shape.w,
       h: shape.selected ? Math.round(shape.h * heightRatio) : shape.h,
     }));
 
     // Update state
-    setSelectionBox({ x: selectionBox.x, y: selectionBox.y, width: newWidth, height: newHeight });
+    setSelectionBox({ x: newX, y: newY, width: newWidth, height: newHeight });
     setAllShapes(resizedItems);
   };
 
 
-  const handleMouseUpBottomRight = () => {
+  const handleCornerMouseUp = () => {
     isResizing.current = false;
     pushToHistory(allShapes);
-    document.removeEventListener("mousemove", handleMouseMoveBottomRight);
-    document.removeEventListener("mouseup", handleMouseUpBottomRight);
+    document.removeEventListener("mousemove", handleCornerMouseMove);
+    document.removeEventListener("mouseup", handleCornerMouseUp);
   };
 
 
@@ -821,6 +873,7 @@ export default function Home() {
         >
           {/* Top-left corner */}
           <div
+            onMouseDown={(e) => handleCornerMouseDown(e, "topLeft")}
             style={{
               position: 'absolute',
               top: '-5px',
@@ -830,10 +883,12 @@ export default function Home() {
               backgroundColor: 'white',
               border: '1px solid black',
               borderRadius: '50%',
+              cursor: 'nwse-resize',
             }}
           />
           {/* Top-right corner */}
           <div
+            onMouseDown={(e) => handleCornerMouseDown(e, "topRight")}
             style={{
               position: 'absolute',
               top: '-5px',
@@ -843,10 +898,12 @@ export default function Home() {
               backgroundColor: 'white',
               border: '1px solid black',
               borderRadius: '50%',
+              cursor: 'nesw-resize',
             }}
           />
           {/* Bottom-left corner */}
           <div
+            onMouseDown={(e) => handleCornerMouseDown(e, "bottomLeft")}
             style={{
               position: 'absolute',
               bottom: '-5px',
@@ -856,11 +913,12 @@ export default function Home() {
               backgroundColor: 'white',
               border: '1px solid black',
               borderRadius: '50%',
+              cursor: 'nesw-resize',
             }}
           />
           {/* Bottom-right corner */}
           <div
-            onMouseDown={handleMouseDownBottomRight}
+            onMouseDown={(e) => handleCornerMouseDown(e, "bottomRight")}
             style={{
               position: 'absolute',
               bottom: '-5px',
