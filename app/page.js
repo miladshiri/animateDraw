@@ -60,6 +60,10 @@ export default function Home() {
   const [pasteImage, setPasteImage] = useState(null);
   const [pasteImageId, setPasteImageId] = useState(null);
 
+  const isResizing = useRef(false);
+  const isDraggingSelectionBox = useRef(false);
+  const initialSize = useRef(null);
+
   useEffect(() => {
     console.log(selectedShape);
   }, [selectedShape])
@@ -213,6 +217,8 @@ export default function Home() {
 
   const handleMouseDown = (e) => {
     e.preventDefault();
+    isResizing.current = false;
+    isDraggingSelectionBox.current = false;
 
     if (selectedTool == 'pan') {
       setIsPanning(true);
@@ -320,6 +326,9 @@ export default function Home() {
       setIsPanning(false);
     }
     else if (selectedTool == 'select') {
+      if (isResizing.current) return;
+      if (isDraggingSelectionBox.current) return;
+
       setIsSelecting(false);
       const box = selectionDragBox;
       const updateShapes = [];
@@ -416,9 +425,6 @@ export default function Home() {
     }
   }
 
-  const isResizing = useRef(false);
-  const isDraggingSelectionBox = useRef(false);
-  const initialSize = useRef(null);
 
   const handleCornerMouseDown = (e, corner) => {
     e.preventDefault();
@@ -526,7 +532,7 @@ export default function Home() {
 
 
   const handleCornerMouseUp = () => {
-    isResizing.current = false;
+    // isResizing.current = false;
     pushToHistory(allShapes);
     document.removeEventListener("mousemove", handleCornerMouseMove);
     document.removeEventListener("mouseup", handleCornerMouseUp);
@@ -535,6 +541,7 @@ export default function Home() {
 
   const handleMouseDownSelectionBox = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     isDraggingSelectionBox.current = true;
 
     // Store initial container and mouse positions
@@ -573,7 +580,7 @@ export default function Home() {
   const handleMouseUpSelectionBox = (e) => {
     console.log("mouse up selection")
     pushToHistory(allShapes);
-    isDraggingSelectionBox.current = false;
+    // isDraggingSelectionBox.current = false;
     document.removeEventListener("mousemove", handleMouseMoveSelectionBox);
     document.removeEventListener("mouseup", handleMouseUpSelectionBox);
 
