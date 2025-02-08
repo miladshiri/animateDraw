@@ -36,6 +36,7 @@ export default function Home() {
     const savedOffset = localStorage.getItem("offset");
     return savedOffset ? JSON.parse(savedOffset) : {x:0, y:0};
   });
+  const [universalMousePosition, setUniversalMousePosition] = useState({ x: 0, y: 0 });
 
   const [isPanning, setIsPanning] = useState(false);
 
@@ -61,6 +62,9 @@ export default function Home() {
   const isResizing = useRef(false);
   const isDraggingSelectionBox = useRef(false);
   const initialSize = useRef(null);
+
+  const [clipboard, setClipboard] = useState([]);
+
 
   useEffect(() => {
     console.log(selectedShape);
@@ -110,9 +114,30 @@ export default function Home() {
         if (event.key === "z") {
           event.preventDefault(); // Prevent default browser undo
           undo(event);
-        } else if (event.key === "x") {
+        } else if (event.key === "y") {
           event.preventDefault(); // Prevent default cut action
           redo(event);
+        } else if (event.key === "c") {
+          const selectedShapes = allShapes.filter(shape => shape.selected);
+          setClipboard(selectedShapes);
+        } else if (event.key === "x") {
+          const selectedShapes = allShapes.filter(shape => shape.selected);
+          setClipboard(selectedShapes);
+          setAllShapes(allShapes.filter(shape => !shape.selected));
+          setSelectionBox(null);
+        } else if (event.key === "v") {
+          if (clipboard.length > 0) {
+
+            const newShapes = clipboard.map(shape => ({
+              ...shape,
+              id: Date.now() + Math.random(),
+              x: xScreenToWorld(universalMousePosition.x) - shape.w / 2,
+              y: yScreenToWorld(universalMousePosition.y) - shape.h / 2,
+              selected: false
+            }));
+            setAllShapes(prevShapes => [...prevShapes, ...newShapes]);
+            pushToHistory(allShapes);
+          }
         }
       }
     };
@@ -256,6 +281,7 @@ export default function Home() {
   };
 
   const handleMouseMove = (e) => {
+    setUniversalMousePosition({ x: e.clientX, y: e.clientY });
     if (selectedTool == 'pan') {
       if (!isPanning || !initialPan.current) return;
 
@@ -539,7 +565,6 @@ export default function Home() {
 
 
   const handleCornerMouseUp = () => {
-    // isResizing.current = false;
     pushToHistory(allShapes);
     document.removeEventListener("mousemove", handleCornerMouseMove);
     document.removeEventListener("mouseup", handleCornerMouseUp);
