@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { ZoomIn, ZoomOut } from "lucide-react";
+import { ZoomIn, ZoomOut, ScanSearch, Expand, Lock } from "lucide-react";
 
-const ZoomToolbar = ({ scale, zoomInOut }) => {
+const ZoomToolbar = ({ scale, zoomInOut, resetZoom, fitScreen, freezeScreen }) => {
   const toolbarStyle = {
     position: "fixed",
     bottom: "10px", // margin from the top
     right: "1px",
     transform: "translateX(-10%)",
-    width: "150px", // 1/4 of the screen width
+    width: "220px", // 1/4 of the screen width
     backgroundColor: "rgba(48, 48, 48, 0.95)",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // Shadow effect
     borderRadius: "8px", // Slightly rounded corners
-    padding: "10px",
+    padding: "6px",
     zIndex: 1000, // Ensures it stays on top of other elements
     display: "flex",
     justifyContent: "space-around",
@@ -31,27 +31,53 @@ const ZoomToolbar = ({ scale, zoomInOut }) => {
   }
 
   return (
-    <div className="toolbar" style={toolbarStyle}>
+    <div className="toolbar" style={toolbarStyle}
+      onMouseUp={(event) => event.stopPropagation()}
+      onMouseDown={(event) => event.stopPropagation()}
+    >
 
       <button
         onMouseUp={(event) => event.stopPropagation()}
         onMouseDown={(event) => zoomIn(event)}
       >
-        <ZoomIn size={20} strokeWidth={1} />
+        <ZoomIn size={18} strokeWidth={1} />
       </button>
 
-      <div
-        style={{
-          color:"#ededed",
-        }}
-      >{Math.round(scale*100)}%</div>
+      <button
+        onMouseUp={(event) => event.stopPropagation()}
+        onMouseDown={(event) => resetZoom()}
+      >
+        <div
+          style={{
+            color:"#ededed",
+          }}
+        >{Math.round(scale*100)}%</div>
+      </button>
 
       <button
         onMouseUp={(event) => event.stopPropagation()}
         onMouseDown={(event) => zoomOut(event)}
       >
-        <ZoomOut size={20} strokeWidth={1} />
+        <ZoomOut size={18} strokeWidth={1} />
       </button>
+
+      <div className="toolbar-separator"></div>
+
+      <button
+        onMouseUp={(event) => event.stopPropagation()}
+        onMouseDown={(event) => fitScreen(event)}
+      >
+        <ScanSearch size={18} strokeWidth={1} />
+      </button>
+
+      <button
+        onMouseUp={(event) => event.stopPropagation()}
+        onMouseDown={(event) => freezeScreen(event)}
+        
+      >
+        <Expand size={18} strokeWidth={1} />
+      </button>
+
     </div>
   );
 };

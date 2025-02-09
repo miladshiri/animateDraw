@@ -181,7 +181,31 @@ export default function Home() {
 
   const zoomInOut = (zoomFactor, xCenter, yCenter) => {
     setScale((prevScale) => {
-      const newScale = Math.min(Math.max(prevScale * zoomFactor, 0.4), 3); // Clamp the scale
+      const newScale = Math.min(Math.max(prevScale * zoomFactor, 0.02), 16); // Clamp the scale
+
+      setOffset((prevOffset) => {
+        
+        const m_before_zoom_x = xCenter / prevScale + prevOffset.x;
+        const m_before_zoom_y = yCenter / prevScale + prevOffset.y;
+
+        const m_after_zoom_x = xCenter / newScale + prevOffset.x;
+        const m_after_zoom_y = yCenter / newScale + prevOffset.y;
+
+        const newOffsetX = prevOffset.x + (m_before_zoom_x - m_after_zoom_x) / 2;
+        const newOffsetY = prevOffset.y + (m_before_zoom_y - m_after_zoom_y) / 2;
+
+        return { x: newOffsetX, y: newOffsetY};
+      });
+
+      return newScale;
+    });
+  }
+
+  const resetZoom = () => {
+    setScale((prevScale) => {
+      const newScale = 1;
+      const xCenter = window.innerWidth / 2;
+      const yCenter = window.innerHeight / 2;
 
       setOffset((prevOffset) => {
         // Adjust the offset to keep the mouse pointer fixed relative to content
@@ -234,7 +258,36 @@ export default function Home() {
     }
   };
 
+  const fitScreen = () => {
+    var minX = Infinity;
+    var minY = Infinity;
+    var maxX = -Infinity;
+    var maxY = -Infinity;
 
+    allShapes.forEach((shape) => {
+      minX = Math.min(minX, shape.x);
+      minY = Math.min(minY, shape.y);
+      maxX = Math.max(maxX, shape.x + shape.w);
+      maxY = Math.max(maxY, shape.y + shape.h);
+    });
+
+    const boundingWidth = maxX - minX;
+    const boundingHeight = maxY - minY;
+
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const scaleX = screenWidth / boundingWidth;
+    const scaleY = screenHeight / boundingHeight;
+    const scale = Math.min(scaleX, scaleY);
+
+    const offsetX =  minX;
+    const offsetY = minY;
+    setScale(scale);
+    setOffset({ x: offsetX, y: offsetY });
+  }
+
+  const freezeScreen = () => {
+  }
 
   const initialPan = useRef(null);
 
@@ -849,7 +902,7 @@ export default function Home() {
         <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName}/>
       }
 
-      <ZoomToolbar scale={scale} zoomInOut={zoomInOut} />
+      <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} />
       
       {allShapes.map((shape, index) => (
         <ShapeWrapper
