@@ -65,6 +65,8 @@ export default function Home() {
 
   const [clipboard, setClipboard] = useState([]);
 
+  const [isFreezeScreenSelected, setIsFreezeScreenSelected] = useState(false);
+
 
   useEffect(() => {
     console.log(selectedShape);
@@ -287,6 +289,12 @@ export default function Home() {
   }
 
   const freezeScreen = () => {
+    if (!isFreezeScreenSelected) {
+      setSelectedTool('pan');
+      setIsFreezeScreenSelected(true);  
+    } else {
+      setIsFreezeScreenSelected(false); 
+    }
   }
 
   const initialPan = useRef(null);
@@ -884,6 +892,7 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
+      {!isFreezeScreenSelected &&
       <Toolbar
         setSelectedTool={setSelectedTool}
         selectedTool={selectedTool}
@@ -893,16 +902,17 @@ export default function Home() {
         redoStack={redoStack}
         storeImage={storeImage}
       />
+      }
 
       {selectedTool === 'shape' &&
         <ShapeToolbar setShapeToCreate={setShapeToCreate} shapeToCreate={shapeToCreate}/>
       }
 
-      {selectedShape && selectedTool === 'select' &&
+      {selectedShape && selectedTool === 'select' && !isFreezeScreenSelected &&
         <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName}/>
       }
 
-      <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} />
+      <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
       
       {allShapes.map((shape, index) => (
         <ShapeWrapper

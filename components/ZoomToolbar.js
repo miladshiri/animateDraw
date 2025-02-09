@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { ZoomIn, ZoomOut, ScanSearch, Expand, Lock } from "lucide-react";
 
-const ZoomToolbar = ({ scale, zoomInOut, resetZoom, fitScreen, freezeScreen }) => {
+const ZoomToolbar = ({ scale, zoomInOut, resetZoom, fitScreen, freezeScreen, isFreezeScreenSelected }) => {
   const toolbarStyle = {
     position: "fixed",
     bottom: "10px", // margin from the top
@@ -73,9 +73,33 @@ const ZoomToolbar = ({ scale, zoomInOut, resetZoom, fitScreen, freezeScreen }) =
       <button
         onMouseUp={(event) => event.stopPropagation()}
         onMouseDown={(event) => freezeScreen(event)}
-        
+        className={isFreezeScreenSelected ? 'isSelected' : ''}
+        style={{
+          width: "32px",
+          height: "32px",
+          position: "relative",
+        }}
       >
-        <Expand size={18} strokeWidth={1} />
+        <Expand size={18} strokeWidth={1} 
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          padding: '6px',
+        }} />
+        {isFreezeScreenSelected &&
+          <Lock size={18} strokeWidth={3} 
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            padding: '10px',
+          }} />
+        }
       </button>
 
     </div>
