@@ -927,17 +927,7 @@ export default function Home() {
           shapeSettings={shape.settings}
         />
       ))}
-<div
-  style={{
-    position: "absolute",
-    top: `0px`,
-    left: `0px`,
-    width: `150px`,
-    height: `150px`,
-  }}
->
 
-</div>
        {/* Render the shape being drawn */}
        {drawing && currentShape && (
           <ShapeWrapper selectedTool={selectedTool} ShapeComponent={currentShape.component} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
