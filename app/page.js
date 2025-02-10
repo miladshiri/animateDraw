@@ -7,6 +7,7 @@ import ZoomToolbar from "@/components/ZoomToolbar";
 import ShapeToolbar from "@/components/ShapeToolbar";
 import ShapeSettings from "@/components/ShapeSettings";
 import { getImageFromIndexedDB, saveImageToIndexedDB } from "@/utils/indexedDBHelper";
+import BottomToolbar from "@/components/BottomToolbar";
 
 export default function Home() {
   const defaultShapes = [
@@ -36,6 +37,12 @@ export default function Home() {
     const savedOffset = localStorage.getItem("offset");
     return savedOffset ? JSON.parse(savedOffset) : {x:0, y:0};
   });
+
+  const [boardColor, setBoardColor] = useState(() => {
+    const savedOffset = localStorage.getItem("boardColor");
+    return savedOffset ? JSON.parse(savedOffset) : "#232323";
+  });
+
   const [universalMousePosition, setUniversalMousePosition] = useState({ x: 0, y: 0 });
 
   const [isPanning, setIsPanning] = useState(false);
@@ -67,6 +74,7 @@ export default function Home() {
 
   const [isFreezeScreenSelected, setIsFreezeScreenSelected] = useState(false);
 
+
   const generateUniqueId = () => {
     return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
   }
@@ -80,7 +88,8 @@ export default function Home() {
     localStorage.setItem("shapes", JSON.stringify(allShapes));
     localStorage.setItem("scale", JSON.stringify(scale));
     localStorage.setItem("offset", JSON.stringify(offset));
-  }, [allShapes, scale, offset]);
+    localStorage.setItem("boardColor", JSON.stringify(boardColor));
+  }, [allShapes, scale, offset, boardColor]);
 
   const pushToHistory = (newShapes) => {
     console.log('push to history called')
@@ -883,7 +892,7 @@ export default function Home() {
         width: "100vw",
         height: "100vh",
         overflow: "hidden",
-        backgroundColor:"rgb(7, 23, 34)",
+        backgroundColor:`${boardColor}`,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -916,6 +925,8 @@ export default function Home() {
 
       <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
       
+      <BottomToolbar boardColor={boardColor} setBoardColor={setBoardColor} />
+
       {allShapes.map((shape, index) => (
         <ShapeWrapper
           key={index}
