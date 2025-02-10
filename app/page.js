@@ -43,7 +43,7 @@ export default function Home() {
     return savedOffset ? JSON.parse(savedOffset) : "#232323";
   });
 
-  const [universalMousePosition, setUniversalMousePosition] = useState({ x: 0, y: 0 });
+  const universalMousePosition = useRef({ x: 0, y: 0 });
 
   const [isPanning, setIsPanning] = useState(false);
 
@@ -161,8 +161,8 @@ export default function Home() {
             const newShapes = clipboard.map(shape => ({
               ...shape,
               id: generateUniqueId(),
-              x: xScreenToWorld(universalMousePosition.x) - shape.w / 2,
-              y: yScreenToWorld(universalMousePosition.y) - shape.h / 2,
+              x: xScreenToWorld(universalMousePosition.current.x) - shape.w / 2,
+              y: yScreenToWorld(universalMousePosition.current.y) - shape.h / 2,
               selected: false
             }));
             setAllShapes(prevShapes => [...prevShapes, ...newShapes]);
@@ -370,7 +370,7 @@ export default function Home() {
   };
 
   const handleMouseMove = (e) => {
-    setUniversalMousePosition({ x: e.clientX, y: e.clientY });
+    universalMousePosition.current = { x: e.clientX, y: e.clientY };
     if (selectedTool == 'pan') {
       if (!isPanning || !initialPan.current) return;
 
