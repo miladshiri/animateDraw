@@ -74,22 +74,38 @@ export default function Home() {
 
   const [isFreezeScreenSelected, setIsFreezeScreenSelected] = useState(false);
 
+  const [colorPalette, setColorPalette] = useState(["#232323", "#990077", "#2f6b85"]);
+
+  const updateColorPalette = () => {
+    const shapeColors = allShapes.map(shape => shape.settings?.shapeColor);
+    const borderColors = allShapes.map(shape => shape.settings?.borderColor);
+    const getMostFrequentColor = (colors) => {
+      const countMap = colors.reduce((acc, color) => {
+        if (color) {
+          acc[color] = (acc[color] || 0) + 1;
+        }
+        return acc;
+      }, {});
+      return Object.keys(countMap).reduce((a, b) => countMap[a] >= countMap[b] ? a : b);
+    };
+  
+    const mostUsedShapeColor = getMostFrequentColor(shapeColors);
+    const mostUsedBorderColor = getMostFrequentColor(borderColors);
+
+    setColorPalette([boardColor, mostUsedShapeColor, mostUsedBorderColor]);
+  };
 
   const generateUniqueId = () => {
     return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
   }
 
-  useEffect(() => {
-    console.log(selectedShape);
-  }, [selectedShape])
-  
 
   useEffect(() => {
     localStorage.setItem("shapes", JSON.stringify(allShapes));
     localStorage.setItem("scale", JSON.stringify(scale));
     localStorage.setItem("offset", JSON.stringify(offset));
     localStorage.setItem("boardColor", JSON.stringify(boardColor));
-  }, [allShapes, scale, offset, boardColor]);
+  }, [allShapes, scale, offset]);
 
   const pushToHistory = (newShapes) => {
     console.log('push to history called')
@@ -920,13 +936,15 @@ export default function Home() {
       }
 
       {selectedShape && selectedTool === 'select' && !isFreezeScreenSelected &&
-        <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName}/>
+        <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName} updateColorPalette={updateColorPalette} colorPalette={colorPalette} />
       }
 
       <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
       
-      <BottomToolbar boardColor={boardColor} setBoardColor={setBoardColor} />
-
+      { !isFreezeScreenSelected && 
+        <BottomToolbar boardColor={boardColor} setBoardColor={setBoardColor} />
+      }
+      
       {allShapes.map((shape, index) => (
         <ShapeWrapper
           key={index}

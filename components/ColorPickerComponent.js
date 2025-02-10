@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 
-const ColorPickerComponent = ({initialColor, changeShapeSettingByName, settingName}) => {
+const ColorPickerComponent = ({initialColor, changeShapeSettingByName, settingName, updateColorPalette, colorPalette}) => {
   const [color, setColor] = useState(initialColor); // Default color
   const [showPicker, setShowPicker] = useState(false);
 
@@ -12,23 +12,51 @@ const ColorPickerComponent = ({initialColor, changeShapeSettingByName, settingNa
 
   useEffect(() => {
     changeShapeSettingByName(settingName, color);
+    updateColorPalette();
   }, [color])
 
   return (
     <div style={{ position: "relative", display: "inline-block" }}>
       {/* Color Display Box */}
       <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around"
+        }}
+      >
+      <div
         onMouseDown={handleColorBoxClick}
         onMouseUp={(e) => e.stopPropagation()}
         style={{
-          width: "180px",
+          width: "30px",
           height: "30px",
           backgroundColor: color,
-          border: "2px solid #000",
+          border: "1px solid #fff",
           cursor: "pointer",
           borderRadius: "4px",
         }}
       >
+      </div>
+      
+      <div className="toolbar-separator"></div>
+      
+      {colorPalette.map((colorItem, index) => (
+        <div
+          key={index}
+          onMouseDown={() => setColor(colorItem)}
+          onMouseUp={(e) => e.stopPropagation()}
+          style={{
+            width: "30px",
+            height: "30px",
+            backgroundColor: `${colorItem}`,
+            border: "1px solid #fff",
+            cursor: "pointer",
+            borderRadius: "4px",
+            margin: "2px",
+          }}
+        >
+        </div>
+      ))}
       </div>
       {/* Color Picker (Shown on Click) */}
       {showPicker && (

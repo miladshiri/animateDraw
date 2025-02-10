@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import ColorPickerComponent from "./ColorPickerComponent";
 
-const ShapeSettings = ({selectedShape, changeShapeSettingByName}) => {
+const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPalette, colorPalette}) => {
 
   const [animationSpeed, setAnimationSpeed] = useState(selectedShape.settings?.animationSpeed)
 
@@ -29,7 +29,7 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName}) => {
         <div className="toolbar-item">
           <div className="toolbar-title">Shape Color</div>
           <div className="toolbar-setting">
-            <ColorPickerComponent initialColor={selectedShape.settings.shapeColor}  changeShapeSettingByName={changeShapeSettingByName} settingName={"shapeColor"} />
+            <ColorPickerComponent initialColor={selectedShape.settings.shapeColor}  changeShapeSettingByName={changeShapeSettingByName} settingName={"shapeColor"} updateColorPalette={updateColorPalette} colorPalette={colorPalette} />
           </div>
         </div>
       )}
@@ -38,7 +38,7 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName}) => {
         <div className="toolbar-item">
           <div className="toolbar-title">Border Color</div>
           <div className="toolbar-setting">
-            <ColorPickerComponent initialColor={selectedShape.settings.borderColor} changeShapeSettingByName={changeShapeSettingByName} settingName={"borderColor"}/>
+            <ColorPickerComponent initialColor={selectedShape.settings.borderColor} changeShapeSettingByName={changeShapeSettingByName} settingName={"borderColor"} updateColorPalette={updateColorPalette} colorPalette={colorPalette}/>
           </div>
         </div>
       )}
