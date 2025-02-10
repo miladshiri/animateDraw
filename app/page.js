@@ -67,6 +67,9 @@ export default function Home() {
 
   const [isFreezeScreenSelected, setIsFreezeScreenSelected] = useState(false);
 
+  const generateUniqueId = () => {
+    return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+  }
 
   useEffect(() => {
     console.log(selectedShape);
@@ -132,7 +135,7 @@ export default function Home() {
 
             const newShapes = clipboard.map(shape => ({
               ...shape,
-              id: Date.now() + Math.random(),
+              id: generateUniqueId(),
               x: xScreenToWorld(universalMousePosition.x) - shape.w / 2,
               y: yScreenToWorld(universalMousePosition.y) - shape.h / 2,
               selected: false
@@ -334,9 +337,9 @@ export default function Home() {
       const startY = e.clientY;
 
       setDrawing(true);
-      const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+
       console.log(defaultSettings[shapeToCreate])
-      setCurrentShape({id: uniqueId ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate, settings: defaultSettings[shapeToCreate] });
+      setCurrentShape({id: generateUniqueId() ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate, settings: defaultSettings[shapeToCreate] });
     }
 
   };
@@ -814,10 +817,9 @@ export default function Home() {
         img.src = await loadImageAsBase64(pasteImageId); // Ensure we get the image URL
         
         img.onload = () => {
-          const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
           
           const imageShape = {
-            id: uniqueId,
+            id: generateUniqueId(),
             x: xScreenToWorld(centerX) - img.width / 2,
             y: yScreenToWorld(centerY) - img.height / 2,
             w: img.width,
