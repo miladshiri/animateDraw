@@ -107,9 +107,7 @@ export default function Home() {
     localStorage.setItem("boardColor", JSON.stringify(boardColor));
   }, [allShapes, scale, offset]);
 
-  const pushToHistory = (newShapes) => {
-    console.log('push to history called')
-    // Save the current state to history and clear the redo stack
+  const pushToHistory = () => {
     setHistory((prev) => [...prev, allShapes]);
     setRedoStack([]);
   };
@@ -166,7 +164,7 @@ export default function Home() {
               selected: false
             }));
             setAllShapes(prevShapes => [...prevShapes, ...newShapes]);
-            pushToHistory(allShapes);
+            pushToHistory();
           }
         }
       }
@@ -387,6 +385,7 @@ export default function Home() {
       };
 
       setAllShapes((prevShapes) => [...prevShapes, newShape]);
+      pushToHistory()
         return;
       }
 
@@ -510,7 +509,7 @@ export default function Home() {
         if (previousIsAnySelected || isAnySelected) {
           setAllShapes(updateShapes);
           console.log('push to hisotry inside mouseup')
-          pushToHistory(updateShapes);
+          pushToHistory();
         }
 
       }
@@ -533,7 +532,7 @@ export default function Home() {
       if (drawing && currentShape) {
         if (currentShape.w > 0 && currentShape.h > 0) {
           setAllShapes((prev) => [...prev, currentShape]);
-          pushToHistory(currentShape);
+          pushToHistory();
         }
         setDrawing(false);
         setCurrentShape(null);
@@ -687,7 +686,7 @@ export default function Home() {
 
 
   const handleCornerMouseUp = () => {
-    pushToHistory(allShapes);
+    pushToHistory();
     document.removeEventListener("mousemove", handleCornerMouseMove);
     document.removeEventListener("mouseup", handleCornerMouseUp);
   };
@@ -733,7 +732,7 @@ export default function Home() {
 
   const handleMouseUpSelectionBox = (e) => {
     console.log("mouse up selection")
-    pushToHistory(allShapes);
+    pushToHistory();
     // isDraggingSelectionBox.current = false;
     document.removeEventListener("mousemove", handleMouseMoveSelectionBox);
     document.removeEventListener("mouseup", handleMouseUpSelectionBox);
@@ -764,7 +763,7 @@ export default function Home() {
         }
 
       setAllShapes(updateShapesWithSelect);
-      pushToHistory(updateShapesWithSelect);
+      pushToHistory();
 
       var minX = Infinity;
       var minY = Infinity;
@@ -808,7 +807,7 @@ export default function Home() {
         if (selectedShapes.length > 0)  {
           setAllShapes((prevShapes) => prevShapes.filter((shape) => !shape.selected));
           setSelectionBox(null);
-          pushToHistory(allShapes);
+          pushToHistory();
         }
       }
     };
@@ -895,7 +894,7 @@ export default function Home() {
   
           console.log(imageShape);
           setAllShapes((prev) => [...prev, imageShape]);
-          pushToHistory(imageShape);
+          pushToHistory();
           setPasteImage(null);
         };
   
@@ -1028,7 +1027,7 @@ export default function Home() {
           minHeight: "30px",
           padding: "5px",
           fontSize: `${16}px`,
-          color: "red",
+          color: "black",
           border: "1px solid #000",
           background: "white",
           outline: "none",

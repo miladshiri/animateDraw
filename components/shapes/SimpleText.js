@@ -17,6 +17,11 @@ const SimpleText = ({size, shapeSettings}) => {
         height: size.h,
         overflow: "hidden",
         fontSize: fontSize ? fontSize : 0,
+        padding: "5px",
+        overflow: "hidden",
+        wordBreak: "break-word",
+        display: "inline-block",
+        whiteSpace: "pre-wrap",
         // transform: `scale(${finalSize.w / shapeSettings.initialW}, ${finalSize.h / shapeSettings.initialH})`,
 
       }}
