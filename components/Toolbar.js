@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Undo, Redo, Move, SquareDashedMousePointer, Shapes, Image } from "lucide-react";
+import { Undo, Redo, Move, SquareDashedMousePointer, Shapes, Image, Type } from "lucide-react";
 
 const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack, storeImage }) => {
   const toolbarStyle = {
@@ -58,6 +58,9 @@ const Toolbar = ({ setSelectedTool, selectedTool, undo, redo, history, redoStack
       </button>
       <button onMouseDown={(event) => handleMouseDown(event, "shape")} className={selectedTool === "shape" ? "isSelected" : ""}>
         <Shapes size={20} strokeWidth={1} />
+      </button>
+      <button onMouseDown={(event) => handleMouseDown(event, "text")} className={selectedTool === "text" ? "isSelected" : ""}>
+        <Type size={20} strokeWidth={1} />
       </button>
       <input
         type="file"

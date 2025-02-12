@@ -327,6 +327,11 @@ export default function Home() {
 
   const initialPan = useRef(null);
 
+  const [isTyping, setIsTyping] = useState(false);
+  const [currentTypingText, setCurrentTypingText] = useState("");
+
+  const textInputRef = useRef(null);
+
   const handleMouseDown = (e) => {
     e.preventDefault();
     isResizing.current = false;
@@ -365,6 +370,34 @@ export default function Home() {
 
       console.log(defaultSettings[shapeToCreate])
       setCurrentShape({id: generateUniqueId() ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate, settings: defaultSettings[shapeToCreate] });
+    }
+    else if (selectedTool == 'text') {
+      if (isTyping) {
+        const { width, height } = textInputRef.current.getBoundingClientRect();
+        setIsTyping(false);
+        const newShape = {
+          id: Date.now(),
+          x: xScreenToWorld(initialPan.current.startX),
+          y: yScreenToWorld(initialPan.current.startY),
+          w: width / scale,
+          h: height / scale,
+          component: "SimpleText",
+          selected: false,
+          settings: { text: currentTypingText, initialW: width / scale, initialH: height / scale, fontSizeRate: 16 / (width + height) * 2 , textColor: "#fff" }
+      };
+
+      setAllShapes((prevShapes) => [...prevShapes, newShape]);
+        return;
+      }
+
+      initialPan.current = {
+        startX: e.clientX,
+        startY: e.clientY,
+        initialOffset: offset,
+      }
+
+      setCurrentTypingText("");
+      setIsTyping(true);
     }
 
   };
@@ -709,55 +742,61 @@ export default function Home() {
 
   const handleShapeClick = (id, e) => {
     e.stopPropagation();
-    if (selectedTool != 'select') return;
-    const isCtrlPressed = e.ctrlKey || e.metaKey;
+    if (selectedTool == 'select') {
+      const isCtrlPressed = e.ctrlKey || e.metaKey;
 
-    const updateShapesWithSelect = allShapes.map((shape) => {
-        if (isCtrlPressed) {
-          // Toggle the clicked shape without affecting others
-          return shape.id === id
-            ? { ...shape, selected: !shape.selected }
-            : shape;
-        } else {
-          // Select only the clicked shape, deselect others
-          return { ...shape, selected: shape.id === id };
+      const updateShapesWithSelect = allShapes.map((shape) => {
+          if (isCtrlPressed) {
+            // Toggle the clicked shape without affecting others
+            return shape.id === id
+              ? { ...shape, selected: !shape.selected }
+              : shape;
+          } else {
+            // Select only the clicked shape, deselect others
+            return { ...shape, selected: shape.id === id };
+          }
+        });
+
+        if (!isCtrlPressed) {
+          const shape = allShapes.filter((shape) => shape.id === id)[0];
+          setSelectedShape(shape);
+          console.log(shape);
         }
+
+      setAllShapes(updateShapesWithSelect);
+      pushToHistory(updateShapesWithSelect);
+
+      var minX = Infinity;
+      var minY = Infinity;
+      var maxX = -Infinity;
+      var maxY = -Infinity;
+      var isAnySelected = false;
+      updateShapesWithSelect.forEach((shape) => {
+        if (shape.selected) {
+            isAnySelected = true;
+            minX = Math.min(minX, shape.x);
+            minY = Math.min(minY, shape.y);
+            maxX = Math.max(maxX, shape.x + shape.w);
+            maxY = Math.max(maxY, shape.y + shape.h);
+          }
       });
 
-      if (!isCtrlPressed) {
-        const shape = allShapes.filter((shape) => shape.id === id)[0];
-        setSelectedShape(shape);
-        console.log(shape);
+      if (!isAnySelected) {
+        setSelectionBox(null);
       }
-
-    setAllShapes(updateShapesWithSelect);
-    pushToHistory(updateShapesWithSelect);
-
-    var minX = Infinity;
-    var minY = Infinity;
-    var maxX = -Infinity;
-    var maxY = -Infinity;
-    var isAnySelected = false;
-    updateShapesWithSelect.forEach((shape) => {
-      if (shape.selected) {
-          isAnySelected = true;
-          minX = Math.min(minX, shape.x);
-          minY = Math.min(minY, shape.y);
-          maxX = Math.max(maxX, shape.x + shape.w);
-          maxY = Math.max(maxY, shape.y + shape.h);
-        }
-    });
-
-    if (!isAnySelected) {
-      setSelectionBox(null);
+      else {
+        setSelectionBox({
+          x: minX,
+          y: minY,
+          width: Math.abs(maxX - minX),
+          height: Math.abs(maxY - minY),
+        })
+      }
     }
-    else {
-      setSelectionBox({
-        x: minX,
-        y: minY,
-        width: Math.abs(maxX - minX),
-        height: Math.abs(maxY - minY),
-      })
+    else if (selectedTool == 'text') {
+      setEditingShapeId(shape.id);
+      setCurrentText(shape.settings.text);
+      setIsTyping(true);
     }
   };
 
@@ -899,6 +938,13 @@ export default function Home() {
     e.preventDefault();
   }
 
+
+  useEffect(() => {
+    if (isTyping && textInputRef.current) {
+        textInputRef.current.focus();
+    }
+  }, [isTyping]);
+
   return (
     <div
     style={{
@@ -912,7 +958,7 @@ export default function Home() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: selectedTool == 'pan' ? 'move' : 'default'
+        cursor: selectedTool == 'pan' ? 'move' : (selectedTool == 'text' ? 'text' : 'default')
     }}
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
@@ -963,6 +1009,38 @@ export default function Home() {
        {drawing && currentShape && (
           <ShapeWrapper selectedTool={selectedTool} ShapeComponent={currentShape.component} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
        )}
+
+      {isTyping && (
+         
+      <div
+        contentEditable
+        suppressContentEditableWarning
+        onInput={(e) => setCurrentTypingText(e.target.innerText)}
+        ref={textInputRef}
+        onKeyDown={(e) => {
+          e.stopPropagation();
+        }}
+        style={{
+          position: "absolute",
+          left: `${initialPan.current.startX}px`,
+          top: `${initialPan.current.startY}px`,
+          minWidth: "10px",
+          minHeight: "30px",
+          padding: "5px",
+          fontSize: `${16}px`,
+          color: "red",
+          border: "1px solid #000",
+          background: "white",
+          outline: "none",
+          resize: "none",
+          overflow: "hidden",
+          wordBreak: "break-word",
+          display: "inline-block",
+          whiteSpace: "pre-wrap",
+        }}
+      >
+      </div>
+      )}
 
        {/* Selection Box */}
       {selectionDragBox && (
