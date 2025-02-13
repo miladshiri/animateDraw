@@ -95,6 +95,26 @@ export default function Home() {
     setColorPalette([boardColor, mostUsedShapeColor, mostUsedBorderColor]);
   };
 
+  const [isCtrlPressed, setIsCtrlPressed] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey || event.metaKey) setIsCtrlPressed(true);
+    };
+
+    const handleKeyUp = (event) => {
+      if (!event.ctrlKey || event.metaKey) setIsCtrlPressed(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
   const generateUniqueId = () => {
     return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
   }
@@ -324,6 +344,7 @@ export default function Home() {
   }
 
   const initialPan = useRef(null);
+  const initialText = useRef(null);
 
   const [isTyping, setIsTyping] = useState(false);
   const [currentTypingText, setCurrentTypingText] = useState("");
@@ -370,18 +391,21 @@ export default function Home() {
       setCurrentShape({id: generateUniqueId() ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate, settings: defaultSettings[shapeToCreate] });
     }
     else if (selectedTool == 'text') {
+      const isCtrlPressed = e.ctrlKey || e.metaKey;
+      if (isCtrlPressed) return;
+
       if (isTyping) {
         const { width, height } = textInputRef.current.getBoundingClientRect();
         setIsTyping(false);
         const newShape = {
           id: Date.now(),
-          x: xScreenToWorld(initialPan.current.startX),
-          y: yScreenToWorld(initialPan.current.startY),
-          w: width / scale,
-          h: height / scale,
+          x: initialText.current.x,
+          y: initialText.current.y,
+          w: textInputRef.current.scrollWidth / scale,
+          h: textInputRef.current.scrollHeight / scale,
           component: "SimpleText",
           selected: false,
-          settings: { text: currentTypingText, initialW: width / scale, initialH: height / scale, fontSizeRate: 16 / (width + height) * 2 , textColor: "#fff" }
+          settings: { text: currentTypingText, fontSizeRate: initialText.current.settings.fontSize / (width + height) * 2 , textColor: "#fff" }
       };
 
       setAllShapes((prevShapes) => [...prevShapes, newShape]);
@@ -389,10 +413,13 @@ export default function Home() {
         return;
       }
 
-      initialPan.current = {
-        startX: e.clientX,
-        startY: e.clientY,
+      initialText.current = {
+        x: xScreenToWorld(e.clientX),
+        y: yScreenToWorld(e.clientY),
         initialOffset: offset,
+        settings: {
+          fontSize: 16
+        }
       }
 
       setCurrentTypingText("");
@@ -739,6 +766,34 @@ export default function Home() {
 
   }
 
+  const handleTextMouseDown = (id, e) => {
+    if (selectedTool == 'text') {
+      e.stopPropagation();
+      const shape = allShapes.filter((shape) => shape.id === id)[0];
+      if (shape.component != 'SimpleText') return;
+      setAllShapes((prevShapes) => prevShapes.filter((shape) => shape.id !== id));
+      pushToHistory()
+      console.log(shape)
+
+      initialText.current = {
+        ...shape,
+        settings: {
+          ...shape.settings,
+          fontSize: shape.settings.fontSizeRate * (shape.w + shape.h) / 2 * scale,
+        },
+      }
+
+      setCurrentTypingText(shape.settings.text);
+      setIsTyping(true);
+    }
+  };
+
+  const handleTextMouseUp = (e) => {
+    if (selectedTool == 'text') {
+      e.stopPropagation();
+    }
+  }
+
   const handleShapeClick = (id, e) => {
     e.stopPropagation();
     if (selectedTool == 'select') {
@@ -791,11 +846,6 @@ export default function Home() {
           height: Math.abs(maxY - minY),
         })
       }
-    }
-    else if (selectedTool == 'text') {
-      setEditingShapeId(shape.id);
-      setCurrentText(shape.settings.text);
-      setIsTyping(true);
     }
   };
 
@@ -957,8 +1007,15 @@ export default function Home() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: selectedTool == 'pan' ? 'move' : (selectedTool == 'text' ? 'text' : 'default')
-    }}
+        cursor:
+          selectedTool === "pan"
+            ? "move"
+            : selectedTool === "text"
+            ? isCtrlPressed
+              ? "text"
+              : "text"
+            : "default",
+      }}
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -1001,6 +1058,8 @@ export default function Home() {
           finalPosition={{x:shape.x, y:shape.y}}
           onClick={(event) => handleShapeClick(shape.id, event)}
           shapeSettings={shape.settings}
+          onMouseDown={(event) => handleTextMouseDown(shape.id, event)}
+          onMouseUp={(event) => handleTextMouseUp(event)}
         />
       ))}
 
@@ -1014,19 +1073,22 @@ export default function Home() {
       <div
         contentEditable
         suppressContentEditableWarning
-        onInput={(e) => setCurrentTypingText(e.target.innerText)}
+        onInput={(e) => {
+          setCurrentTypingText(e.target.innerText);
+        }}
         ref={textInputRef}
         onKeyDown={(e) => {
           e.stopPropagation();
         }}
+        onMouseDown={(e) => e.stopPropagation()}
         style={{
           position: "absolute",
-          left: `${initialPan.current.startX}px`,
-          top: `${initialPan.current.startY}px`,
+          left: `${xWorldToScreen(initialText.current.x)}px`,
+          top: `${yWorldToScreen(initialText.current.y)}px`,
           minWidth: "10px",
           minHeight: "30px",
           padding: "5px",
-          fontSize: `${16}px`,
+          fontSize: `${initialText.current.settings.fontSize}px`,
           color: "black",
           border: "1px solid #000",
           background: "white",
@@ -1036,8 +1098,11 @@ export default function Home() {
           wordBreak: "break-word",
           display: "inline-block",
           whiteSpace: "pre-wrap",
+          width: "fit-content",
+          height: "fit-content"
         }}
       >
+        {initialText.current.settings.text}
       </div>
       )}
 

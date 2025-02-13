@@ -4,7 +4,7 @@ import React, { useState, useEffect, use } from "react";
 import { getComponentByName } from "./shapeToComponentMapping";
 
 
-const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition, scale, offset, onClick, shapeSettings}) => {
+const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition, scale, offset, onClick, shapeSettings, onMouseDown, onMouseUp}) => {
   const [selected, setSelected] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [finalSize, setFinalSize] = useState({});
@@ -21,6 +21,8 @@ const ShapeWrapper = ({selectedTool, ShapeComponent, initialSize, finalPosition,
   return (
     <div
       onClick={onClick}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
       style={{
         position: "absolute",
         top: `${(finalPosition.y - offset.y) * scale }px`,
