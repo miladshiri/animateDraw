@@ -78,6 +78,7 @@ export default function Home() {
   
   const [inputTextScale, setInputTextScale] = useState({ x: 1, y: 1 });
 
+  const [hiddenTextId, setHiddenTextid] = useState(null);
 
   const updateColorPalette = () => {
     const shapeColors = allShapes.map(shape => shape.settings?.shapeColor);
@@ -277,6 +278,7 @@ export default function Home() {
   }
 
   const handleWheel = (e) => {
+    if (isTyping) return;
     if (e.ctrlKey || e.metaKey) {
       const yDiff = e.deltaY > 0 ? -1 : 1;
       setOffset((prevOffset) => {
@@ -397,7 +399,10 @@ export default function Home() {
 
       if (isTyping) {
         setIsTyping(false);
-        if (currentTypingText.length == 0) return;
+        if (currentTypingText.length == 0 || initialText.current.settings.text == currentTypingText) {
+          setHiddenTextid(null);
+          return;
+        }
         const { width, height } = textInputRef.current.getBoundingClientRect();
         
         const newShape = {
@@ -410,10 +415,12 @@ export default function Home() {
           component: "SimpleText",
           selected: false,
           settings: { text: currentTypingText, fontSizeRate: initialText.current.settings.fontSize / (width + height) * 2 , textColor: "#fff" }
-      };
-
+        };
+      setAllShapes((prevShapes) => prevShapes.filter((shape) => shape.id !== hiddenTextId));
+      pushToHistory()
       setAllShapes((prevShapes) => [...prevShapes, newShape]);
       pushToHistory()
+      setHiddenTextid(null)
       return;
       }
 
@@ -773,8 +780,6 @@ export default function Home() {
       e.stopPropagation();
       const shape = allShapes.filter((shape) => shape.id === id)[0];
       if (shape.component != 'SimpleText') return;
-      setAllShapes((prevShapes) => prevShapes.filter((shape) => shape.id !== id));
-      pushToHistory()
 
       initialText.current = {
         ...shape,
@@ -784,7 +789,7 @@ export default function Home() {
         },
       }
 
-   
+      setHiddenTextid(id);
 
       setCurrentTypingText(shape.settings.text);
       setIsTyping(true);
@@ -799,6 +804,7 @@ export default function Home() {
   const handleTextMouseUp = (e) => {
     if (selectedTool == 'text') {
       e.stopPropagation();
+
     }
   }
 
@@ -1031,7 +1037,7 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      {!isFreezeScreenSelected &&
+      {!isFreezeScreenSelected && !isTyping &&
       <Toolbar
         setSelectedTool={setSelectedTool}
         selectedTool={selectedTool}
@@ -1043,7 +1049,7 @@ export default function Home() {
       />
       }
 
-      {selectedTool === 'shape' &&
+      {selectedTool === 'shape' && !isTyping &&
         <ShapeToolbar setShapeToCreate={setShapeToCreate} shapeToCreate={shapeToCreate}/>
       }
 
@@ -1051,15 +1057,20 @@ export default function Home() {
         <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName} updateColorPalette={updateColorPalette} colorPalette={colorPalette} />
       }
 
-      <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
-      
-      { !isFreezeScreenSelected && 
+      { !isTyping &&
+        <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
+      }
+
+      { !isFreezeScreenSelected &&  !isTyping &&
         <BottomToolbar boardColor={boardColor} setBoardColor={setBoardColor} />
       }
       
-      {allShapes.map((shape, index) => (
+      {allShapes
+      .filter(shape => shape.id != hiddenTextId)
+      .map((shape, index) => (
         <ShapeWrapper
-          key={index}
+
+        key={index}
           selectedTool={selectedTool}
           ShapeComponent={shape.component}
           initialSize={{w:shape.w, h:shape.h}}
@@ -1088,9 +1099,7 @@ export default function Home() {
           top: `${yWorldToScreen(initialText.current.y)}px`,
           minWidth: "10px",
           minHeight: "30px",
-          color: "black",
-          border: "1px solid #000",
-          background: "white",
+          color: "white",
           outline: "none",
           display: "flex",
           alignItems: "start",
@@ -1102,6 +1111,7 @@ export default function Home() {
       <div
       contentEditable
       suppressContentEditableWarning
+      className="editable-div"
       onInput={(e) => {
         setCurrentTypingText(e.target.innerText);
       }}
@@ -1111,10 +1121,11 @@ export default function Home() {
       onMouseDown={(e) => e.stopPropagation()}
       ref={textInputRef}
         style={{
-          backgroundColor: "blue",
           fontSize: "16px",
           whiteSpace: "pre",
           transformOrigin: "0 0",
+          backgroundColor: "rgba(10, 119, 236, 0.48)",
+          outline: "1px solid rgba(2, 25, 50, 0.32)",
           transform: `scale(${inputTextScale.x}, ${inputTextScale.y})`
         }}
       >
@@ -1124,7 +1135,7 @@ export default function Home() {
       )}
 
        {/* Selection Box */}
-      {selectionDragBox && (
+      {selectionDragBox && !isTyping && (
         <div
           style={{
             position: "absolute",
@@ -1139,7 +1150,7 @@ export default function Home() {
         ></div>
       )}
 
-        {selectionBox && (
+        {selectionBox && !isTyping && (
         <div
           onMouseDown={handleMouseDownSelectionBox}
           style={{

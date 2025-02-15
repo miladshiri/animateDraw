@@ -15,7 +15,6 @@ const SimpleText = ({size, shapeSettings}) => {
     <div
       style={{
         color: shapeSettings.textColor, 
-        backgroundColor: "red",
         width: size.w,
         height: size.h,
         // fontSize: fontSize ? fontSize : 0,
