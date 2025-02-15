@@ -75,6 +75,9 @@ export default function Home() {
   const [isFreezeScreenSelected, setIsFreezeScreenSelected] = useState(false);
 
   const [colorPalette, setColorPalette] = useState(["#232323", "#990077", "#2f6b85"]);
+  
+  const [inputTextScale, setInputTextScale] = useState({ x: 1, y: 1 });
+
 
   const updateColorPalette = () => {
     const shapeColors = allShapes.map(shape => shape.settings?.shapeColor);
@@ -133,7 +136,6 @@ export default function Home() {
   };
 
   const undo = (e) => {
-    console.log('undo called')
     e.stopPropagation();
     if (history.length > 0) {
       const previousState = history[history.length - 1];
@@ -387,7 +389,6 @@ export default function Home() {
 
       setDrawing(true);
 
-      console.log(defaultSettings[shapeToCreate])
       setCurrentShape({id: generateUniqueId() ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate, settings: defaultSettings[shapeToCreate] });
     }
     else if (selectedTool == 'text') {
@@ -395,14 +396,17 @@ export default function Home() {
       if (isCtrlPressed) return;
 
       if (isTyping) {
-        const { width, height } = textInputRef.current.getBoundingClientRect();
         setIsTyping(false);
+        if (currentTypingText.length == 0) return;
+        const { width, height } = textInputRef.current.getBoundingClientRect();
+        
         const newShape = {
           id: Date.now(),
           x: initialText.current.x,
           y: initialText.current.y,
-          w: textInputRef.current.scrollWidth / scale,
-          h: textInputRef.current.scrollHeight / scale,
+          w: initialText.current.w ? inputTextScale.x * textInputRef.current.scrollWidth / scale : textInputRef.current.scrollWidth / scale,
+          h: initialText.current.h ? inputTextScale.y * textInputRef.current.scrollHeight / scale  : textInputRef.current.scrollHeight / scale,
+
           component: "SimpleText",
           selected: false,
           settings: { text: currentTypingText, fontSizeRate: initialText.current.settings.fontSize / (width + height) * 2 , textColor: "#fff" }
@@ -410,7 +414,7 @@ export default function Home() {
 
       setAllShapes((prevShapes) => [...prevShapes, newShape]);
       pushToHistory()
-        return;
+      return;
       }
 
       initialText.current = {
@@ -421,7 +425,7 @@ export default function Home() {
           fontSize: 16
         }
       }
-
+      setInputTextScale({x:1,y:1});
       setCurrentTypingText("");
       setIsTyping(true);
     }
@@ -535,7 +539,6 @@ export default function Home() {
         const previousIsAnySelected = allShapes.some((shape) => shape.selected);
         if (previousIsAnySelected || isAnySelected) {
           setAllShapes(updateShapes);
-          console.log('push to hisotry inside mouseup')
           pushToHistory();
         }
 
@@ -758,7 +761,6 @@ export default function Home() {
   }
 
   const handleMouseUpSelectionBox = (e) => {
-    console.log("mouse up selection")
     pushToHistory();
     // isDraggingSelectionBox.current = false;
     document.removeEventListener("mousemove", handleMouseMoveSelectionBox);
@@ -773,7 +775,6 @@ export default function Home() {
       if (shape.component != 'SimpleText') return;
       setAllShapes((prevShapes) => prevShapes.filter((shape) => shape.id !== id));
       pushToHistory()
-      console.log(shape)
 
       initialText.current = {
         ...shape,
@@ -783,8 +784,15 @@ export default function Home() {
         },
       }
 
+   
+
       setCurrentTypingText(shape.settings.text);
       setIsTyping(true);
+
+      setInputTextScale({
+        x: (shape.w * scale) / (textInputRef.current?.scrollWidth ) || 1,
+        y: (shape.h * scale) / (textInputRef.current?.scrollHeight ) || 1
+      });
     }
   };
 
@@ -814,7 +822,6 @@ export default function Home() {
         if (!isCtrlPressed) {
           const shape = allShapes.filter((shape) => shape.id === id)[0];
           setSelectedShape(shape);
-          console.log(shape);
         }
 
       setAllShapes(updateShapesWithSelect);
@@ -942,7 +949,6 @@ export default function Home() {
             settings: { imageId: pasteImageId },
           };
   
-          console.log(imageShape);
           setAllShapes((prev) => [...prev, imageShape]);
           pushToHistory();
           setPasteImage(null);
@@ -991,6 +997,10 @@ export default function Home() {
   useEffect(() => {
     if (isTyping && textInputRef.current) {
         textInputRef.current.focus();
+        setInputTextScale({
+          x: (initialText.current.w * scale) / (textInputRef.current.scrollWidth ),
+          y: (initialText.current.h * scale) / (textInputRef.current.scrollHeight )
+        });
     }
   }, [isTyping]);
 
@@ -1068,41 +1078,48 @@ export default function Home() {
           <ShapeWrapper selectedTool={selectedTool} ShapeComponent={currentShape.component} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
        )}
 
-      {isTyping && (
-         
+      {isTyping && initialText && ( 
       <div
-        contentEditable
-        suppressContentEditableWarning
-        onInput={(e) => {
-          setCurrentTypingText(e.target.innerText);
-        }}
-        ref={textInputRef}
-        onKeyDown={(e) => {
-          e.stopPropagation();
-        }}
-        onMouseDown={(e) => e.stopPropagation()}
+        
+
         style={{
           position: "absolute",
           left: `${xWorldToScreen(initialText.current.x)}px`,
           top: `${yWorldToScreen(initialText.current.y)}px`,
           minWidth: "10px",
           minHeight: "30px",
-          padding: "5px",
-          fontSize: `${initialText.current.settings.fontSize}px`,
           color: "black",
           border: "1px solid #000",
           background: "white",
           outline: "none",
-          resize: "none",
-          overflow: "hidden",
-          wordBreak: "break-word",
-          display: "inline-block",
-          whiteSpace: "pre-wrap",
-          width: "fit-content",
-          height: "fit-content"
+          display: "flex",
+          alignItems: "start",
+          justifyContent: "start",
+          width: initialText?.current.w * scale || 1,
+          height: initialText?.current.h * scale || 1,
+        }}
+      >
+      <div
+      contentEditable
+      suppressContentEditableWarning
+      onInput={(e) => {
+        setCurrentTypingText(e.target.innerText);
+      }}
+      onKeyDown={(e) => {
+        e.stopPropagation();
+      }}
+      onMouseDown={(e) => e.stopPropagation()}
+      ref={textInputRef}
+        style={{
+          backgroundColor: "blue",
+          fontSize: "16px",
+          whiteSpace: "pre",
+          transformOrigin: "0 0",
+          transform: `scale(${inputTextScale.x}, ${inputTextScale.y})`
         }}
       >
         {initialText.current.settings.text}
+        </div>
       </div>
       )}
 
@@ -1241,12 +1258,8 @@ export default function Home() {
               cursor: 'ew-resize',
             }}
           />
-          
-
         </div>
       )}
-
-      {scale}
     </div>
   );
 }
