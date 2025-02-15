@@ -43,6 +43,15 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
         </div>
       )}
 
+      {selectedShape.settings.textColor && (
+        <div className="toolbar-item">
+          <div className="toolbar-title">Text Color</div>
+          <div className="toolbar-setting">
+            <ColorPickerComponent initialColor={selectedShape.settings.textColor} changeShapeSettingByName={changeShapeSettingByName} settingName={"textColor"} updateColorPalette={updateColorPalette} colorPalette={colorPalette}/>
+          </div>
+        </div>
+      )}
+
       {selectedShape.settings.animationSpeed && (
         <div className="toolbar-item">
           <div className="toolbar-title">Animation Speed</div>

@@ -17,7 +17,8 @@ export default function Home() {
 
   const defaultSettings = {
     "AnimatedRec": {animationSpeed: "fast", shapeColor: "#2a2a2a", borderColor: "#51b39a"},
-    "Cube3d": {animationSpeed: "fast", shapeColor: "#00ee00"}
+    "Cube3d": {animationSpeed: "fast", shapeColor: "#00ee00"},
+    "SimpleText": {animationSpeed: "fast", textColor: "#fff", fontSize: 26},
   }
 
 
@@ -404,18 +405,22 @@ export default function Home() {
           return;
         }
         const { width, height } = textInputRef.current.getBoundingClientRect();
-        
+
         const newShape = {
           id: Date.now(),
           x: initialText.current.x,
           y: initialText.current.y,
           w: initialText.current.w ? inputTextScale.x * textInputRef.current.scrollWidth / scale : textInputRef.current.scrollWidth / scale,
           h: initialText.current.h ? inputTextScale.y * textInputRef.current.scrollHeight / scale  : textInputRef.current.scrollHeight / scale,
-
           component: "SimpleText",
           selected: false,
-          settings: { text: currentTypingText, fontSizeRate: initialText.current.settings.fontSize / (width + height) * 2 , textColor: "#fff" }
+          settings: {
+            text: currentTypingText,
+            fontSizeRate: initialText.current.settings.fontSize / (width + height) * 2,
+            textColor: initialText.current.settings.textColor
+          }
         };
+
       setAllShapes((prevShapes) => prevShapes.filter((shape) => shape.id !== hiddenTextId));
       pushToHistory()
       setAllShapes((prevShapes) => [...prevShapes, newShape]);
@@ -427,11 +432,12 @@ export default function Home() {
       initialText.current = {
         x: xScreenToWorld(e.clientX),
         y: yScreenToWorld(e.clientY),
-        initialOffset: offset,
         settings: {
-          fontSize: 16
+          fontSize: defaultSettings['SimpleText']['fontSize'],
+          textColor: defaultSettings['SimpleText']['textColor'],
         }
       }
+
       setInputTextScale({x:1,y:1});
       setCurrentTypingText("");
       setIsTyping(true);
@@ -786,6 +792,7 @@ export default function Home() {
         settings: {
           ...shape.settings,
           fontSize: shape.settings.fontSizeRate * (shape.w + shape.h) / 2 * scale,
+          textColor: shape.settings.textColor,
         },
       }
 
@@ -1091,7 +1098,6 @@ export default function Home() {
 
       {isTyping && initialText && ( 
       <div
-        
 
         style={{
           position: "absolute",
@@ -1121,7 +1127,8 @@ export default function Home() {
       onMouseDown={(e) => e.stopPropagation()}
       ref={textInputRef}
         style={{
-          fontSize: "16px",
+          fontSize: `${initialText.current.settings.fontSize}px`,
+          color: initialText.current.settings.textColor,
           whiteSpace: "pre",
           transformOrigin: "0 0",
           backgroundColor: "rgba(10, 119, 236, 0.48)",
