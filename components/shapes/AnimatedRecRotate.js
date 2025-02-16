@@ -2,13 +2,31 @@
 import { motion } from "framer-motion";
 
 import React, { useState, useEffect } from "react";
+import { defaultSettings } from "../shapeToComponentMapping";
 
-const AnimatedRec = ({size, shapeSettings}) => {
+const AnimatedRecRotate = ({size, shapeSettings}) => {
+  
+  var speed = 1;
+  if (shapeSettings) {
+    if (shapeSettings.animationSpeed == 'slow') {
+      speed = 5;
+    }
+    else if (shapeSettings.animationSpeed == 'normal') {
+      speed = 2;
+    }
+    else if (shapeSettings.animationSpeed == 'fast') {
+      speed = 1;
+    }
+    else {
+      speed = 0;
+    }
+  }
+
 
   return (
     <div
       style={{
-        backgroundColor: `${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : "#51b39a") : "#51b39a"}`,
+        backgroundColor: `${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : defaultSettings['AnimatedRecRotate'].borderColor) : defaultSettings['AnimatedRecRotate'].borderColor}`,
         position: "relative",
         top: `0px`, 
         left: `0px`,
@@ -28,9 +46,9 @@ const AnimatedRec = ({size, shapeSettings}) => {
           content: "",
           width: `${Math.max(size.w, size.h) * 2}px`, 
           height: `${Math.min(size.w, size.h) / 1.6}px`,
-          background: `${shapeSettings ? (shapeSettings.flowColor ? shapeSettings.flowColor : "#51b39a") : "#51b39a"}`,
+          background: `${shapeSettings ? (shapeSettings.flowColor ? shapeSettings.flowColor : defaultSettings['AnimatedRecRotate'].flowColor) : defaultSettings['AnimatedRecRotate'].flowColor}`,
           transform: "translate(-50%, -50%) rotate(45deg)",
-          animation: "rotateAround 4s linear infinite",
+          animation: `rotateAround ${speed}s linear infinite`,
         }}
       >
       </div>
@@ -38,7 +56,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
         style={{
           position: "absolute",
           inset: `${5}%`,
-          background:  `${shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : "#2a2a2a") : "#2a2a2a"}`
+          background:  `${shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : defaultSettings['AnimatedRecRotate'].shapeColor) : defaultSettings['AnimatedRecRotate'].shapeColor}`
 
         }}  
       >
@@ -62,4 +80,4 @@ const AnimatedRec = ({size, shapeSettings}) => {
   );
 };
 
-export default AnimatedRec;
+export default AnimatedRecRotate;

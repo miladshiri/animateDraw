@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useMemo } from "react";
 
 import React, { useState, useEffect } from "react";
+import { defaultSettings } from "../shapeToComponentMapping";
 
 const AnimatedRec = ({size, shapeSettings}) => {
 
@@ -41,7 +42,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
         left: `0px`,
         width: `100%`,
         height: `100%`,
-        border: `${(size.w + size.h) / 340}px solid ${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : "#51b39a") : "#51b39a"}`,
+        border: `${(size.w + size.h) / 340}px solid ${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : defaultSettings['AnimatedRec'].borderColor) : defaultSettings['AnimatedRec'].borderColor}`,
         userSelect: "none",
         overflow: "hidden",
       }}
@@ -75,7 +76,7 @@ const AnimatedRec = ({size, shapeSettings}) => {
         style={{
           position: "absolute",
           inset: `${(size.w + size.h) / 140}px`,
-          background: `${shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : "#2a2a2a") : "#2a2a2a"}`
+          background: `${shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : defaultSettings['AnimatedRec'].shapeColor) : defaultSettings['AnimatedRec'].shapeColor}`
 
         }}  
       ></div>
