@@ -1,26 +1,28 @@
 import Tabs from "./Tabs";
-import { Home, Info, Mail } from "lucide-react"; // Import Lucide icons
+import { Square, Circle, Box, ArrowLeftRight } from "lucide-react"; // Import Lucide icons
 
 const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
 
   const shapeCategories = [
-    {name:"square", icon: <Home />, assets: 
+    {name:"square", icon: <Square />, assets: 
       [
         {name:"amazing", component: "AnimatedRec"},
-        {name:"amazing2", component: "Cube3d"},
-        {name:"amazing3", component: "AnimatedRec1"},
-        {name:"amazing4", component: "AnimatedRec1"},
-        {name:"amazing5", component: "AnimatedRec1"},
-        {name:"amazing6", component: "AnimatedRec1"},
       ]
     },
-    {name:"circle", icon: <Info />, assets: [
+    {name:"circle", icon: <Circle />, assets: 
+      [
 
-    ]
-  },
-    {name:"3d", icon: <Info />, assets: [
+      ]
+    },
+    {name:"arrow", icon: <ArrowLeftRight />, assets: 
+      [
 
-    ]
+      ]
+    },
+    {name:"3d", icon: <Box />, assets: 
+      [
+      {name:"amazing2", component: "Cube3d"},
+      ]
   },
   ]
 
