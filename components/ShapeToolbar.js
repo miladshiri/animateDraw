@@ -6,7 +6,8 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
   const shapeCategories = [
     {name:"square", icon: <Square />, assets: 
       [
-        {name:"amazing", component: "AnimatedRec"},
+        {name:"Single Flow Rect", component: "AnimatedRec"},
+        {name:"Double Flow Rect", component: "AnimatedRecRotate"},
       ]
     },
     {name:"circle", icon: <Circle />, assets: 

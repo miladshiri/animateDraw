@@ -3,12 +3,12 @@ import { motion } from "framer-motion";
 
 import React, { useState, useEffect } from "react";
 
-const AnimatedRec = ({size, scale}) => {
+const AnimatedRec = ({size, shapeSettings}) => {
 
   return (
     <div
       style={{
-        backgroundColor: "red",
+        backgroundColor: `${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : "#51b39a") : "#51b39a"}`,
         position: "relative",
         top: `0px`, 
         left: `0px`,
@@ -26,20 +26,19 @@ const AnimatedRec = ({size, scale}) => {
           left: "50%",
           position: "absolute",
           content: "",
-          width: `${Math.max(size.w, size.h) * scale * 2}px`, 
-          height: `${Math.min(size.w, size.h) * scale / 1.6}px`,
-          background: "#4caf50",
+          width: `${Math.max(size.w, size.h) * 2}px`, 
+          height: `${Math.min(size.w, size.h) / 1.6}px`,
+          background: `${shapeSettings ? (shapeSettings.flowColor ? shapeSettings.flowColor : "#51b39a") : "#51b39a"}`,
           transform: "translate(-50%, -50%) rotate(45deg)",
           animation: "rotateAround 4s linear infinite",
-
         }}
       >
       </div>
       <div
         style={{
           position: "absolute",
-          inset: `${5 * scale}px`,
-          background: "#2a2a2a"
+          inset: `${5}%`,
+          background:  `${shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : "#2a2a2a") : "#2a2a2a"}`
 
         }}  
       >
