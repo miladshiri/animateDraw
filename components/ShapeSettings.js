@@ -18,6 +18,9 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
     event.stopPropagation();
   };
 
+  if (!selectedShape.settings.animationSpeedOff) {
+    selectedShape.settings.animationSpeedOff = 'yes'
+  }
   return (
     <div
       className="toolbar shape-toolbar settings-toolbar"
@@ -65,7 +68,10 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
         <div className="toolbar-item">
           <div className="toolbar-title">Animation Speed</div>
           <div className="toolbar-setting">
+            
+          {selectedShape.settings.animationSpeedOff == 'yes' && (
             <button onClick={()=> {setAnimationSpeed('no-animation')}} className={animationSpeed === 'no-animation' ? "isSelected" : ""} >Off</button>
+          )} 
             <button onClick={()=> {setAnimationSpeed('slow')}} className={animationSpeed === 'slow' ? "isSelected" : ""} >Slow</button>
             <button onClick={()=> {setAnimationSpeed('normal')}} className={animationSpeed === 'normal' ? "isSelected" : ""} >Normal</button>
             <button onClick={()=> {setAnimationSpeed('fast')}} className={animationSpeed === 'fast' ? "isSelected" : ""} >Fast</button>

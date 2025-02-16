@@ -5,9 +5,9 @@ import SimpleImage from "./shapes/SimpleImage";
 import SimpleText from "./shapes/SimpleText";
 
   export const defaultSettings = {
-    "AnimatedRec": {animationSpeed: "fast", shapeColor: "#2a2a2a", borderColor: "#51b39a"},
-    "AnimatedRecRotate": {animationSpeed: "fast", shapeColor: "#1b14f5", borderColor: "#ffffff", flowColor: "#e30707"},
-    "Cube3d": {animationSpeed: "fast", shapeColor: "#00ee00"},
+    "AnimatedRec": {animationSpeed: "normal", shapeColor: "#2a2a2a", borderColor: "#51b39a"},
+    "AnimatedRecRotate": {animationSpeed: "normal", shapeColor: "#1b14f5", borderColor: "#ffffff", flowColor: "#e30707"},
+    "Cube3d": {animationSpeed: "normal", animationSpeedOff: "no", shapeColor: "#00ee00", textColor: "#00f01c", shapeText: "Text"},
     "SimpleText": {animationSpeed: "fast", textColor: "#fff", fontSize: 26},
   }
   
