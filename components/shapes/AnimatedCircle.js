@@ -1,11 +1,10 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useMemo } from "react";
 
 import React, { useState, useEffect } from "react";
 import { defaultSettings } from "../shapeToComponentMapping";
 
-const AnimatedRec = ({size, shapeSettings}) => {
+const AnimatedCircle = ({size, shapeSettings}) => {
 
   var speed = 1;
   if (shapeSettings) {
@@ -24,14 +23,8 @@ const AnimatedRec = ({size, shapeSettings}) => {
   }
 
   const factor = 0.2;
-  const bar = (size.w + size.h) / 140;
-  const path = [
-    { x: - size.w * factor + bar, y: - size.h * factor + bar },
-    { x: size.w - 2 * bar, y: - size.h * factor + bar },
-    { x: size.w - 2 * bar , y: size.h - 2 * bar},
-    { x: - size.w * factor + bar, y: size.h - 2 * bar },
-    { x: - size.w * factor + bar, y: - size.h * factor + bar },
-  ];
+  const bar = (size.w + size.h) / 170;
+
 
   return (
     <div
@@ -42,9 +35,10 @@ const AnimatedRec = ({size, shapeSettings}) => {
         left: `0px`,
         width: `100%`,
         height: `100%`,
-        border: `${(size.w + size.h) / 340}px solid ${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : defaultSettings['AnimatedRec'].borderColor) : defaultSettings['AnimatedRec'].borderColor}`,
+        border: `${(size.w + size.h) / 340}px solid ${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : defaultSettings['AnimatedCircle'].borderColor) : defaultSettings['AnimatedCircle'].borderColor}`,
         userSelect: "none",
         overflow: "hidden",
+        borderRadius: "50%",
       }}
     >
       <>
@@ -53,17 +47,16 @@ const AnimatedRec = ({size, shapeSettings}) => {
         key={speed}
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: `${size.w * factor}px`,
+          top: "50%",
+          left: "50%",
+          paddingTop: `-${size.h * factor / 2}px`,
+          width: `${(size.w + size.h)}px`,
           height: `${size.h * factor}px`,
-          backgroundColor: `${shapeSettings ? (shapeSettings.flowColor ? shapeSettings.flowColor : defaultSettings['AnimatedRec'].flowColor) : defaultSettings['AnimatedRec'].flowColor}`,
+          backgroundColor: `${shapeSettings ? (shapeSettings.flowColor ? shapeSettings.flowColor : defaultSettings['AnimatedCircle'].flowColor) : defaultSettings['AnimatedCircle'].flowColor}`,
           borderRadius: "0%",
+           transformOrigin: "top left"
         }}
-        animate={{
-          x: path.map((point) => point.x),
-          y: path.map((point) => point.y),
-        }}
+        animate={{ rotate: 360 }}
         transition={{
           repeat: Infinity,
           duration: speed,
@@ -76,12 +69,12 @@ const AnimatedRec = ({size, shapeSettings}) => {
         style={{
           position: "absolute",
           inset: `${(size.w + size.h) / 140}px`,
-          background: `${shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : defaultSettings['AnimatedRec'].shapeColor) : defaultSettings['AnimatedRec'].shapeColor}`
-
+          background: `${shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : defaultSettings['AnimatedCircle'].shapeColor) : defaultSettings['AnimatedCircle'].shapeColor}`,
+          borderRadius: "50%"
         }}  
       ></div>
     </div>
   );
 };
 
-export default AnimatedRec;
+export default AnimatedCircle;

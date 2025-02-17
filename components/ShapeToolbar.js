@@ -12,6 +12,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
     },
     {name:"circle", icon: <Circle />, assets: 
       [
+        {name:"Single Flow Circle", component: "AnimatedCircle"},
 
       ]
     },
