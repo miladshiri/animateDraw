@@ -39,12 +39,12 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
             <div
               onClick={() => setShapeToCreate(asset.component)}
               style={{
-                width: "25px",
-                height: "25px",
+                width: "35px",
+                height: "35px",
                 margin: "1px",
               }}
             >
-              {React.createElement(getComponentByName(asset.component), {size:{w:25, h:25}}) }
+              {React.createElement(getComponentByName(asset.component), {size:{w:35, h:35}}) }
             </div>
             </div>
         ))}

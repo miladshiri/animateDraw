@@ -76,6 +76,9 @@ export default function Home() {
 
   const [hiddenTextId, setHiddenTextid] = useState(null);
 
+  const mouseDownPosition = useRef({ x: 0, y: 0 });
+
+
   const updateColorPalette = () => {
     const shapeColors = allShapes.map(shape => shape.settings?.shapeColor);
     const borderColors = allShapes.map(shape => shape.settings?.borderColor);
@@ -387,7 +390,18 @@ export default function Home() {
 
       setDrawing(true);
 
-      setCurrentShape({id: generateUniqueId() ,x: xScreenToWorld(startX), y: yScreenToWorld(startY), w: 0, h: 0, selected: false, component: shapeToCreate, settings: defaultSettings[shapeToCreate] });
+      setCurrentShape({
+        id: generateUniqueId(),
+        x: xScreenToWorld(startX),
+        y: yScreenToWorld(startY),
+        w: 0,
+        h: 0,
+        selected: false,
+        component: shapeToCreate,
+        settings: defaultSettings[shapeToCreate]
+      });
+
+      mouseDownPosition.current = {x: xScreenToWorld(startX), y: yScreenToWorld(startY)}
     }
     else if (selectedTool == 'text') {
       const isCtrlPressed = e.ctrlKey || e.metaKey;
@@ -477,18 +491,25 @@ export default function Home() {
     }
     else if (selectedTool == 'shape') {
       if (!drawing || !currentShape) return;
-      const currentX = xScreenToWorld(e.clientX);
-      const currentY = yScreenToWorld(e.clientY);
-  
-      const width = currentX - currentShape.x;
-      const height = currentY - currentShape.y;
-
+      var currentX = xScreenToWorld(e.clientX);
+      var currentY = yScreenToWorld(e.clientY);
+      
+      const width = currentX - mouseDownPosition.current.x;
+      const height = currentY - mouseDownPosition.current.y;
+      console.log(height)
       const newShape = {
         ...currentShape,
         w: Math.abs(width),
         h: Math.abs(height),
-        x: width < 0 ? currentX : currentShape.x,
-        y: height < 0 ? currentY : currentShape.y,
+        x: width > 0 ? mouseDownPosition.current.x : currentX,
+        y: height > 0 ? mouseDownPosition.current.y : currentY,
+        settings: {
+          ...currentShape.settings,
+          startX: width > 0 ? "0" : "100",
+          startY: height > 0 ? "0" : "100",
+          endX: width > 0 ? "100" : "0",
+          endY: height > 0 ? "100" : "0"
+        }
       };
 
       setCurrentShape((prev) => {
@@ -1088,7 +1109,14 @@ export default function Home() {
 
        {/* Render the shape being drawn */}
        {drawing && currentShape && (
-          <ShapeWrapper selectedTool={selectedTool} ShapeComponent={currentShape.component} initialSize={{w:currentShape.w, h:currentShape.h}} scale={scale} offset={offset} finalPosition={{x:currentShape.x, y:currentShape.y}} />
+          <ShapeWrapper
+            selectedTool={selectedTool}
+            ShapeComponent={currentShape.component}
+            initialSize={{w:currentShape.w, h:currentShape.h}}
+            scale={scale} offset={offset}
+            finalPosition={{x:currentShape.x, y:currentShape.y}}
+            shapeSettings={currentShape.settings}
+          />
        )}
 
       {isTyping && initialText && ( 
