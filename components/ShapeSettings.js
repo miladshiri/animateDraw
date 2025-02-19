@@ -6,6 +6,7 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
 
   const [animationSpeed, setAnimationSpeed] = useState(selectedShape.settings?.animationSpeed)
   const [arrowHeads, setArrowHeads] = useState(selectedShape.settings?.head)
+  const [shapeText, setShapeText] = useState(selectedShape.settings?.shapeText)
 
   useEffect(()=> {
     changeShapeSettingByName("animationSpeed", animationSpeed);
@@ -14,6 +15,10 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
   useEffect(()=> {
     changeShapeSettingByName("head", arrowHeads);
   }, [arrowHeads])
+
+  useEffect(()=> {
+    changeShapeSettingByName("shapeText", shapeText);
+  }, [shapeText])
 
   const handleMouseDown = (event) => {
     event.stopPropagation();
@@ -99,7 +104,28 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
         </div>
       )}
 
-    </div>
+      {selectedShape.settings.shapeText && (
+        <div className="toolbar-item">
+          <div className="toolbar-title">Text</div>
+          <div className="toolbar-setting">
+            <input
+              type="text"
+              value={shapeText}
+              onChange={(e) => {setShapeText(e.target.value)}}
+              onKeyDown={(e) => {e.stopPropagation()}}
+              style={{
+                backgroundColor: "#555",
+                color: "white",
+                padding: "2px",
+                paddingRight: "4px",
+                paddingLeft: "4px",
+                borderRadius: "4px"
+              }}
+            />
+          </div>
+        </div>
+    )}
+  </div>
   )
 }
 

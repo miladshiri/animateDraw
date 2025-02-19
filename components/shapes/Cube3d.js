@@ -85,6 +85,7 @@ const Cube3d = ({size, shapeSettings}) => {
                 ref={textInputRef}
                 style={{
                   padding: "4px",
+                  whiteSpace: "pre",
                   color: `${shapeSettings ? (shapeSettings.textColor ? shapeSettings.textColor : defaultSettings['Cube3d'].textColor) : defaultSettings['Cube3d'].textColor}`,
                   fontSize: `16px`,
                   transform: `scale(${(size.w + size.h) / 2 / (textInputRef.current?.scrollWidth ) || 1}, ${(size.w + size.h) / 2 / (textInputRef.current?.scrollWidth ) || 1  })`
