@@ -41,7 +41,7 @@ const Arrow = ({ size, shapeSettings, scale }) => {
     <div
       style={{
         position: "relative",
-        top: `0px`,
+        top: `-${thicknessSize * scale / 2}px`,
         left: `0px`,
         width: `100%`,
         height: `100%`,
@@ -63,11 +63,10 @@ const Arrow = ({ size, shapeSettings, scale }) => {
 {(head === "start" || head === "both") && (
         <div
           style={{
-            width: 0,
-            height: 0,
-            borderStyle: "solid",
-            borderWidth: `${thicknessSize * scale}px ${thicknessSize * 2 * scale}px ${thicknessSize * scale}px ${thicknessSize * scale}px`,
-            borderColor: `transparent ${shapeColor} transparent transparent`,
+            width: `${120 * scale}px`,
+            height: `${120 * scale}px`,
+            backgroundColor: shapeColor,
+            clipPath: "polygon(100% 0, 0 50%, 100% 100%)"
           }}
         ></div>
       )}
@@ -80,15 +79,13 @@ const Arrow = ({ size, shapeSettings, scale }) => {
       ></div>
       {(head === "end" || head === "both") && (
         <div
-          style={{
-            width: 0,
-            height: 0,
-            borderStyle: "solid",
-            borderWidth: `${thicknessSize * scale}px ${thicknessSize * 2 * scale}px ${thicknessSize * scale}px ${thicknessSize * scale}px`,
-            borderColor: `transparent ${shapeColor} transparent transparent`,
-            transform: "rotate(180deg)",
-          }}
-        ></div>
+        style={{
+          width: `${120 * scale}px`,
+          height: `${120 * scale}px`,
+          backgroundColor: shapeColor,
+          clipPath: "polygon(0% 100%, 100% 50%, 0% 0%)"
+        }}
+      ></div>
       )}
 
     </div>
