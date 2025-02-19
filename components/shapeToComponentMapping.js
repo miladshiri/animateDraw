@@ -12,7 +12,7 @@ import Arrow from "./shapes/Arrow";
     "AnimatedRecRotate": {animationSpeed: "normal", shapeColor: "#1b14f5", borderColor: "#ffffff", flowColor: "#e30707"},
     "Cube3d": {animationSpeed: "normal", animationSpeedOff: "no", shapeColor: "#00ee00", textColor: "#00f01c", shapeText: "Text"},
     "SimpleText": {animationSpeed: "fast", textColor: "#fff", fontSize: 26},
-    "Arrow": {animationSpeed: "fast", textColor: "#fff", thickness: "normal", shapeColor: "#00ee00", fontSize: 26, startX: 0, startY: 0, endX: 100, endY: 100, head: "end"}
+    "Arrow": {animationSpeed: "fast", thickness: "normal", shapeColor: "#00ee00", fontSize: 26, startX: 0, startY: 0, endX: 100, endY: 100, head: "end"}
   }
   
   export const getComponentByName = (componentName) => {

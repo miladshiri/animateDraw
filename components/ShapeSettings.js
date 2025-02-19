@@ -5,10 +5,15 @@ import ColorPickerComponent from "./ColorPickerComponent";
 const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPalette, colorPalette}) => {
 
   const [animationSpeed, setAnimationSpeed] = useState(selectedShape.settings?.animationSpeed)
+  const [arrowHeads, setArrowHeads] = useState(selectedShape.settings?.head)
 
   useEffect(()=> {
     changeShapeSettingByName("animationSpeed", animationSpeed);
   }, [animationSpeed])
+
+  useEffect(()=> {
+    changeShapeSettingByName("head", arrowHeads);
+  }, [arrowHeads])
 
   const handleMouseDown = (event) => {
     event.stopPropagation();
@@ -75,6 +80,21 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
             <button onClick={()=> {setAnimationSpeed('slow')}} className={animationSpeed === 'slow' ? "isSelected" : ""} >Slow</button>
             <button onClick={()=> {setAnimationSpeed('normal')}} className={animationSpeed === 'normal' ? "isSelected" : ""} >Normal</button>
             <button onClick={()=> {setAnimationSpeed('fast')}} className={animationSpeed === 'fast' ? "isSelected" : ""} >Fast</button>
+          </div>
+        </div>
+      )}
+
+      {selectedShape.settings.head && (
+        <div className="toolbar-item">
+          <div className="toolbar-title">Heads</div>
+          <div className="toolbar-setting">
+            
+          {selectedShape.settings.animationSpeedOff == 'yes' && (
+            <button onClick={()=> {setArrowHeads('no-head')}} className={arrowHeads === 'no-head' ? "isSelected" : ""} >Off</button>
+          )} 
+            <button onClick={()=> {setArrowHeads('start')}} className={arrowHeads === 'start' ? "isSelected" : ""} >Start</button>
+            <button onClick={()=> {setArrowHeads('end')}} className={arrowHeads === 'end' ? "isSelected" : ""} >End</button>
+            <button onClick={()=> {setArrowHeads('both')}} className={arrowHeads === 'both' ? "isSelected" : ""} >Both</button>
           </div>
         </div>
       )}
