@@ -9,6 +9,7 @@ import ShapeSettings from "@/components/ShapeSettings";
 import { getImageFromIndexedDB, saveImageToIndexedDB } from "@/utils/indexedDBHelper";
 import BottomToolbar from "@/components/BottomToolbar";
 import { defaultSettings } from "@/components/shapeToComponentMapping";
+import Image from 'next/image';
 
 export default function Home() {
   const defaultShapes = [
@@ -1079,6 +1080,21 @@ export default function Home() {
       {selectedShape && selectedTool === 'select' && !isFreezeScreenSelected &&
         <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName} updateColorPalette={updateColorPalette} colorPalette={colorPalette} />
       }
+
+    <Image
+      style={{
+        position: "fixed",
+        bottom: "1px",
+        left: "2px",
+        WebkitFilter: "drop-shadow(5px 5px 5px #222)",
+        filter: "drop-shadow(5px 5px 5px #222)",
+        zIndex: "1000"
+      }}
+      src="/mainLogo.png"
+      alt="flowyBoard"
+      width={200}
+      height={300}
+    />
 
       { !isTyping &&
         <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
