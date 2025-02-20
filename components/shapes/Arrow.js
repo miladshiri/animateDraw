@@ -15,12 +15,12 @@ const Arrow = ({ size, shapeSettings, scale }) => {
   var thicknessSize = 0;
 
   if (thickness == 'narrow') {
-    thicknessSize = 20;
+    thicknessSize = 6;
   }
   else if (thickness == 'bold') {
-    thicknessSize = 40;
+    thicknessSize = 20;
   } else {
-    thicknessSize = 50;
+    thicknessSize = 10;
   }
 
   var startX = startX / 100 * size.w;
@@ -29,7 +29,7 @@ const Arrow = ({ size, shapeSettings, scale }) => {
   var endY = endY / 100 * size.h;
 
   if (!scale) {
-    scale = 0.09;
+    scale = 0.9;
   }
 
   const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
@@ -63,8 +63,8 @@ const Arrow = ({ size, shapeSettings, scale }) => {
 {(head === "start" || head === "both") && (
         <div
           style={{
-            width: `${120 * scale}px`,
-            height: `${120 * scale}px`,
+            width: `${scale * thicknessSize * 2}px`,
+            height: `${scale * thicknessSize * 2}px`,
             backgroundColor: shapeColor,
             clipPath: "polygon(100% 0, 0 50%, 100% 100%)"
           }}
@@ -80,8 +80,8 @@ const Arrow = ({ size, shapeSettings, scale }) => {
       {(head === "end" || head === "both") && (
         <div
         style={{
-          width: `${120 * scale}px`,
-          height: `${120 * scale}px`,
+          width: `${scale * thicknessSize * 2}px`,
+          height: `${scale * thicknessSize * 1.5}px`,
           backgroundColor: shapeColor,
           clipPath: "polygon(0% 100%, 100% 50%, 0% 0%)"
         }}
