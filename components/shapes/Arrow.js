@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { defaultSettings } from "../shapeToComponentMapping";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Arrow = ({ size, shapeSettings, scale }) => {
 
@@ -34,6 +35,11 @@ const Arrow = ({ size, shapeSettings, scale }) => {
 
   const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
   const length = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
+
+  const path = [
+    { x: 0},
+    { x: length - thicknessSize * scale * 4},
+  ];
 
   const headSize = (size.h + size.w) / 10;
 
@@ -75,8 +81,29 @@ const Arrow = ({ size, shapeSettings, scale }) => {
           flexGrow: 1,
           height: `${thicknessSize / 2 * scale}px`,
           backgroundColor: shapeColor,
+          display: 'flex',
+          alignItems: 'center'
         }}
-      ></div>
+      >
+        <motion.div
+          style={{
+            width: `${thicknessSize * scale}px`,
+            height: `${thicknessSize * scale}px`,
+            backgroundColor: "red",
+            borderRadius: "50%",
+            boxShadow: "0px 0px 4px 4px rgb(241, 16, 16)"
+          }}
+          animate={{
+            x: path.map((point) => point.x),
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: '2',
+            ease: "linear",
+          }}
+        />
+
+      </div>
       {(head === "end" || head === "both") && (
         <div
         style={{
