@@ -280,19 +280,15 @@ export default function Home() {
   const handleWheel = (e) => {
     if (isTyping) return;
     if (e.ctrlKey || e.metaKey) {
-      const yDiff = e.deltaY > 0 ? -1 : 1;
-      setOffset((prevOffset) => {
-        // Adjust the offset to keep the mouse pointer fixed relative to content
+            // const scaleDiff = e.deltaY > 0 ? -0.05 : 0.05;
+            const scaleDiff = e.deltaY > 0 ? 0.9 : 1.1;
+            zoomInOut (scaleDiff, e.clientX, e.clientY);
 
-        const newOffsetX = prevOffset.x;
-        const newOffsetY = prevOffset.y + yDiff / scale * 26;
-
-        return { x: newOffsetX, y: newOffsetY};
-      });
 
     }
     else if (e.shiftKey) {
       const xDiff = e.deltaX > 0 ? -1 : 1;
+
       setOffset((prevOffset) => {
         // Adjust the offset to keep the mouse pointer fixed relative to content
 
@@ -304,9 +300,16 @@ export default function Home() {
 
     }
     else {
-      // const scaleDiff = e.deltaY > 0 ? -0.05 : 0.05;
-      const scaleDiff = e.deltaY > 0 ? 0.9 : 1.1;
-      zoomInOut (scaleDiff, e.clientX, e.clientY);
+
+      const yDiff = e.deltaY > 0 ? -1 : 1;
+      setOffset((prevOffset) => {
+        // Adjust the offset to keep the mouse pointer fixed relative to content
+
+        const newOffsetX = prevOffset.x;
+        const newOffsetY = prevOffset.y + yDiff / scale * 26;
+
+        return { x: newOffsetX, y: newOffsetY};
+      });
     }
   };
 
