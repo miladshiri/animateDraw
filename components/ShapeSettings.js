@@ -7,6 +7,7 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
   const [animationSpeed, setAnimationSpeed] = useState(selectedShape.settings?.animationSpeed)
   const [arrowHeads, setArrowHeads] = useState(selectedShape.settings?.head)
   const [shapeText, setShapeText] = useState(selectedShape.settings?.shapeText)
+  const [thickness, setThickness] = useState(selectedShape.settings?.thickness)
 
   useEffect(()=> {
     changeShapeSettingByName("animationSpeed", animationSpeed);
@@ -19,6 +20,10 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
   useEffect(()=> {
     changeShapeSettingByName("shapeText", shapeText);
   }, [shapeText])
+
+  useEffect(()=> {
+    changeShapeSettingByName("thickness", thickness);
+  }, [thickness])
 
   const handleMouseDown = (event) => {
     event.stopPropagation();
@@ -100,6 +105,18 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
             <button onClick={()=> {setArrowHeads('start')}} className={arrowHeads === 'start' ? "isSelected" : ""} >Start</button>
             <button onClick={()=> {setArrowHeads('end')}} className={arrowHeads === 'end' ? "isSelected" : ""} >End</button>
             <button onClick={()=> {setArrowHeads('both')}} className={arrowHeads === 'both' ? "isSelected" : ""} >Both</button>
+          </div>
+        </div>
+      )}
+
+      {selectedShape.settings.thickness && (
+        <div className="toolbar-item">
+          <div className="toolbar-title">Thickness</div>
+          <div className="toolbar-setting">
+            
+          <button onClick={()=> {setThickness('narrow')}} className={thickness === 'narrow' ? "isSelected" : ""} >Narrow</button>
+          <button onClick={()=> {setThickness('normal')}} className={thickness === 'normal' ? "isSelected" : ""} >Normal</button>
+          <button onClick={()=> {setThickness('bold')}} className={thickness === 'bold' ? "isSelected" : ""} >Bold</button>
           </div>
         </div>
       )}
