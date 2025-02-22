@@ -1,7 +1,6 @@
 import React from "react";
-import clsx from "clsx";
 import { defaultSettings } from "../shapeToComponentMapping";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const Arrow = ({ size, shapeSettings, scale }) => {
 
@@ -12,8 +11,24 @@ const Arrow = ({ size, shapeSettings, scale }) => {
   var head = shapeSettings ? (shapeSettings.head ? shapeSettings.head : defaultSettings['Arrow'].head) : defaultSettings['Arrow'].head
 
   const shapeColor = shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : defaultSettings['Arrow'].shapeColor) : defaultSettings['Arrow'].shapeColor
+  const flowColor = shapeSettings ? (shapeSettings.flowColor ? shapeSettings.flowColor : defaultSettings['Arrow'].flowColor) : defaultSettings['Arrow'].flowColor
   const thickness = shapeSettings ? (shapeSettings.thickness ? shapeSettings.thickness : defaultSettings['Arrow'].thickness) : defaultSettings['Arrow'].thickness
+  const animationSpeed = shapeSettings ? (shapeSettings.animationSpeed ? shapeSettings.animationSpeed : defaultSettings['Arrow'].animationSpeed) : defaultSettings['Arrow'].animationSpeed
   var thicknessSize = 0;
+
+  var speed = 1;
+    if (animationSpeed == 'slow') {
+      speed = 2;
+    }
+    else if (animationSpeed == 'normal') {
+      speed = 1;
+    }
+    else if (animationSpeed == 'fast') {
+      speed = 0.4;
+    }
+    else {
+      speed = 0;
+    }
 
   if (thickness == 'narrow') {
     thicknessSize = 6;
@@ -86,19 +101,20 @@ const Arrow = ({ size, shapeSettings, scale }) => {
         }}
       >
         <motion.div
+          key={speed}
           style={{
             width: `${thicknessSize * scale}px`,
             height: `${thicknessSize * scale}px`,
-            backgroundColor: "red",
+            backgroundColor: flowColor,
             borderRadius: "50%",
-            boxShadow: "0px 0px 4px 4px rgb(241, 16, 16)"
+            boxShadow: `0px 0px 4px 4px ${flowColor}`
           }}
           animate={{
             x: path.map((point) => point.x),
           }}
           transition={{
             repeat: Infinity,
-            duration: '2',
+            duration: speed * length * scale / 300,
             ease: "linear",
           }}
         />
