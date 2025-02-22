@@ -10,6 +10,7 @@ import { getImageFromIndexedDB, saveImageToIndexedDB } from "@/utils/indexedDBHe
 import BottomToolbar from "@/components/BottomToolbar";
 import { defaultSettings } from "@/components/shapeToComponentMapping";
 import Image from 'next/image';
+import LogoBar from "@/components/LogoBar";
 
 export default function Home() {
   const defaultShapes = [
@@ -1084,20 +1085,7 @@ export default function Home() {
         <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName} updateColorPalette={updateColorPalette} colorPalette={colorPalette} />
       }
 
-    <Image
-      style={{
-        position: "fixed",
-        bottom: "1px",
-        left: "2px",
-        WebkitFilter: "drop-shadow(5px 5px 5px #222)",
-        filter: "drop-shadow(5px 5px 5px #222)",
-        zIndex: "1000"
-      }}
-      src="/mainLogo.png"
-      alt="flowyBoard"
-      width={200}
-      height={300}
-    />
+      <LogoBar />
 
       { !isTyping &&
         <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
