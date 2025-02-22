@@ -18,7 +18,7 @@ const Arrow = ({ size, shapeSettings, scale }) => {
 
   var speed = 1;
     if (animationSpeed == 'slow') {
-      speed = 2;
+      speed = 4;
     }
     else if (animationSpeed == 'normal') {
       speed = 1;
