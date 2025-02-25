@@ -23,7 +23,8 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
     },
     {name:"3d", icon: <Box />, assets: 
       [
-      {name:"amazing2", component: "Cube3d"},
+      {name:"Cube 3D", component: "Cube3d"},
+      {name:"Diomond 3D", component: "Diamond3d"},
       ]
   },
   ]
