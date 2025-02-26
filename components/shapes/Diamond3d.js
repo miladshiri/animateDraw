@@ -97,8 +97,8 @@ const Diamond3d = ({ size, shapeSettings, scale }) => {
 
         .triangle {
           position: absolute;
-          left: -100px;
-          top: -30px;
+          left: -${borderSize}px;
+          top: -${borderSize * 0.3}px;
           width: 0;
           height: 0;
           border-left: ${borderSize}px solid transparent;
