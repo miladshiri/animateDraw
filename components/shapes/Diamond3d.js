@@ -1,6 +1,15 @@
+import { useState, useEffect } from "react";
+import { defaultSettings } from "../shapeToComponentMapping";
+
 const Diamond3d = ({ size, shapeSettings, scale }) => {
-  const f = 0.1;
-  const borderSize = (size.h + size.w) / 2 * scale;
+
+  const [borderSize, setBorderSize] = useState(0);
+
+    useEffect(() => {
+      setBorderSize((size.h + size.w) / 2);
+    }, [size])
+
+  const shapeColor = shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : defaultSettings['Diamond3d'].shapeColor) : defaultSettings['Diamond3d'].shapeColor
 
   // Function to generate styles for different types of triangles (bottom, middle-bottom, middle-top, up)
   const generateTriangleStyles = (type, index) => {
@@ -36,7 +45,15 @@ const Diamond3d = ({ size, shapeSettings, scale }) => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        position: "relative",
+        top: borderSize * 0.5,
+        left: borderSize * 0.5,
+        backgroundColor: "red",
+        "--shapeColor": shapeColor,
+      }}
+    >
       <div className="wrap rotor-x">
         <div className="wrap rotor-y">
           <div className="wrap rotor-z">
@@ -80,16 +97,12 @@ const Diamond3d = ({ size, shapeSettings, scale }) => {
       </div>
 
       <style jsx>{`
-        body {
-          background-color: #f1f1f1;
-        }
-
         .wrap {
           position: absolute;
-          width: 0;
-          height: 0;
-          top: 50%;
-          left: 50%;
+          width: 100%;
+          height: 100%;
+          top: 0%;
+          left: 0%;
           transform-origin: 0 0;
           transform-style: preserve-3d;
           overflow: visible;
@@ -103,7 +116,7 @@ const Diamond3d = ({ size, shapeSettings, scale }) => {
           height: 0;
           border-left: ${borderSize}px solid transparent;
           border-right: ${borderSize}px solid transparent;
-          border-bottom: ${borderSize}px solid #33afff;
+          border-bottom: ${borderSize}px solid ${shapeColor};
           animation: lighting 12s infinite linear;
         }
 
@@ -124,7 +137,7 @@ const Diamond3d = ({ size, shapeSettings, scale }) => {
 
         /** Up Triangles **/
         .triangle.up {
-          animation: lighting-lighter 12s infinite linear;
+          animation: lighting-lighter 11s infinite linear;
           transform-origin: 50% 0%;
         }
 
@@ -135,7 +148,7 @@ const Diamond3d = ({ size, shapeSettings, scale }) => {
         }
 
         .rotor-y {
-          animation: spinY 12s infinite linear;
+          animation: spinY 13s infinite linear;
         }
 
         .rotor-z {
@@ -171,25 +184,25 @@ const Diamond3d = ({ size, shapeSettings, scale }) => {
 
         @keyframes lighting {
           0% {
-            border-bottom-color: #33afff;
+            border-bottom-color: var(--shapeColor);
           }
           50% {
-            border-bottom-color: #bbe8ff;
+            border-bottom-color:rgb(255, 255, 255);
           }
           100% {
-            border-bottom-color: #33afff;
+            border-bottom-color: var(--shapeColor);
           }
         }
 
         @keyframes lighting-lighter {
           0% {
-            border-bottom-color: #72c8ff;
+            border-bottom-color: var(--shapeColor);
           }
           50% {
-            border-bottom-color: #99eaff;
+            border-bottom-color:rgb(255, 255, 255);
           }
           100% {
-            border-bottom-color: #72c8ff;
+            border-bottom-color: var(--shapeColor);
           }
         }
       `}</style>
