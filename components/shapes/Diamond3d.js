@@ -1,6 +1,7 @@
-const Diamond3d = ({ size, shapeSettings }) => {
+const Diamond3d = ({ size, shapeSettings, scale }) => {
   const f = 0.1;
-  
+  const borderSize = (size.h + size.w) / 2 * scale;
+
   // Function to generate styles for different types of triangles (bottom, middle-bottom, middle-top, up)
   const generateTriangleStyles = (type, index) => {
     const baseDelay = type === 'middle-top' ? 2500 : type === 'up' ? 3500 : 3500;
@@ -9,12 +10,12 @@ const Diamond3d = ({ size, shapeSettings }) => {
     let transform = '';
 
     if (type === 'bottom') {
-      transform = `translateY(90px) rotateY(${rotationY}deg) rotateX(35deg) scaleX(0.24) scaleY(-1)`;
+      transform = `translateY(${borderSize * 0.9}px) rotateY(${rotationY}deg) rotateX(35deg) scaleX(0.24) scaleY(-1)`;
     } else if (type === 'middle-bottom') {
-      transform = `rotateY(${rotationY}deg) translateY(-11px) translateZ(-34px) rotateX(-50deg) scaleX(0.24) scaleY(0.3)`;
+      transform = `rotateY(${rotationY}deg) translateY(-${borderSize * 0.1}px) translateZ(-${borderSize / 3}px) rotateX(-50deg) scaleX(0.24) scaleY(0.3)`;
     } else if (type === 'middle-top') {
-      const topTransformY = -111;  // Y position for middle-top faces
-      const topTranslateZ = -31;   // Z position for middle-top faces
+      const topTransformY = -1 * (borderSize + borderSize * 0.1 );  // Y position for middle-top faces
+      const topTranslateZ = -1 * (borderSize * 0.30);   // Z position for middle-top faces
       const rotateX = -58;         // Fixed X rotation for top faces
       const scaleX = 0.13;         // Scale for X axis for top faces
       const scaleY = -0.36;        // Scale for Y axis for top faces
@@ -22,7 +23,7 @@ const Diamond3d = ({ size, shapeSettings }) => {
       // For middle-top faces, calculate specific rotations and translations
       transform = `rotateY(${22.5 + 45 * index}deg) translateY(${topTransformY}px) translateZ(${topTranslateZ}px) rotateX(${rotateX}deg) scaleX(${scaleX}) scaleY(${scaleY})`;
     } else if (type === 'up') {
-      const upTransformY = -22;    // Y position for up faces
+      const upTransformY = -1 * (borderSize * 0.21);    // Y position for up faces
       const rotateX = -70;         // Fixed X rotation for up faces
       const scaleX = 0.13;         // Scale for X axis for up faces
       const scaleY = 0.33;         // Scale for Y axis for up faces
@@ -100,9 +101,9 @@ const Diamond3d = ({ size, shapeSettings }) => {
           top: -30px;
           width: 0;
           height: 0;
-          border-left: 100px solid transparent;
-          border-right: 100px solid transparent;
-          border-bottom: 100px solid #33afff;
+          border-left: ${borderSize}px solid transparent;
+          border-right: ${borderSize}px solid transparent;
+          border-bottom: ${borderSize}px solid #33afff;
           animation: lighting 12s infinite linear;
         }
 
