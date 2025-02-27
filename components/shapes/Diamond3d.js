@@ -2,8 +2,26 @@ import { useState, useEffect } from "react";
 import { defaultSettings } from "../shapeToComponentMapping";
 
 const Diamond3d = ({ size, shapeSettings, scale }) => {
+  var speed = 4;
+
+  if (shapeSettings) {
+    if (shapeSettings.animationSpeed == 'slow') {
+      speed = 8;
+    }
+    else if (shapeSettings.animationSpeed == 'normal') {
+      speed = 4;
+    }
+    else if (shapeSettings.animationSpeed == 'fast') {
+      speed = 1;
+    }
+
+  }
+
+  const rotorStyle = {
+    animation: `spinY ${speed}s infinite linear`,
+  };
+
   const [borderSize, setBorderSize] = useState(0);
-  console.log(borderSize);
 
     useEffect(() => {
       if (size.h && size.w && !isNaN(size.h) && !isNaN(size.w)) {
@@ -57,7 +75,7 @@ const Diamond3d = ({ size, shapeSettings, scale }) => {
       }}
     >
       <div className="wrap rotor-x">
-        <div className="wrap rotor-y">
+        <div className="wrap rotor-y" style={rotorStyle}>
           <div className="wrap rotor-z">
             {/* Bottom Triangles */}
             {Array.from({ length: 8 }, (_, index) => (
@@ -147,10 +165,6 @@ const Diamond3d = ({ size, shapeSettings, scale }) => {
 
         .rotor-x {
           transform: rotateX(-22deg);
-        }
-
-        .rotor-y {
-          animation: spinY 13s infinite linear;
         }
 
         .rotor-z {
