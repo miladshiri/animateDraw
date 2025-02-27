@@ -42,6 +42,7 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
                 width: "35px",
                 height: "35px",
                 margin: "1px",
+                zIndex: "100",
               }}
             >
               {React.createElement(getComponentByName(asset.component), {size:{w:35, h:35}}) }

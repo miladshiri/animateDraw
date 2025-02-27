@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { defaultSettings } from "../shapeToComponentMapping";
 
 const Diamond3d = ({ size, shapeSettings, scale }) => {
-
   const [borderSize, setBorderSize] = useState(0);
+  console.log(borderSize);
 
     useEffect(() => {
-      setBorderSize((size.h + size.w) / 2);
+      if (size.h && size.w && !isNaN(size.h) && !isNaN(size.w)) {
+        setBorderSize((size.h + size.w) / 2);
+      }
     }, [size])
 
   const shapeColor = shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : defaultSettings['Diamond3d'].shapeColor) : defaultSettings['Diamond3d'].shapeColor
