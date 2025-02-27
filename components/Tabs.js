@@ -13,7 +13,7 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
         {tabs.map((tab, index) => (
           <button
             key={index}
-            className={`tab-button ${activeTab === index ? "active" : ""}`}
+            className={`tab-button ${activeTab === index ? "isSelected" : ""}`}
             onClick={() => setActiveTab(index)}
           >
             {tab.icon}
