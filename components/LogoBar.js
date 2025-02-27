@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, ScanSearch } from "lucide-react";
+import { Menu, ScanSearch, Eraser, Save, MonitorDown } from "lucide-react";
 import Image from "next/image";
 
 
@@ -32,9 +32,9 @@ const LogoBar = () => {
       style={{
         display: "flex",
         zIndex: 1000, // Ensures it stays on top of other elements
-
-        
       }}
+      onMouseUp={(event) => event.stopPropagation()}
+      onMouseDown={(event) => event.stopPropagation()}
     >
     <div className="toolbar" style={toolbarStyle}>
 
@@ -75,9 +75,34 @@ const LogoBar = () => {
         color: '#1b1b1f'
       }}
     >
-      dsfasfasdf
+      <div className="menu-item"><Eraser size={20} strokeWidth={1} />Clean the Board</div>
+      <div className="menu-item"><Save size={20} strokeWidth={1} />Save the Board</div>
+      <div className="menu-item"><MonitorDown size={20} strokeWidth={1} />Import a Board</div>
     </div>
 }
+
+
+    <style jsx>
+      {`
+        .menu-item {
+          padding: 4px;
+          padding-bottom: 10px;
+          color: rgb(57, 57, 57);
+          display: flex;
+          justify-content: start;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .menu-item:hover {
+          background-color: #223ce5;
+          transition: 0.2s ease-in-out;
+          border-radius: 5px;
+          color: white;
+        }
+
+      `}
+    </style>
     </div>
   )
 }
