@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Menu, ScanSearch, Eraser, Save, MonitorDown } from "lucide-react";
 import Image from "next/image";
 
@@ -6,10 +6,37 @@ import Image from "next/image";
 const LogoBar = () => {
 
   const [showMenu, setShowMenu] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const menuRef = useRef(null);
 
   const handleMenuButton = (e) => {
     setShowMenu((prev) => !prev);
   }
+
+  const handleCleanBoardClick = () => {
+    setShowConfirmation(true);
+  };
+
+  const confirmDelete = () => {
+    setShowConfirmation(false);
+    console.log("Board deleted"); // Replace with actual delete logic
+  };
+
+  const cancelDelete = () => {
+    setShowConfirmation(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+        setShowConfirmation(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const toolbarStyle = {
     position: "fixed",
@@ -29,6 +56,7 @@ const LogoBar = () => {
 
   return (
     <div
+      ref={menuRef}
       style={{
         display: "flex",
         zIndex: 1000, // Ensures it stays on top of other elements
@@ -75,12 +103,22 @@ const LogoBar = () => {
         color: '#1b1b1f'
       }}
     >
-      <div className="menu-item"><Eraser size={20} strokeWidth={1} />Clean the Board</div>
+      <div className="menu-item" onClick={handleCleanBoardClick}><Eraser size={20} strokeWidth={1} />Clean the Board</div>
       <div className="menu-item"><Save size={20} strokeWidth={1} />Save the Board</div>
       <div className="menu-item"><MonitorDown size={20} strokeWidth={1} />Import a Board</div>
     </div>
 }
 
+
+      {showConfirmation && (
+        <div id="clean-board-confirmation" className="confirmation-box">
+          <p>Are you sure you want to delete the board?</p>
+          <div className="confirm-buttons">
+            <button className="yes-btn" onClick={confirmDelete}>Yes</button>
+            <button className="no-btn" onClick={cancelDelete}>No</button>
+          </div>
+        </div>
+      )}
 
     <style jsx>
       {`
@@ -101,8 +139,64 @@ const LogoBar = () => {
           color: white;
         }
 
+        .confirmation-box {
+          position: fixed;
+          bottom: 50px;
+          left: 2px;
+          transform: translateX(5%);
+          width: 210px;
+          background: white;
+          border-radius: 8px;
+          padding: 15px;
+          box-shadow: 4px 0px 0px 0px rgb(211, 211, 211);
+          color: #1b1b1f;
+          text-align: center;
+          z-index: 1100;
+        }
+
+        .confirmation-box p {
+          font-size: 14px;
+          font-weight: 500;
+          color: rgb(57, 57, 57);
+          margin-bottom: 10px;
+        }
+
+        .confirm-buttons {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .yes-btn, .no-btn {
+          flex: 1;
+          margin: 0 5px;
+          padding: 8px 0;
+          border: none;
+          border-radius: 5px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+
+        .yes-btn {
+          background-color: #ff4d4d;
+          color: white;
+        }
+
+        .no-btn {
+          background-color: #ccc;
+          color: black;
+        }
+
+        .yes-btn:hover {
+          background-color: #cc0000;
+        }
+
+        .no-btn:hover {
+          background-color: #999;
+        }
+
       `}
     </style>
+
     </div>
   )
 }
