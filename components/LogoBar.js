@@ -3,7 +3,7 @@ import { Menu, ScanSearch, Eraser, Save, MonitorDown } from "lucide-react";
 import Image from "next/image";
 
 
-const LogoBar = () => {
+const LogoBar = ({ setAllShapes, pushToHistory }) => {
 
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -18,8 +18,10 @@ const LogoBar = () => {
   };
 
   const confirmDelete = () => {
+    setAllShapes([]); // Clear all shapes
+    pushToHistory(); // Push the empty state to history
     setShowConfirmation(false);
-    console.log("Board deleted"); // Replace with actual delete logic
+    setShowMenu(false);
   };
 
   const cancelDelete = () => {

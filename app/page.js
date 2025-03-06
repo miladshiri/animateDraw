@@ -1085,7 +1085,7 @@ export default function Home() {
         <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName} updateColorPalette={updateColorPalette} colorPalette={colorPalette} />
       }
 
-      <LogoBar />
+      <LogoBar setAllShapes={setAllShapes} pushToHistory={pushToHistory} />
 
       { !isTyping &&
         <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
