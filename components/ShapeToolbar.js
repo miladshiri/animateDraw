@@ -13,7 +13,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
     {name:"circle", icon: <Circle />, assets: 
       [
         {name:"Single Flow Circle", component: "AnimatedCircle"},
-
+        {name:"Pulsing Red Circle", component: "AnimatedRedCircle"},
       ]
     },
     {name:"arrow", icon: <ArrowLeftRight />, assets: 
