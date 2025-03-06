@@ -1,5 +1,5 @@
 import Tabs from "./Tabs";
-import { Square, Circle, Box, ArrowLeftRight } from "lucide-react"; // Import Lucide icons
+import { Square, Circle, Box, ArrowLeftRight, Bot } from "lucide-react"; // Import Lucide icons
 
 const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
 
@@ -27,7 +27,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
       {name:"Diomond 3D", component: "Diamond3d"},
       ]
     },
-    {name:"3d", icon: <Box />, assets: 
+    {name:"misc", icon: <Bot />, assets: 
       [
       {name:"Robot Wave Hand", component: "RobotHandShake"},
       ]
