@@ -44,6 +44,7 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
                 height: "35px",
                 margin: "1px",
                 zIndex: "100",
+                cursor: "pointer"
               }}
             >
               {React.createElement(getComponentByName(asset.component), {size:{w:35, h:35}}) }
@@ -102,15 +103,26 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
           grid-template-columns: auto auto auto;
         }
         .tab-item {
+          position: relative;
           transition: 0.2s ease-in-out;
-          cursor: pointer;
         }
-        .tab-item:hover {
-          background-color: rgb(83, 83, 83);
+        .tab-item::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
           border-radius: 5px;
+          transition: 0.2s ease-in-out;
+          pointer-events: none;
+        }
+        .tab-item:hover::before {
+          background-color: rgb(83, 83, 83);
         }
         .shape-preview {
-          pointer-events: none;
+          position: relative;
+          z-index: 1;
         }
       `}</style>
     </div>
