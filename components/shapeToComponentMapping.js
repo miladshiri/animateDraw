@@ -6,6 +6,7 @@ import SimpleText from "./shapes/SimpleText";
 import AnimatedCircle from "./shapes/AnimatedCircle";
 import Arrow from "./shapes/Arrow";
 import Diamond3d from "./shapes/Diamond3d";
+import RobotHandShake from "./shapes/RobotHandShake";
 
   export const defaultSettings = {
     "AnimatedRec": {animationSpeed: "normal", shapeColor: "#2a2a2a", borderColor: "#51b39a", flowColor: "#aaaaaa"},
@@ -15,6 +16,7 @@ import Diamond3d from "./shapes/Diamond3d";
     "SimpleText": {animationSpeed: "fast", textColor: "#fff", fontSize: 26},
     "Arrow": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
     "Diamond3d": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#001bed"},
+    "RobotHandShake": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#001bed"},
   }
   
   export const getComponentByName = (componentName) => {
@@ -29,7 +31,8 @@ import Diamond3d from "./shapes/Diamond3d";
     "SimpleImage": SimpleImage,
     "SimpleText": SimpleText,
     "Arrow": Arrow,
-    "Diamond3d": Diamond3d
+    "Diamond3d": Diamond3d,
+    "RobotHandShake": RobotHandShake
   };
 
   export default components;
