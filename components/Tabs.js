@@ -26,7 +26,7 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
         {tabs[activeTab].assets.map((asset, index) => (
             <div
               key={index}
-              className={shapeToCreate === asset.component ? "isSelectedSecondary" : ""}
+              className={`tab-item ${shapeToCreate === asset.component ? "isSelectedSecondary" : ""}`}
               style={{
                 width: "50px",
                 height: "50px",
@@ -38,6 +38,7 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
             >
             <div
               onClick={() => setShapeToCreate(asset.component)}
+              className="shape-preview"
               style={{
                 width: "35px",
                 height: "35px",
@@ -100,10 +101,16 @@ export default function Tabs({tabs, setShapeToCreate, shapeToCreate}) {
           display: grid;
           grid-template-columns: auto auto auto;
         }
-        .tab-content div:hover {
-          background-color: rgb(83, 83, 83);
+        .tab-item {
           transition: 0.2s ease-in-out;
+          cursor: pointer;
+        }
+        .tab-item:hover {
+          background-color: rgb(83, 83, 83);
           border-radius: 5px;
+        }
+        .shape-preview {
+          pointer-events: none;
         }
       `}</style>
     </div>
