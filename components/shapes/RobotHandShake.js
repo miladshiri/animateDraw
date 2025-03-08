@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { defaultSettings } from "../shapeToComponentMapping";
 
 const RobotHandShake = ({ size, shapeSettings, scale }) => {
+  const [isHovered, setIsHovered] = useState(false);
   var speed = 4;
 
   if (shapeSettings) {
@@ -12,7 +13,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
       speed = 4;
     }
     else if (shapeSettings.animationSpeed == 'fast') {
-      speed = 1;
+      speed = 2;
     }
   }
 
@@ -27,7 +28,38 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
     <div style={{ padding: `${baseUnit * 5}px` }}>
       <div className="robot">
         <div className="robot-head"></div>
-        <div className="robot-body"></div>
+        <div 
+          className="robot-body" 
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          style={{ 
+            width: `${baseUnit * 20}px`,
+            height: `${baseUnit * 22.5}px`,
+            position: 'absolute',
+            top: `${baseUnit * 15}px`,
+            left: `${baseUnit * 2.5}px`,
+            display: 'block',
+            overflow: 'hidden',
+            borderRadius: '50% 50% 50% 50%/30% 30% 70% 70%',
+            background: shapeColor,
+          }}
+        >
+          <div 
+            style={{
+              content: '""',
+              display: 'block',
+              width: `${baseUnit * 3.75}px`,
+              height: `${baseUnit * 3.75}px`,
+              position: 'absolute',
+              top: `${baseUnit * 6.25}px`,
+              left: `${baseUnit * 12}px`,
+              borderRadius: '50%',
+              animation: isHovered 
+                ? `wobble ${speed * 25}ms linear infinite`
+                : `beat ${speed * 112}ms linear infinite`
+            }}
+          />
+        </div>
         <div className="robot-hand"></div>
       </div>
 
@@ -216,12 +248,6 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           top: ${baseUnit * 6.25}px;
           left: ${baseUnit * 12}px;
           border-radius: 50%;
-          -webkit-animation: beat 4500ms linear infinite;
-                  animation: beat 4500ms linear infinite;
-        }
-        .robot-body:hover::after {
-          -webkit-animation: wobble 1000ms linear infinite;
-                  animation: wobble 1000ms linear infinite;
         }
         .robot-hand {
           width: ${baseUnit * 8.5}px;
