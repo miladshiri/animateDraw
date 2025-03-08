@@ -26,7 +26,11 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
 
   return (
     <div style={{ padding: `${baseUnit * 5}px` }}>
-      <div className="robot">
+      <div className="robot" style={{
+        display: 'block',
+        position: 'relative',
+        animation: `hover ${speed * 375}ms ease-in-out alternate infinite`
+      }}>
         <div className="robot-head"></div>
         <div 
           className="robot-body" 
@@ -60,7 +64,29 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
             }}
           />
         </div>
-        <div className="robot-hand"></div>
+        <div className="robot-hand" style={{
+          width: `${baseUnit * 8.5}px`,
+          height: `${baseUnit * 8.5}px`,
+          position: 'absolute',
+          top: `${baseUnit * 7.5}px`,
+          left: `${baseUnit * 21.25}px`,
+          display: 'block',
+          borderRadius: '50%',
+          transformOrigin: `50% ${baseUnit * 12}px`,
+          boxShadow: `0 ${baseUnit * 7.5}px 0 ${-baseUnit * 2.5}px ${shapeColor}`,
+          animation: `wave ${speed * 250}ms alternate ease-in-out infinite`
+        }}></div>
+        <div style={{
+          content: '""',
+          display: 'block',
+          width: `${baseUnit * 15}px`,
+          height: `${baseUnit * 3.75}px`,
+          position: 'absolute',
+          top: `${baseUnit * 40}px`,
+          left: `${baseUnit * 5}px`,
+          borderRadius: '50%',
+          animation: `shadow ${speed * 375}ms ease-in-out alternate infinite`
+        }}></div>
       </div>
 
       <style jsx>
@@ -181,12 +207,6 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           padding: 0;
         }
 
-        .robot {
-          display: block;
-          position: relative;
-          -webkit-animation: hover 1500ms ease-in-out alternate infinite;
-                  animation: hover 1500ms ease-in-out alternate infinite;
-        }
         .robot-head {
           width: ${baseUnit * 25}px;
           height: ${baseUnit * 12.5}px;
@@ -195,7 +215,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           border-radius: ${baseUnit * 6.25}px;
           background-color: black;
           box-shadow: 0 0 0 ${baseUnit * 3.25}px ${shapeColor} inset;
-          transition: transform ease-in-out 350ms;
+          transition: transform ease-in-out ${speed * 87.5}ms;
         }
         .robot-head::before {
           content: "";
@@ -259,8 +279,6 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           border-radius: 50%;
           transform-origin: 50% ${baseUnit * 12}px;
           box-shadow: 0 ${baseUnit * 7.5}px 0 ${-baseUnit * 2.5}px ${shapeColor};
-          -webkit-animation: wave 1000ms alternate ease-in-out infinite;
-                  animation: wave 1000ms alternate ease-in-out infinite;
         }
         .robot-hand::after {
           content: "";
@@ -284,8 +302,6 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           top: ${baseUnit * 40}px;
           left: ${baseUnit * 5}px;
           border-radius: 50%;
-          -webkit-animation: shadow 1500ms ease-in-out alternate infinite;
-                  animation: shadow 1500ms ease-in-out alternate infinite;
         }
       `}
       </style>
