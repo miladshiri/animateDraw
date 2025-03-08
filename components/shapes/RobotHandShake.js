@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import { defaultSettings } from "../shapeToComponentMapping";
 
 const RobotHandShake = ({ size, shapeSettings, scale }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const uniqueId = useId().replace(/:/g, ''); // Remove colons from the ID
   var speed = 4;
 
   if (shapeSettings) {
@@ -59,8 +60,9 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
               left: `${baseUnit * 12}px`,
               borderRadius: '50%',
               animation: isHovered 
-                ? `wobble ${speed * 25}ms linear infinite`
-                : `beat ${speed * 112}ms linear infinite`
+                ? `wobble${uniqueId} ${speed * 25}ms linear infinite`
+                : `beat${uniqueId} ${speed * 112}ms linear infinite`,
+              backgroundColor: flowColor
             }}
           />
         </div>
@@ -127,7 +129,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
             transform: translate(0, ${-baseUnit * 1.25}px);
           }
         }
-        @-webkit-keyframes beat {
+        @-webkit-keyframes beat${uniqueId} {
           0% {
             background-color: ${flowColor};
             box-shadow: 0 0 0 0 ${flowColor}4D;
@@ -140,7 +142,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
             background-color: ${flowColor};
           }
         }
-        @keyframes beat {
+        @keyframes beat${uniqueId} {
           0% {
             background-color: ${flowColor};
             box-shadow: 0 0 0 0 ${flowColor}4D;
@@ -169,7 +171,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
             transform: rotate(80deg);
           }
         }
-        @-webkit-keyframes wobble {
+        @-webkit-keyframes wobble${uniqueId} {
           0% {
             transform: translate(${-baseUnit * 0.25}px, 0);
             background-color: ${flowColor};
@@ -185,7 +187,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
             background-color: ${flowColor};
           }
         }
-        @keyframes wobble {
+        @keyframes wobble${uniqueId} {
           0% {
             transform: translate(${-baseUnit * 0.25}px, 0);
             background-color: ${flowColor};
