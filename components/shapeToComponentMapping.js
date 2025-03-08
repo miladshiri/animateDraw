@@ -17,7 +17,7 @@ import AnimatedRedCircle from "./shapes/AnimatedRedCircle";
     "SimpleText": {animationSpeed: "fast", textColor: "#fff", fontSize: 26},
     "Arrow": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
     "Diamond3d": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#001bed"},
-    "RobotHandShake": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#001bed"},
+    "RobotHandShake": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#ffffff", flowColor: "#87ceeb"},
     "AnimatedRedCircle": {animationSpeed: "normal", shapeColor: "#ff0000", borderColor: "#ff0000"},
   }
   

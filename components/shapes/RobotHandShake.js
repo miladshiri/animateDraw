@@ -19,8 +19,9 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
   // Calculate base unit based on size
   const baseUnit = Math.min(size.w, size.h) / 40; // 40 is our base unit for calculations
   
-  // Get shape color from settings or use white as default
-  const shapeColor = shapeSettings?.shapeColor || defaultSettings['RobotHandShake'].shapeColor || "#ffffff";
+  // Get colors from settings or use defaults
+  const shapeColor = shapeSettings ? (shapeSettings.shapeColor ? shapeSettings.shapeColor : defaultSettings['RobotHandShake'].shapeColor) : defaultSettings['RobotHandShake'].shapeColor;
+  const flowColor = shapeSettings ? (shapeSettings.flowColor ? shapeSettings.flowColor : defaultSettings['RobotHandShake'].flowColor) : defaultSettings['RobotHandShake'].flowColor;
 
   return (
     <div style={{ padding: `${baseUnit * 5}px` }}>
@@ -70,28 +71,28 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
         }
         @-webkit-keyframes beat {
           0% {
-            background-color: rebeccapurple;
-            box-shadow: 0 0 0 0 rgba(220, 20, 60, 0.3);
+            background-color: ${flowColor};
+            box-shadow: 0 0 0 0 ${flowColor}4D;
           }
           50%, 70% {
-            background-color: powderblue;
-            box-shadow: 0 0 ${baseUnit * 10}px ${baseUnit * 12.5}px rgba(176, 224, 230, 0);
+            background-color: ${flowColor};
+            box-shadow: 0 0 ${baseUnit * 10}px ${baseUnit * 12.5}px ${flowColor}00;
           }
           100% {
-            background-color: rebeccapurple;
+            background-color: ${flowColor};
           }
         }
         @keyframes beat {
           0% {
-            background-color: rebeccapurple;
-            box-shadow: 0 0 0 0 rgba(220, 20, 60, 0.3);
+            background-color: ${flowColor};
+            box-shadow: 0 0 0 0 ${flowColor}4D;
           }
           50%, 70% {
-            background-color: powderblue;
-            box-shadow: 0 0 ${baseUnit * 10}px ${baseUnit * 12.5}px rgba(176, 224, 230, 0);
+            background-color: ${flowColor};
+            box-shadow: 0 0 ${baseUnit * 10}px ${baseUnit * 12.5}px ${flowColor}00;
           }
           100% {
-            background-color: rebeccapurple;
+            background-color: ${flowColor};
           }
         }
         @-webkit-keyframes wave {
@@ -113,33 +114,33 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
         @-webkit-keyframes wobble {
           0% {
             transform: translate(${-baseUnit * 0.25}px, 0);
-            background-color: crimson;
-            box-shadow: 0 0 0 0 rgba(220, 20, 60, 0.3);
+            background-color: ${flowColor};
+            box-shadow: 0 0 0 0 ${flowColor}4D;
           }
           50%, 70% {
             transform: translate(${baseUnit * 0.25}px, 0);
-            background-color: mediumvioletred;
-            box-shadow: 0 0 ${baseUnit * 10}px ${baseUnit * 12.5}px rgba(220, 20, 60, 0);
+            background-color: ${flowColor};
+            box-shadow: 0 0 ${baseUnit * 10}px ${baseUnit * 12.5}px ${flowColor}00;
           }
           100% {
             transform: translate(${-baseUnit * 0.25}px, 0);
-            background-color: rebeccapurple;
+            background-color: ${flowColor};
           }
         }
         @keyframes wobble {
           0% {
             transform: translate(${-baseUnit * 0.25}px, 0);
-            background-color: crimson;
-            box-shadow: 0 0 0 0 rgba(220, 20, 60, 0.3);
+            background-color: ${flowColor};
+            box-shadow: 0 0 0 0 ${flowColor}4D;
           }
           50%, 70% {
             transform: translate(${baseUnit * 0.25}px, 0);
-            background-color: mediumvioletred;
-            box-shadow: 0 0 ${baseUnit * 10}px ${baseUnit * 12.5}px rgba(220, 20, 60, 0);
+            background-color: ${flowColor};
+            box-shadow: 0 0 ${baseUnit * 10}px ${baseUnit * 12.5}px ${flowColor}00;
           }
           100% {
             transform: translate(${-baseUnit * 0.25}px, 0);
-            background-color: rebeccapurple;
+            background-color: ${flowColor};
           }
         }
         * {
@@ -185,8 +186,8 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           top: ${baseUnit * 4.5}px;
           left: ${baseUnit * 4.5}px;
           border-radius: ${baseUnit * 1.875}px;
-          background-color: powderblue;
-          box-shadow: ${baseUnit * 12.25}px 0 powderblue;
+          background-color: ${flowColor};
+          box-shadow: ${baseUnit * 12.25}px 0 ${flowColor};
           transition: inherit;
         }
         .robot-head:hover {
