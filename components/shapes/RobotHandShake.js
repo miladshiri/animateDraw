@@ -18,6 +18,9 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
 
   // Calculate base unit based on size
   const baseUnit = Math.min(size.w, size.h) / 40; // 40 is our base unit for calculations
+  
+  // Get shape color from settings or use white as default
+  const shapeColor = shapeSettings?.shapeColor || defaultSettings['RobotHandShake'].shapeColor || "#ffffff";
 
   return (
     <div style={{ padding: `${baseUnit * 5}px` }}>
@@ -158,7 +161,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           position: relative;
           border-radius: ${baseUnit * 6.25}px;
           background-color: black;
-          box-shadow: 0 0 0 ${baseUnit * 3.25}px white inset;
+          box-shadow: 0 0 0 ${baseUnit * 3.25}px ${shapeColor} inset;
           transition: transform ease-in-out 350ms;
         }
         .robot-head::before {
@@ -170,8 +173,8 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           top: ${-baseUnit * 10}px;
           left: ${baseUnit * 10.5}px;
           border-radius: 50%;
-          background-color: white;
-          box-shadow: 0 ${baseUnit}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 0.5}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 1.5}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 2}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 2.5}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 3}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 3.5}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 4}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 4.5}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 5}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 5.5}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 6}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 6.5}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 7}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 7.5}px 0 ${-baseUnit * 1.5}px white, 0 ${baseUnit * 8}px 0 ${-baseUnit * 1.5}px white;
+          background-color: ${shapeColor};
+          box-shadow: 0 ${baseUnit}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 0.5}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 1.5}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 2}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 2.5}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 3}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 3.5}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 4}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 4.5}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 5}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 5.5}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 6}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 6.5}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 7}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 7.5}px 0 ${-baseUnit * 1.5}px ${shapeColor}, 0 ${baseUnit * 8}px 0 ${-baseUnit * 1.5}px ${shapeColor};
         }
         .robot-head::after {
           content: "";
@@ -201,7 +204,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           display: block;
           overflow: hidden;
           border-radius: 50% 50% 50% 50%/30% 30% 70% 70%;
-          background: white;
+          background: ${shapeColor};
         }
         .robot-body::after {
           content: "";
@@ -228,7 +231,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           display: block;
           border-radius: 50%;
           transform-origin: 50% ${baseUnit * 12}px;
-          box-shadow: 0 ${baseUnit * 7.5}px 0 ${-baseUnit * 2.5}px white;
+          box-shadow: 0 ${baseUnit * 7.5}px 0 ${-baseUnit * 2.5}px ${shapeColor};
           -webkit-animation: wave 1000ms alternate ease-in-out infinite;
                   animation: wave 1000ms alternate ease-in-out infinite;
         }
@@ -243,7 +246,7 @@ const RobotHandShake = ({ size, shapeSettings, scale }) => {
           -webkit-clip-path: polygon(0% 0%, 50% 50%, 100% 0%, 100% 100%, 0% 100%);
                   clip-path: polygon(0% 0%, 50% 50%, 100% 0%, 100% 100%, 0% 100%);
           border-radius: 50%;
-          box-shadow: 0 0 0 ${baseUnit * 2.5}px white inset;
+          box-shadow: 0 0 0 ${baseUnit * 2.5}px ${shapeColor} inset;
         }
         .robot::after {
           content: "";
