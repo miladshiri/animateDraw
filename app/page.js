@@ -1085,9 +1085,19 @@ export default function Home() {
         <ShapeSettings selectedShape={selectedShape} changeShapeSettingByName={changeShapeSettingByName} updateColorPalette={updateColorPalette} colorPalette={colorPalette} />
       }
 
-      <LogoBar setAllShapes={setAllShapes} pushToHistory={pushToHistory} />
+      <LogoBar 
+        setAllShapes={setAllShapes} 
+        pushToHistory={pushToHistory} 
+        allShapes={allShapes}
+        scale={scale}
+        offset={offset}
+        boardColor={boardColor}
+        setScale={setScale}
+        setOffset={setOffset}
+        setBoardColor={setBoardColor}
+      />
 
-      { !isTyping &&
+      { !isFreezeScreenSelected && !isTyping &&
         <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
       }
 
