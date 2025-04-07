@@ -15,6 +15,8 @@ const LogoBar = ({
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationType, setConfirmationType] = useState(null); // 'delete' or 'import'
+  const [importFile, setImportFile] = useState(null);
   const menuRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -23,6 +25,7 @@ const LogoBar = ({
   }
 
   const handleCleanBoardClick = () => {
+    setConfirmationType('delete');
     setShowConfirmation(true);
   };
 
@@ -64,6 +67,18 @@ const LogoBar = ({
   const handleFileImport = (e) => {
     const file = e.target.files[0];
     if (file && file.name.endsWith('.fb')) {
+      setImportFile(file);
+      setConfirmationType('import');
+      setShowConfirmation(true);
+    } else {
+      alert('Please select a valid flowyBoard file (.fb)');
+    }
+    // Reset the file input value to allow selecting the same file again
+    e.target.value = '';
+  };
+
+  const confirmImport = () => {
+    if (importFile) {
       const reader = new FileReader();
       reader.onload = (event) => {
         try {
@@ -79,10 +94,17 @@ const LogoBar = ({
           alert('Error importing board file. Please make sure it\'s a valid flowyBoard file.');
         }
       };
-      reader.readAsText(file);
-    } else {
-      alert('Please select a valid flowyBoard file (.fb)');
+      reader.readAsText(importFile);
     }
+    setShowConfirmation(false);
+    setImportFile(null);
+    setConfirmationType(null);
+  };
+
+  const cancelImport = () => {
+    setShowConfirmation(false);
+    setImportFile(null);
+    setConfirmationType(null);
   };
 
   useEffect(() => {
@@ -90,6 +112,8 @@ const LogoBar = ({
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setShowMenu(false);
         setShowConfirmation(false);
+        setImportFile(null);
+        setConfirmationType(null);
       }
     };
 
@@ -177,10 +201,12 @@ const LogoBar = ({
 
       {showConfirmation && (
         <div id="clean-board-confirmation" className="confirmation-box">
-          <p>Are you sure you want to delete the board?</p>
+          <p>{confirmationType === 'delete' 
+            ? "Are you sure you want to delete the board?"
+            : "Are you sure you want to import this board? This will replace your current board."}</p>
           <div className="confirm-buttons">
-            <button className="yes-btn" onClick={confirmDelete}>Yes</button>
-            <button className="no-btn" onClick={cancelDelete}>No</button>
+            <button className="yes-btn" onClick={confirmationType === 'delete' ? confirmDelete : confirmImport}>Yes</button>
+            <button className="no-btn" onClick={confirmationType === 'delete' ? cancelDelete : cancelImport}>No</button>
           </div>
         </div>
       )}
