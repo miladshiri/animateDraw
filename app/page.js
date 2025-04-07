@@ -1097,7 +1097,7 @@ export default function Home() {
         setBoardColor={setBoardColor}
       />
 
-      { !isFreezeScreenSelected && !isTyping &&
+      { !isTyping &&
         <ZoomToolbar scale={scale} zoomInOut={zoomInOut} resetZoom={resetZoom} fitScreen={fitScreen} freezeScreen={freezeScreen} isFreezeScreenSelected={isFreezeScreenSelected}/>
       }
 
