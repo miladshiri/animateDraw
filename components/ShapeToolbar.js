@@ -19,6 +19,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
     {name:"arrow", icon: <ArrowLeftRight />, assets: 
       [
         {name:"Flow Arrow", component: "Arrow"},
+        {name:"Bar Arrow", component: "ArrowBar"},
       ]
     },
     {name:"3d", icon: <Box />, assets: 

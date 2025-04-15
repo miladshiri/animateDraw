@@ -5,6 +5,7 @@ import SimpleImage from "./shapes/SimpleImage";
 import SimpleText from "./shapes/SimpleText";
 import AnimatedCircle from "./shapes/AnimatedCircle";
 import Arrow from "./shapes/Arrow";
+import ArrowBar from "./shapes/ArrowBar";
 import Diamond3d from "./shapes/Diamond3d";
 import RobotHandShake from "./shapes/RobotHandShake";
 import AnimatedRedCircle from "./shapes/AnimatedRedCircle";
@@ -16,6 +17,7 @@ import AnimatedRedCircle from "./shapes/AnimatedRedCircle";
     "Cube3d": {animationSpeed: "normal", animationSpeedOff: "no", shapeColor: "#00ee00", textColor: "#00f01c", shapeText: "Text"},
     "SimpleText": {animationSpeed: "fast", textColor: "#fff", fontSize: 26},
     "Arrow": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
+    "ArrowBar": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
     "Diamond3d": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#001bed"},
     "RobotHandShake": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#ffffff", flowColor: "#87ceeb"},
     "AnimatedRedCircle": {animationSpeed: "normal", shapeColor: "#ff0000", borderColor: "#ff0000"},
@@ -33,6 +35,7 @@ import AnimatedRedCircle from "./shapes/AnimatedRedCircle";
     "SimpleImage": SimpleImage,
     "SimpleText": SimpleText,
     "Arrow": Arrow,
+    "ArrowBar": ArrowBar,
     "Diamond3d": Diamond3d,
     "RobotHandShake": RobotHandShake,
     "AnimatedRedCircle": AnimatedRedCircle
