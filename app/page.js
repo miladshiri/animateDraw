@@ -18,28 +18,22 @@ export default function Home() {
     {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", shapeColor: "#000000", borderColor: "#e10f4e"}}
   ]
 
+  const [allShapes, setAllShapes] = useState(defaultShapes);
+  const [scale, setScale] = useState(1);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [boardColor, setBoardColor] = useState("#232323"); 
 
-  const [allShapes, setAllShapes] = useState(() => {
+  useEffect(() => {
     const savedShapes = localStorage.getItem("shapes");
-    return savedShapes ? JSON.parse(savedShapes) : defaultShapes;
-  }, []);
-
-  // Load scale state from localStorage or fallback to default
-  const [scale, setScale] = useState(() => {
     const savedScale = localStorage.getItem("scale");
-    return savedScale ? JSON.parse(savedScale) : 1;
-  });
-
-  // Load scale state from localStorage or fallback to default
-  const [offset, setOffset] = useState(() => {
     const savedOffset = localStorage.getItem("offset");
-    return savedOffset ? JSON.parse(savedOffset) : {x:0, y:0};
-  });
-
-  const [boardColor, setBoardColor] = useState(() => {
-    const savedOffset = localStorage.getItem("boardColor");
-    return savedOffset ? JSON.parse(savedOffset) : "#232323";
-  });
+    const savedBoardColor = localStorage.getItem("boardColor");
+  
+    if (savedShapes) setAllShapes(JSON.parse(savedShapes));
+    if (savedScale) setScale(JSON.parse(savedScale));
+    if (savedOffset) setOffset(JSON.parse(savedOffset));
+    if (savedBoardColor) setBoardColor(JSON.parse(savedBoardColor));
+  }, []);
 
   const universalMousePosition = useRef({ x: 0, y: 0 });
 
