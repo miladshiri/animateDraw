@@ -425,7 +425,8 @@ export default function Home() {
           settings: {
             text: currentTypingText,
             fontSizeRate: initialText.current.settings.fontSize / (width + height) * 2,
-            textColor: initialText.current.settings.textColor
+            textColor: initialText.current.settings.textColor,
+            textAnimation: defaultSettings['SimpleText'].textAnimation
           }
         };
 

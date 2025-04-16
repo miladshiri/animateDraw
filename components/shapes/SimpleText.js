@@ -1,42 +1,100 @@
 import { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 const SimpleText = ({size, shapeSettings}) => {
 
   const [fontSize, setFontSize] = useState(0);
   const textInputRef = useRef(null);
 
-
   useEffect(() => {
     setFontSize(shapeSettings.fontSizeRate * (size.w + size.h) / 2);
   }, [size, shapeSettings])
   
+  const getAnimationStyle = () => {
+    if (!shapeSettings.textAnimation) return {};
+
+    switch(shapeSettings.textAnimation) {
+      case 'color-fade':
+        return {
+          animate: { 
+            opacity: [1, 0.2, 1]
+          },
+          transition: { 
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
+        };
+      case 'shake':
+        return {
+          animate: { 
+            x: [0, -5, 5, -5, 5, 0]
+          },
+          transition: { 
+            duration: 0.5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
+        };
+      case 'pulse':
+        return {
+          animate: { 
+            scale: [1, 1.1, 1]
+          },
+          transition: { 
+            duration: 1,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
+        };
+      default:
+        return {};
+    }
+  };
+
+  const scaledText = (
+    <div
+      ref={textInputRef}
+      style={{
+        fontSize: "16px",
+        whiteSpace: "pre",
+        transform: `scale(${size.w / (textInputRef.current?.scrollWidth ) || 1}, ${size.h / (textInputRef.current?.scrollHeight ) || 1  })`,
+        overflow: "hidden",
+        color: shapeSettings.textColor
+      }}
+    >
+      {shapeSettings.text}
+    </div>
+  );
 
   return (
     <div
       style={{
-        color: shapeSettings.textColor, 
         width: size.w,
         height: size.h,
-        // fontSize: fontSize ? fontSize : 0,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        // transform: `scale(${finalSize.w / shapeSettings.initialW}, ${finalSize.h / shapeSettings.initialH})`,
-
       }}
     >
-      <div      
-      ref={textInputRef}
-        style={{
-          fontSize: "16px",
-          whiteSpace: "pre",
-          transform: `scale(${size.w / (textInputRef.current?.scrollWidth ) || 1}, ${size.h / (textInputRef.current?.scrollHeight ) || 1  })`
-        }}
-      >
-      {shapeSettings.text}
-      </div>
+      {shapeSettings.textAnimation === 'shake' ? (
+        <motion.div
+          style={{
+            position: "relative"
+          }}
+          {...getAnimationStyle()}
+        >
+          {scaledText}
+        </motion.div>
+      ) : (
+        <motion.div
+          {...getAnimationStyle()}
+        >
+          {scaledText}
+        </motion.div>
+      )}
     </div>
-    )
+  )
 }
 
 export default SimpleText;

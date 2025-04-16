@@ -8,6 +8,7 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
   const [arrowHeads, setArrowHeads] = useState(selectedShape.settings?.head)
   const [shapeText, setShapeText] = useState(selectedShape.settings?.shapeText)
   const [thickness, setThickness] = useState(selectedShape.settings?.thickness)
+  const [textAnimation, setTextAnimation] = useState(selectedShape.settings?.textAnimation)
 
   useEffect(()=> {
     changeShapeSettingByName("animationSpeed", animationSpeed);
@@ -24,6 +25,10 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
   useEffect(()=> {
     changeShapeSettingByName("thickness", thickness);
   }, [thickness])
+
+  useEffect(()=> {
+    changeShapeSettingByName("textAnimation", textAnimation);
+  }, [textAnimation])
 
   const handleMouseDown = (event) => {
     event.stopPropagation();
@@ -117,6 +122,18 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
           <button onClick={()=> {setThickness('narrow')}} className={thickness === 'narrow' ? "isSelected" : ""} >Narrow</button>
           <button onClick={()=> {setThickness('normal')}} className={thickness === 'normal' ? "isSelected" : ""} >Normal</button>
           <button onClick={()=> {setThickness('bold')}} className={thickness === 'bold' ? "isSelected" : ""} >Bold</button>
+          </div>
+        </div>
+      )}
+
+      {selectedShape.settings.textAnimation !== undefined && (
+        <div className="toolbar-item">
+          <div className="toolbar-title">Text Animation</div>
+          <div className="toolbar-setting">
+            <button onClick={()=> {setTextAnimation('none')}} className={textAnimation === 'none' ? "isSelected" : ""} >None</button>
+            <button onClick={()=> {setTextAnimation('color-fade')}} className={textAnimation === 'color-fade' ? "isSelected" : ""} >Color Fade</button>
+            <button onClick={()=> {setTextAnimation('shake')}} className={textAnimation === 'shake' ? "isSelected" : ""} >Shake</button>
+            <button onClick={()=> {setTextAnimation('pulse')}} className={textAnimation === 'pulse' ? "isSelected" : ""} >Pulse</button>
           </div>
         </div>
       )}
