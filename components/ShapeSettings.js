@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import ColorPickerComponent from "./ColorPickerComponent";
+import { motion } from "framer-motion";
 
 const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPalette, colorPalette}) => {
 
@@ -41,6 +42,47 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
   if (!selectedShape.settings.animationSpeedOff) {
     selectedShape.settings.animationSpeedOff = 'yes'
   }
+
+  const getAnimationStyle = (type) => {
+    switch(type) {
+      case 'color-fade':
+        return {
+          animate: { 
+            opacity: [1, 0.2, 1]
+          },
+          transition: { 
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
+        };
+      case 'shake':
+        return {
+          animate: { 
+            x: [0, -15, 15, -15, 15, 0]
+          },
+          transition: { 
+            duration: 0.5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
+        };
+      case 'pulse':
+        return {
+          animate: { 
+            scale: [0.7, 1.5, 0.7]
+          },
+          transition: { 
+            duration: 1,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
+        };
+      default:
+        return {};
+    }
+  };
+
   return (
     <div
       className="toolbar shape-toolbar settings-toolbar"
@@ -129,11 +171,31 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
       {selectedShape.settings.textAnimation !== undefined && (
         <div className="toolbar-item">
           <div className="toolbar-title">Text Animation</div>
-          <div className="toolbar-setting">
-            <button onClick={()=> {setTextAnimation('none')}} className={textAnimation === 'none' ? "isSelected" : ""} >None</button>
-            <button onClick={()=> {setTextAnimation('color-fade')}} className={textAnimation === 'color-fade' ? "isSelected" : ""} >Color Fade</button>
-            <button onClick={()=> {setTextAnimation('shake')}} className={textAnimation === 'shake' ? "isSelected" : ""} >Shake</button>
-            <button onClick={()=> {setTextAnimation('pulse')}} className={textAnimation === 'pulse' ? "isSelected" : ""} >Pulse</button>
+          <div className="toolbar-setting" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '5px' }}>
+            <div>
+              <button onClick={()=> {setTextAnimation('none')}} className={textAnimation === 'none' ? "isSelected" : ""} >None</button>
+            </div>
+            <div>
+              <motion.button 
+                onClick={()=> {setTextAnimation('color-fade')}} 
+                className={textAnimation === 'color-fade' ? "isSelected" : ""}
+                {...getAnimationStyle('color-fade')}
+              >Blink</motion.button>
+            </div>
+            <div>
+              <motion.button 
+                onClick={()=> {setTextAnimation('shake')}} 
+                className={textAnimation === 'shake' ? "isSelected" : ""}
+                {...getAnimationStyle('shake')}
+              >Shake</motion.button>
+            </div>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <motion.button 
+                onClick={()=> {setTextAnimation('pulse')}} 
+                className={textAnimation === 'pulse' ? "isSelected" : ""}
+                {...getAnimationStyle('pulse')}
+              >Pulse</motion.button>
+            </div>
           </div>
         </div>
       )}
