@@ -9,9 +9,20 @@ const SimpleText = ({size, shapeSettings}) => {
   useEffect(() => {
     setFontSize(shapeSettings.fontSizeRate * (size.w + size.h) / 2);
   }, [size, shapeSettings])
-  
+
+  let speed = 1;
+  if (shapeSettings.animationSpeed === 'slow') {
+    speed = 2;
+  } else if (shapeSettings.animationSpeed === 'normal') {
+    speed = 1;
+  } else if (shapeSettings.animationSpeed === 'fast') {
+    speed = 0.5;
+  }
+
   const getAnimationStyle = () => {
     if (!shapeSettings.textAnimation) return {};
+
+
 
     switch(shapeSettings.textAnimation) {
       case 'color-fade':
@@ -20,7 +31,7 @@ const SimpleText = ({size, shapeSettings}) => {
             opacity: [1, 0.2, 1]
           },
           transition: { 
-            duration: 2,
+            duration: 2 * speed,
             repeat: Infinity,
             ease: "easeInOut"
           }
@@ -31,7 +42,7 @@ const SimpleText = ({size, shapeSettings}) => {
             x: [0, -5, 5, -5, 5, 0]
           },
           transition: { 
-            duration: 0.5,
+            duration: 0.5 * speed,
             repeat: Infinity,
             ease: "easeInOut"
           }
@@ -42,7 +53,7 @@ const SimpleText = ({size, shapeSettings}) => {
             scale: [1, 1.1, 1]
           },
           transition: { 
-            duration: 1,
+            duration: 1 * speed,
             repeat: Infinity,
             ease: "easeInOut"
           }
@@ -79,6 +90,7 @@ const SimpleText = ({size, shapeSettings}) => {
     >
       {shapeSettings.textAnimation === 'shake' ? (
         <motion.div
+        key={speed}
           style={{
             position: "relative"
           }}
@@ -88,6 +100,7 @@ const SimpleText = ({size, shapeSettings}) => {
         </motion.div>
       ) : (
         <motion.div
+        key={speed}
           {...getAnimationStyle()}
         >
           {scaledText}
