@@ -3,13 +3,9 @@ import { motion } from "framer-motion";
 import { defaultSettings } from "../shapeToComponentMapping";
 
 const SimpleText = ({size, shapeSettings}) => {
-
   const [fontSize, setFontSize] = useState(0);
   const textInputRef = useRef(null);
-
-  useEffect(() => {
-    setFontSize(shapeSettings.fontSizeRate * (size.w + size.h) / 2);
-  }, [size, shapeSettings])
+  const [displayText, setDisplayText] = useState(shapeSettings.text || "");
 
   let speed = 1;
   if (shapeSettings.animationSpeed === 'slow') {
@@ -20,10 +16,16 @@ const SimpleText = ({size, shapeSettings}) => {
     speed = 0.5;
   }
 
+  useEffect(() => {
+    setFontSize(shapeSettings.fontSizeRate * (size.w + size.h) / 2);
+  }, [size, shapeSettings])
+
+  useEffect(() => {
+    setDisplayText(shapeSettings.text || "");
+  }, [shapeSettings.text]);
+
   const getAnimationStyle = () => {
     if (!shapeSettings.textAnimation) return {};
-
-
 
     switch(shapeSettings.textAnimation) {
       case 'color-fade':
@@ -59,6 +61,18 @@ const SimpleText = ({size, shapeSettings}) => {
             ease: "easeInOut"
           }
         };
+      case 'typewriter':
+        return {
+          animate: { 
+            width: ['0%', '100%']
+          },
+          transition: { 
+            duration: 2 * speed,
+            repeat: Infinity,
+            repeatDelay: 1 * speed,
+            ease: "linear"
+          }
+        };
       default:
         return {};
     }
@@ -77,7 +91,7 @@ const SimpleText = ({size, shapeSettings}) => {
         textStroke: `${(size.w / (textInputRef.current?.scrollWidth) / 6 + size.h / (textInputRef.current?.scrollHeight )/ 60) / 2}px ${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : defaultSettings['SimpleText'].borderColor) : defaultSettings['SimpleText'].borderColor}`,
       }}
     >
-      {shapeSettings.text}
+      {displayText}
     </div>
   );
 
@@ -104,6 +118,13 @@ const SimpleText = ({size, shapeSettings}) => {
       ) : (
         <motion.div
         key={speed}
+          style={{
+            position: "relative",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
           {...getAnimationStyle()}
         >
           {scaledText}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { HexColorPicker } from "react-colorful";
 import ColorPickerComponent from "./ColorPickerComponent";
 import { motion } from "framer-motion";
@@ -10,6 +10,8 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
   const [shapeText, setShapeText] = useState(selectedShape.settings?.shapeText)
   const [thickness, setThickness] = useState(selectedShape.settings?.thickness)
   const [textAnimation, setTextAnimation] = useState(selectedShape.settings?.textAnimation)
+  const [typewriterText, setTypewriterText] = useState("")
+  const currentIndexRef = useRef(0)
 
   useEffect(()=> {
     changeShapeSettingByName("animationSpeed", animationSpeed);
@@ -30,6 +32,27 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
   useEffect(()=> {
     changeShapeSettingByName("textAnimation", textAnimation);
   }, [textAnimation])
+
+  useEffect(() => {
+    const text = "Type";
+    
+    const typewriterInterval = setInterval(() => {
+      if (currentIndexRef.current < text.length) {
+        const nextChar = text[currentIndexRef.current];
+        if (nextChar !== undefined) {
+          setTypewriterText(prev => prev + nextChar);
+        }
+        currentIndexRef.current++;
+      } else {
+        setTimeout(() => {
+          setTypewriterText("");
+          currentIndexRef.current = 0;
+        }, 1000);
+      }
+    }, 100);
+
+    return () => clearInterval(typewriterInterval);
+  }, []);
 
   const handleMouseDown = (event) => {
     event.stopPropagation();
@@ -76,6 +99,18 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
             duration: 1,
             repeat: Infinity,
             ease: "easeInOut"
+          }
+        };
+      case 'typewriter':
+        return {
+          animate: { 
+            width: ['0%', '100%']
+          },
+          transition: { 
+            duration: 2,
+            repeat: Infinity,
+            repeatDelay: 1,
+            ease: "linear"
           }
         };
       default:
@@ -189,12 +224,40 @@ const ShapeSettings = ({selectedShape, changeShapeSettingByName, updateColorPale
                 {...getAnimationStyle('shake')}
               >Shake</motion.button>
             </div>
-            <div style={{ gridColumn: '1 / -1' }}>
+            <div>
               <motion.button 
                 onClick={()=> {setTextAnimation('pulse')}} 
                 className={textAnimation === 'pulse' ? "isSelected" : ""}
                 {...getAnimationStyle('pulse')}
               >Pulse</motion.button>
+            </div>
+            <div>
+              <motion.button 
+                onClick={()=> {setTextAnimation('typewriter')}} 
+                className={textAnimation === 'typewriter' ? "isSelected" : ""}
+                style={{
+                  position: "relative",
+                  overflow: "hidden",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                <motion.div
+                  style={{
+                    position: "relative",
+                    overflow: "hidden",
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                  {...getAnimationStyle('typewriter')}
+                >
+                  Scan
+                </motion.div>
+              </motion.button>
             </div>
           </div>
         </div>
