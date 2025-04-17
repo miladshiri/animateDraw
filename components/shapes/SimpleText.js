@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
+import { defaultSettings } from "../shapeToComponentMapping";
 
 const SimpleText = ({size, shapeSettings}) => {
 
@@ -71,7 +72,9 @@ const SimpleText = ({size, shapeSettings}) => {
         whiteSpace: "pre",
         transform: `scale(${size.w / (textInputRef.current?.scrollWidth ) || 1}, ${size.h / (textInputRef.current?.scrollHeight ) || 1  })`,
         overflow: "hidden",
-        color: shapeSettings.textColor
+        color: shapeSettings.textColor,
+        WebkitTextStroke: `${(size.w / (textInputRef.current?.scrollWidth) / 6 + size.h / (textInputRef.current?.scrollHeight) / 60) / 2}px ${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : defaultSettings['SimpleText'].borderColor) : defaultSettings['SimpleText'].borderColor}`,
+        textStroke: `${(size.w / (textInputRef.current?.scrollWidth) / 6 + size.h / (textInputRef.current?.scrollHeight )/ 60) / 2}px ${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : defaultSettings['SimpleText'].borderColor) : defaultSettings['SimpleText'].borderColor}`,
       }}
     >
       {shapeSettings.text}

@@ -85,7 +85,9 @@ export default function Home() {
         }
         return acc;
       }, {});
-      return Object.keys(countMap).reduce((a, b) => countMap[a] >= countMap[b] ? a : b);
+      const keys = Object.keys(countMap);
+      if (keys.length === 0) return "#000000";
+      return keys.reduce((a, b) => countMap[a] >= countMap[b] ? a : b);
     };
   
     const mostUsedShapeColor = getMostFrequentColor(shapeColors);
@@ -426,6 +428,7 @@ export default function Home() {
             text: currentTypingText,
             fontSizeRate: initialText.current.settings.fontSize / (width + height) * 2,
             textColor: initialText.current.settings.textColor,
+            borderColor: initialText.current.settings.borderColor,
             textAnimation: defaultSettings['SimpleText'].textAnimation,
             animationSpeed: defaultSettings['SimpleText'].animationSpeed
           }
@@ -445,6 +448,7 @@ export default function Home() {
         settings: {
           fontSize: defaultSettings['SimpleText']['fontSize'],
           textColor: defaultSettings['SimpleText']['textColor'],
+          borderColor: defaultSettings['SimpleText']['borderColor'],
         }
       }
 
