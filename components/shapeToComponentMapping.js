@@ -10,6 +10,7 @@ import Diamond3d from "./shapes/Diamond3d";
 import RobotHandShake from "./shapes/RobotHandShake";
 import AnimatedRedCircle from "./shapes/AnimatedRedCircle";
 import GradientRect from "./shapes/GradientRect";
+import FullGradientRect from "./shapes/FullGradientRect";
 
 export const defaultSettings = {
   "AnimatedRec": {animationSpeed: "normal", shapeColor: "#2a2a2a", borderColor: "#51b39a", flowColor: "#aaaaaa"},
@@ -23,6 +24,7 @@ export const defaultSettings = {
   "RobotHandShake": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#ffffff", flowColor: "#87ceeb"},
   "AnimatedRedCircle": {animationSpeed: "normal", shapeColor: "#ff0000", borderColor: "#ff0000"},
   "GradientRect": {animationSpeed: "normal", shapeColor: "#2a2a2a"},
+  "FullGradientRect": {animationSpeed: "normal", borderColor: "#51b39a"},
 }
 
 export const getComponentByName = (componentName) => {
@@ -41,7 +43,8 @@ const components = {
   "Diamond3d": Diamond3d,
   "RobotHandShake": RobotHandShake,
   "AnimatedRedCircle": AnimatedRedCircle,
-  "GradientRect": GradientRect
+  "GradientRect": GradientRect,
+  "FullGradientRect": FullGradientRect
 };
 
 export default components;
