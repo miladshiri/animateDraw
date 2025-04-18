@@ -8,6 +8,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
       [
         {name:"Single Flow Rect", component: "AnimatedRec"},
         {name:"Double Flow Rect", component: "AnimatedRecRotate"},
+        {name:"Gradient Rect", component: "GradientRect"},
       ]
     },
     {name:"circle", icon: <Circle />, assets: 
