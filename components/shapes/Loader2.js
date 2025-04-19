@@ -21,7 +21,7 @@ const Loader2 = ({ size, shapeSettings }) => {
     }
   }
 
-  const shapeColor = shapeSettings?.shapeColor || defaultSettings['Loader2']?.shapeColor || "#ffffff";
+  const flowColor = shapeSettings?.flowColor || defaultSettings['Loader2']?.flowColor || "#ffffff";
   const borderColor = shapeSettings?.borderColor || defaultSettings['Loader2']?.borderColor || "rgba(255, 255, 255, 0.3)";
 
   return (
@@ -32,7 +32,7 @@ const Loader2 = ({ size, shapeSettings }) => {
         height: "100%",
         display: "grid",
         placeItems: "center",
-        color: shapeColor,
+        color: flowColor,
       }}
     >
       <div

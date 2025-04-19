@@ -7,7 +7,7 @@ const Loader5 = ({ size, shapeSettings }) => {
   const safeWidth = size?.w || 100; // Default to 100 if undefined
   const safeHeight = size?.h || 100; // Default to 100 if undefined
   
-  const loaderSize = Math.min(safeWidth, safeHeight) / 2;
+  const loaderSize = Math.min(safeWidth, safeHeight);
   const tiltDeg = 40;
   const zOffset = loaderSize / 4;
   

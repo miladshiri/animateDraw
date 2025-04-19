@@ -35,14 +35,14 @@ export const defaultSettings = {
   "GradientRect": {animationSpeed: "normal", shapeColor: "#2a2a2a"},
   "FullGradientRect": {animationSpeed: "normal", borderColor: "#51b39a"},
   "LoaderRect": {animationSpeed: "normal", flowColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)", animationSpeedOff: "no"},
-  "Loader2": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader2": {animationSpeed: "normal", flowColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)", animationSpeedOff: "no"},
   "LoaderCircle": {animationSpeed: "normal", flowColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)", animationSpeedOff: "no"},
   "LoaderCube": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
-  "Loader5": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
-  "Loader6": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
-  "Loader7": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
-  "Loader8": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
-  "Loader9": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader5": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
+  "Loader6": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
+  "Loader7": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
+  "Loader8": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
+  "Loader9": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
 }
 
 export const getComponentByName = (componentName) => {

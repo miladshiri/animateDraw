@@ -7,17 +7,17 @@ const Loader6 = ({ size, shapeSettings }) => {
   const safeWidth = size?.w || 100; // Default to 100 if undefined
   const safeHeight = size?.h || 100; // Default to 100 if undefined
   
-  const loaderSize = Math.min(safeWidth, safeHeight) / 2;
+  const loaderSize = Math.min(safeWidth, safeHeight);
   const ballSize = loaderSize / 4;
   
-  var speed = 0.6;
+  var speed = 1;
   if (shapeSettings) {
     if (shapeSettings.animationSpeed === 'slow') {
-      speed = 1.2;
+      speed = 2;
     } else if (shapeSettings.animationSpeed === 'normal') {
-      speed = 0.6;
+      speed = 1;
     } else if (shapeSettings.animationSpeed === 'fast') {
-      speed = 0.3;
+      speed = 0.5;
     }
   }
 
@@ -45,6 +45,7 @@ const Loader6 = ({ size, shapeSettings }) => {
         }}
       >
         <motion.div
+          key={`ball1-${speed}`}
           style={{
             width: ballSize,
             height: ballSize,
@@ -63,6 +64,7 @@ const Loader6 = ({ size, shapeSettings }) => {
           }}
         />
         <motion.div
+          key={`ball2-${speed}`}
           style={{
             width: ballSize,
             height: ballSize,
