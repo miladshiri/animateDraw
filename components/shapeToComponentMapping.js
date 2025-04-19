@@ -11,6 +11,15 @@ import RobotHandShake from "./shapes/RobotHandShake";
 import AnimatedRedCircle from "./shapes/AnimatedRedCircle";
 import GradientRect from "./shapes/GradientRect";
 import FullGradientRect from "./shapes/FullGradientRect";
+import Loader1 from "./shapes/Loader1";
+import Loader2 from "./shapes/Loader2";
+import Loader3 from "./shapes/Loader3";
+import Loader4 from "./shapes/Loader4";
+import Loader5 from "./shapes/Loader5";
+import Loader6 from "./shapes/Loader6";
+import Loader7 from "./shapes/Loader7";
+import Loader8 from "./shapes/Loader8";
+import Loader9 from "./shapes/Loader9";
 
 export const defaultSettings = {
   "AnimatedRec": {animationSpeed: "normal", shapeColor: "#2a2a2a", borderColor: "#51b39a", flowColor: "#aaaaaa"},
@@ -20,11 +29,20 @@ export const defaultSettings = {
   "SimpleText": {animationSpeed: "normal", textColor: "#fff", fontSize: 26, textAnimation: "none", borderColor: "#000000"},
   "Arrow": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
   "ArrowBar": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
-  "Diamond3d": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#001bed"},
+  "Diamond3d": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#00ee00", textColor: "#00f01c", shapeText: "Text"},
   "RobotHandShake": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#ffffff", flowColor: "#87ceeb"},
   "AnimatedRedCircle": {animationSpeed: "normal", shapeColor: "#ff0000", borderColor: "#ff0000"},
   "GradientRect": {animationSpeed: "normal", shapeColor: "#2a2a2a"},
   "FullGradientRect": {animationSpeed: "normal", borderColor: "#51b39a"},
+  "Loader1": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader2": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader3": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader4": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader5": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader6": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader7": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader8": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "Loader9": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
 }
 
 export const getComponentByName = (componentName) => {
@@ -44,7 +62,16 @@ const components = {
   "RobotHandShake": RobotHandShake,
   "AnimatedRedCircle": AnimatedRedCircle,
   "GradientRect": GradientRect,
-  "FullGradientRect": FullGradientRect
-};
+  "FullGradientRect": FullGradientRect,
+  "Loader1": Loader1,
+  "Loader2": Loader2,
+  "Loader3": Loader3,
+  "Loader4": Loader4,
+  "Loader5": Loader5,
+  "Loader6": Loader6,
+  "Loader7": Loader7,
+  "Loader8": Loader8,
+  "Loader9": Loader9,
+}
 
 export default components;
