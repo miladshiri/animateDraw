@@ -7,7 +7,7 @@ const Loader7 = ({ size, shapeSettings }) => {
   const safeWidth = size?.w || 100; // Default to 100 if undefined
   const safeHeight = size?.h || 100; // Default to 100 if undefined
   
-  const loaderSize = Math.min(safeWidth, safeHeight) / 2;
+  const loaderSize = Math.min(safeWidth, safeHeight);
   const waveCount = 3;
   
   var speed = 0.8;
