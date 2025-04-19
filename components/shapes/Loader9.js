@@ -3,7 +3,11 @@ import { motion } from "framer-motion";
 import { defaultSettings } from "../shapeToComponentMapping";
 
 const Loader9 = ({ size, shapeSettings }) => {
-  const loaderSize = Math.min(size.w, size.h) / 2;
+  // Add safety checks for size values
+  const safeWidth = size?.w || 100; // Default to 100 if undefined
+  const safeHeight = size?.h || 100; // Default to 100 if undefined
+  
+  const loaderSize = Math.min(safeWidth, safeHeight) / 2;
   const dotCount = 8;
   const dotSize = loaderSize / 10;
   
