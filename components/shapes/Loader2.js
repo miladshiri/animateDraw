@@ -8,7 +8,7 @@ const Loader2 = ({ size, shapeSettings }) => {
   const safeHeight = size?.h || 100; // Default to 100 if undefined
   
   const dotSize = Math.min(safeWidth, safeHeight) / 20;
-  const loaderSize = Math.min(safeWidth, safeHeight) / 2;
+  const loaderSize = (safeWidth + safeHeight) / 2;
   
   var speed = 1;
   if (shapeSettings) {

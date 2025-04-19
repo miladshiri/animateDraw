@@ -7,17 +7,17 @@ const Loader4 = ({ size, shapeSettings }) => {
   const safeWidth = size?.w || 100; // Default to 100 if undefined
   const safeHeight = size?.h || 100; // Default to 100 if undefined
   
-  const loaderSize = Math.min(safeWidth, safeHeight) / 2;
+  const loaderSize = Math.min(safeWidth, safeHeight);
   const zOffset = loaderSize / 4;
   
-  var speed = 0.5;
+  var speed = 2.5;
   if (shapeSettings) {
     if (shapeSettings.animationSpeed === 'slow') {
-      speed = 1;
+      speed = 4;
     } else if (shapeSettings.animationSpeed === 'normal') {
-      speed = 0.5;
+      speed = 2.5;
     } else if (shapeSettings.animationSpeed === 'fast') {
-      speed = 0.25;
+      speed = 1.25;
     }
   }
 
