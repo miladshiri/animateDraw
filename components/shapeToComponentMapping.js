@@ -14,7 +14,7 @@ import FullGradientRect from "./shapes/FullGradientRect";
 import LoaderRect from "./shapes/LoaderRect";
 import Loader2 from "./shapes/Loader2";
 import LoaderCircle from "./shapes/LoaderCircle";
-import Loader4 from "./shapes/Loader4";
+import LoaderCube from "./shapes/LoaderCube";
 import Loader5 from "./shapes/Loader5";
 import Loader6 from "./shapes/Loader6";
 import Loader7 from "./shapes/Loader7";
@@ -37,7 +37,7 @@ export const defaultSettings = {
   "LoaderRect": {animationSpeed: "normal", flowColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)", animationSpeedOff: "no"},
   "Loader2": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
   "LoaderCircle": {animationSpeed: "normal", flowColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)", animationSpeedOff: "no"},
-  "Loader4": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "LoaderCube": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
   "Loader5": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
   "Loader6": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
   "Loader7": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
@@ -66,7 +66,7 @@ const components = {
   "LoaderRect": LoaderRect,
   "Loader2": Loader2,
   "LoaderCircle": LoaderCircle,
-  "Loader4": Loader4,
+  "LoaderCube": LoaderCube,
   "Loader5": Loader5,
   "Loader6": Loader6,
   "Loader7": Loader7,

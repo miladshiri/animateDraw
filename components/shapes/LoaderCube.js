@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { defaultSettings } from "../shapeToComponentMapping";
 
-const Loader4 = ({ size, shapeSettings }) => {
+const LoaderCube = ({ size, shapeSettings }) => {
   // Add safety checks for size values
   const safeWidth = size?.w || 100; // Default to 100 if undefined
   const safeHeight = size?.h || 100; // Default to 100 if undefined
@@ -21,7 +21,7 @@ const Loader4 = ({ size, shapeSettings }) => {
     }
   }
 
-  const shapeColor = shapeSettings?.shapeColor || defaultSettings['Loader4']?.shapeColor || "#ffffff";
+  const shapeColor = shapeSettings?.shapeColor || defaultSettings['LoaderCube']?.shapeColor || "#ffffff";
 
   return (
     <div
@@ -130,4 +130,4 @@ const Loader4 = ({ size, shapeSettings }) => {
   );
 };
 
-export default Loader4; 
+export default LoaderCube; 
