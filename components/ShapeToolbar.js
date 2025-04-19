@@ -10,6 +10,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
         {name:"Double Flow Rect", component: "AnimatedRecRotate"},
         {name:"Gradient Rect", component: "GradientRect"},
         {name:"Full Gradient Rect", component: "FullGradientRect"},
+        {name:"Square Dots", component: "LoaderRect"},
       ]
     },
     {name:"circle", icon: <Circle />, assets: 
@@ -37,7 +38,6 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
     },
     {name:"loaders", icon: <Loader />, assets: 
       [
-      {name:"Square Dots", component: "Loader1"},
       {name:"Line Dots", component: "Loader2"},
       {name:"Circle Dots", component: "Loader3"},
       {name:"Spinning Dots", component: "Loader4"},

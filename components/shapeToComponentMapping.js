@@ -11,7 +11,7 @@ import RobotHandShake from "./shapes/RobotHandShake";
 import AnimatedRedCircle from "./shapes/AnimatedRedCircle";
 import GradientRect from "./shapes/GradientRect";
 import FullGradientRect from "./shapes/FullGradientRect";
-import Loader1 from "./shapes/Loader1";
+import LoaderRect from "./shapes/LoaderRect";
 import Loader2 from "./shapes/Loader2";
 import Loader3 from "./shapes/Loader3";
 import Loader4 from "./shapes/Loader4";
@@ -34,7 +34,7 @@ export const defaultSettings = {
   "AnimatedRedCircle": {animationSpeed: "normal", shapeColor: "#ff0000", borderColor: "#ff0000"},
   "GradientRect": {animationSpeed: "normal", shapeColor: "#2a2a2a"},
   "FullGradientRect": {animationSpeed: "normal", borderColor: "#51b39a"},
-  "Loader1": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "LoaderRect": {animationSpeed: "normal", flowColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
   "Loader2": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
   "Loader3": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
   "Loader4": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
@@ -63,7 +63,7 @@ const components = {
   "AnimatedRedCircle": AnimatedRedCircle,
   "GradientRect": GradientRect,
   "FullGradientRect": FullGradientRect,
-  "Loader1": Loader1,
+  "LoaderRect": LoaderRect,
   "Loader2": Loader2,
   "Loader3": Loader3,
   "Loader4": Loader4,

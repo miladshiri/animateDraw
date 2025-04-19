@@ -2,14 +2,16 @@ import React from "react";
 import { motion } from "framer-motion";
 import { defaultSettings } from "../shapeToComponentMapping";
 
-const Loader1 = ({ size, shapeSettings }) => {
+const LoaderRect = ({ size, shapeSettings }) => {
   // Add safety checks for size values
   const safeWidth = size?.w || 100; // Default to 100 if undefined
   const safeHeight = size?.h || 100; // Default to 100 if undefined
   
   const dotSize = Math.min(safeWidth, safeHeight) / 20;
-  const loaderSize = Math.min(safeWidth, safeHeight) / 2;
-  const loaderDist = loaderSize - dotSize/2 + 1;
+  const loaderSize = { width: safeWidth, height: safeHeight };
+  const borderWidth = 1; // Border width in pixels
+  const loaderDistX = safeWidth - dotSize/2;
+  const loaderDistY = safeHeight - dotSize/2;
   
   var speed = 1;
   if (shapeSettings) {
@@ -22,8 +24,8 @@ const Loader1 = ({ size, shapeSettings }) => {
     }
   }
 
-  const shapeColor = shapeSettings?.shapeColor || defaultSettings['Loader1']?.shapeColor || "#ffffff";
-  const borderColor = shapeSettings?.borderColor || defaultSettings['Loader1']?.borderColor || "rgba(255, 255, 255, 0.3)";
+  const flowColor = shapeSettings?.flowColor || defaultSettings['LoaderRect']?.flowColor || "#ffffff";
+  const borderColor = shapeSettings?.borderColor || defaultSettings['LoaderRect']?.borderColor || "rgba(255, 255, 255, 0.3)";
 
   return (
     <div
@@ -33,13 +35,13 @@ const Loader1 = ({ size, shapeSettings }) => {
         height: "100%",
         display: "grid",
         placeItems: "center",
-        color: shapeColor,
+        color: flowColor,
       }}
     >
       <div
         style={{
-          width: loaderSize,
-          height: loaderSize,
+          width: loaderSize.width,
+          height: loaderSize.height,
           aspectRatio: "1 / 1",
           border: `1px solid ${borderColor}`,
           position: "relative",
@@ -57,14 +59,14 @@ const Loader1 = ({ size, shapeSettings }) => {
             left: -dotSize/2,
           }}
           animate={{
-            x: [0, loaderDist, loaderDist, 0],
-            y: [0, 0, loaderDist, loaderDist],
+            x: [0, loaderDistX + dotSize/2, loaderDistX + dotSize/2, 0, 0],
+            y: [0, 0, loaderDistY + dotSize/2, loaderDistY + dotSize/2, 0],
           }}
           transition={{
             duration: speed,
             repeat: Infinity,
-            ease: "easeInOut",
-            times: [0, 0.25, 0.5, 1],
+            ease: "linear",
+            times: [0, 0.25, 0.5, 0.75, 1],
           }}
         />
         <motion.div
@@ -79,14 +81,14 @@ const Loader1 = ({ size, shapeSettings }) => {
             left: -dotSize/2,
           }}
           animate={{
-            x: [0, loaderDist, loaderDist, 0],
-            y: [0, 0, loaderDist, loaderDist],
+            x: [0, loaderDistX + dotSize/2, loaderDistX + dotSize/2, 0, 0],
+            y: [0, 0, loaderDistY + dotSize/2, loaderDistY + dotSize/2, 0],
           }}
           transition={{
             duration: speed,
             repeat: Infinity,
-            ease: "easeInOut",
-            times: [0, 0.25, 0.5, 1],
+            ease: "linear",
+            times: [0, 0.25, 0.5, 0.75, 1],
             delay: -speed/2,
           }}
         />
@@ -95,4 +97,4 @@ const Loader1 = ({ size, shapeSettings }) => {
   );
 };
 
-export default Loader1;
+export default LoaderRect;
