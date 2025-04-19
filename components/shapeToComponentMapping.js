@@ -13,7 +13,7 @@ import GradientRect from "./shapes/GradientRect";
 import FullGradientRect from "./shapes/FullGradientRect";
 import LoaderRect from "./shapes/LoaderRect";
 import Loader2 from "./shapes/Loader2";
-import Loader3 from "./shapes/Loader3";
+import LoaderCircle from "./shapes/LoaderCircle";
 import Loader4 from "./shapes/Loader4";
 import Loader5 from "./shapes/Loader5";
 import Loader6 from "./shapes/Loader6";
@@ -34,9 +34,9 @@ export const defaultSettings = {
   "AnimatedRedCircle": {animationSpeed: "normal", shapeColor: "#ff0000", borderColor: "#ff0000"},
   "GradientRect": {animationSpeed: "normal", shapeColor: "#2a2a2a"},
   "FullGradientRect": {animationSpeed: "normal", borderColor: "#51b39a"},
-  "LoaderRect": {animationSpeed: "normal", flowColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "LoaderRect": {animationSpeed: "normal", flowColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)", animationSpeedOff: "no"},
   "Loader2": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
-  "Loader3": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
+  "LoaderCircle": {animationSpeed: "normal", flowColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)", animationSpeedOff: "no"},
   "Loader4": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
   "Loader5": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
   "Loader6": {animationSpeed: "normal", shapeColor: "#ffffff", borderColor: "rgba(255, 255, 255, 0.3)"},
@@ -65,7 +65,7 @@ const components = {
   "FullGradientRect": FullGradientRect,
   "LoaderRect": LoaderRect,
   "Loader2": Loader2,
-  "Loader3": Loader3,
+  "LoaderCircle": LoaderCircle,
   "Loader4": Loader4,
   "Loader5": Loader5,
   "Loader6": Loader6,

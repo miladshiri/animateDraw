@@ -2,13 +2,14 @@ import React from "react";
 import { motion } from "framer-motion";
 import { defaultSettings } from "../shapeToComponentMapping";
 
-const Loader3 = ({ size, shapeSettings }) => {
+const LoaderCircle = ({ size, shapeSettings }) => {
   // Add safety checks for size values
   const safeWidth = size?.w || 100; // Default to 100 if undefined
   const safeHeight = size?.h || 100; // Default to 100 if undefined
   
-  const dotSize = Math.min(safeWidth, safeHeight) / 20;
-  const loaderSize = Math.min(safeWidth, safeHeight) / 2;
+  const circleSize = Math.min(safeWidth, safeHeight);
+  const dotSize = circleSize / 20;
+  const loaderSize = circleSize;
   
   var speed = 1.2;
   if (shapeSettings) {
@@ -21,8 +22,8 @@ const Loader3 = ({ size, shapeSettings }) => {
     }
   }
 
-  const shapeColor = shapeSettings?.shapeColor || defaultSettings['Loader3']?.shapeColor || "#ffffff";
-  const borderColor = shapeSettings?.borderColor || defaultSettings['Loader3']?.borderColor || "rgba(255, 255, 255, 0.3)";
+  const flowColor = shapeSettings?.flowColor || defaultSettings['LoaderCircle']?.flowColor || "#ffffff";
+  const borderColor = shapeSettings?.borderColor || defaultSettings['LoaderCircle']?.borderColor || "rgba(255, 255, 255, 0.3)";
 
   return (
     <div
@@ -30,9 +31,7 @@ const Loader3 = ({ size, shapeSettings }) => {
         position: "relative",
         width: "100%",
         height: "100%",
-        display: "grid",
-        placeItems: "center",
-        color: shapeColor,
+        color: flowColor,
       }}
     >
       <motion.div
@@ -96,4 +95,4 @@ const Loader3 = ({ size, shapeSettings }) => {
   );
 };
 
-export default Loader3; 
+export default LoaderCircle; 

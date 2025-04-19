@@ -17,6 +17,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
       [
         {name:"Single Flow Circle", component: "AnimatedCircle"},
         {name:"Pulsing Red Circle", component: "AnimatedRedCircle"},
+        {name:"Circle Dots", component: "LoaderCircle"},
       ]
     },
     {name:"arrow", icon: <ArrowLeftRight />, assets: 
@@ -39,7 +40,6 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
     {name:"loaders", icon: <Loader />, assets: 
       [
       {name:"Line Dots", component: "Loader2"},
-      {name:"Circle Dots", component: "Loader3"},
       {name:"Spinning Dots", component: "Loader4"},
       {name:"3D Triangles", component: "Loader5"},
       {name:"Bouncing Balls", component: "Loader6"},
