@@ -17,6 +17,8 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
       [
         {name:"Single Flow Circle", component: "AnimatedCircle"},
         {name:"Pulsing Red Circle", component: "AnimatedRedCircle"},
+        {name:"Gradient Circle", component: "GradientCircle"},
+        {name:"Full Gradient Circle", component: "FullGradientCircle"},
         {name:"Circle Dots", component: "LoaderCircle"},
       ]
     },
