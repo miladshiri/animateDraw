@@ -1,5 +1,6 @@
 import { getImageFromIndexedDB } from "@/utils/indexedDBHelper";
 import { useEffect, useState } from "react";
+import Image from 'next/image';
 
 const SimpleImage = ({size, shapeSettings}) => {
     const [imageSrc, setImageSrc] = useState(null)
@@ -30,15 +31,16 @@ const SimpleImage = ({size, shapeSettings}) => {
       height: `100%`,
     }}
     >
-      {shapeSettings.imageId && (
-        <img 
+      {shapeSettings.imageId && imageSrc && (
+        <Image 
+          src={imageSrc}
+          alt="Uploaded image"
+          fill
           style={{
-            width: `100%`,
-            height: `100%`,
+            objectFit: 'contain'
           }}
-        src={imageSrc}/>
-      )
-    }
+        />
+      )}
     </div>
   )
 }

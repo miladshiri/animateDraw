@@ -967,7 +967,7 @@ export default function Home() {
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
   
-        const img = new Image();
+        const img = new window.Image();
         img.src = await loadImageAsBase64(pasteImageId); // Ensure we get the image URL
         
         img.onload = () => {
