@@ -110,12 +110,15 @@ const Arrow = ({ size, shapeSettings, scale }) => {
             boxShadow: `0px 0px ${thicknessSize * scale / 2}px ${thicknessSize * scale / 2}px ${flowColor}`
           }}
           animate={{
-            x: path.map((point) => point.x),
+            x: head === "both" ? 
+              [0, length - thicknessSize * scale * 4 - (thicknessSize * scale / 2), 0] : 
+              [0, length - (head === "end" ? thicknessSize * 2 + (thicknessSize * scale / 2) : thicknessSize * 2 + (thicknessSize * scale / 2))]
           }}
           transition={{
             repeat: Infinity,
             duration: speed * length / scale / 300,
             ease: "linear",
+            times: head === "both" ? [0, 0.5, 1] : [0, 1]
           }}
         />
 
