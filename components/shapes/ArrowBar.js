@@ -50,10 +50,9 @@ const ArrowBar = ({ size, shapeSettings, scale }) => {
   const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
   const length = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
 
-  const path = [
-    { x: 0},
-    { x: length - thicknessSize * scale * 7 * length / 200},
-  ];
+  const barWidth = thicknessSize * scale * 5 * length / 200;
+  const endOffset = thicknessSize * 2;
+  const animationEndPoint = length - endOffset - barWidth;
 
   const headSize = (size.h + size.w) / 10;
 
@@ -102,19 +101,22 @@ const ArrowBar = ({ size, shapeSettings, scale }) => {
         <motion.div
           key={speed}
           style={{
-            width: `${thicknessSize * scale * 5 * length / 200}px`,
+            width: `${barWidth}px`,
             height: `${thicknessSize * scale / 2}px`,
             backgroundColor: flowColor,
             position: 'relative',
             overflow: 'hidden',
           }}
           animate={{
-            x: path.map((point) => point.x),
+            x: head === "both" ? 
+              [0, animationEndPoint, 0] : 
+              [0, animationEndPoint]
           }}
           transition={{
             repeat: Infinity,
             duration: speed * length / scale / 300,
             ease: "linear",
+            times: head === "both" ? [0, 0.5, 1] : [0, 1]
           }}
         >
         </motion.div>
