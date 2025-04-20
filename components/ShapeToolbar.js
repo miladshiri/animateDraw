@@ -1,5 +1,5 @@
 import Tabs from "./Tabs";
-import { Square, Circle, Box, ArrowLeftRight, Bot, Loader } from "lucide-react"; // Import Lucide icons
+import { Square, Circle, Box, ArrowLeftRight, Bot, Loader, Sparkles } from "lucide-react"; // Import Lucide icons
 
 const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
 
@@ -21,6 +21,11 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
         {name:"Full Gradient Circle", component: "FullGradientCircle"},
         {name:"Circle Dots", component: "LoaderCircle"},
         {name:"Loading Ring", component: "LoadingRing"},
+      ]
+    },
+    {name:"different", icon: <Sparkles />, assets: 
+      [
+        {name:"Dancing Shape", component: "DanceShape"},
       ]
     },
     {name:"arrow", icon: <ArrowLeftRight />, assets: 
