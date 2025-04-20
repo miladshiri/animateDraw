@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Menu, ScanSearch, Eraser, Save, MonitorDown } from "lucide-react";
 import Image from "next/image";
-import { getImageFromIndexedDB, saveImageToIndexedDB, openDatabase } from "@/utils/indexedDBHelper";
+import { getImageFromIndexedDB, saveImageToIndexedDB, openDatabase, clearImageDatabase } from "@/utils/indexedDBHelper";
 
 const LogoBar = ({ 
   setAllShapes, 
@@ -30,11 +30,16 @@ const LogoBar = ({
     setShowConfirmation(true);
   };
 
-  const confirmDelete = () => {
-    setAllShapes([]); // Clear all shapes
-    pushToHistory(); // Push the empty state to history
-    setShowConfirmation(false);
-    setShowMenu(false);
+  const confirmDelete = async () => {
+    try {
+      await clearImageDatabase(); // Clear the image database
+      setAllShapes([]); // Clear all shapes
+      pushToHistory(); // Push the empty state to history
+      setShowConfirmation(false);
+      setShowMenu(false);
+    } catch (error) {
+      console.error('Error clearing image database:', error);
+    }
   };
 
   const cancelDelete = () => {
@@ -108,6 +113,9 @@ const LogoBar = ({
       reader.onload = async (event) => {
         try {
           const boardData = JSON.parse(event.target.result);
+          
+          // Clear existing images before importing new ones
+          await clearImageDatabase();
           
           // Handle image data if present
           if (boardData.images) {

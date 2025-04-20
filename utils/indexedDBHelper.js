@@ -36,3 +36,15 @@ export const getImageFromIndexedDB = async (id) => {
     request.onerror = () => reject("Failed to retrieve image.");
   });
 };
+
+export const clearImageDatabase = async () => {
+  const db = await openDatabase();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction("images", "readwrite");
+    const store = transaction.objectStore("images");
+    const request = store.clear();
+
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject("Failed to clear image database.");
+  });
+};
