@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Menu, ScanSearch, Eraser, Save, MonitorDown } from "lucide-react";
 import Image from "next/image";
+import { getImageFromIndexedDB, saveImageToIndexedDB, openDatabase } from "@/utils/indexedDBHelper";
 
 const LogoBar = ({ 
   setAllShapes, 
@@ -40,12 +41,36 @@ const LogoBar = ({
     setShowConfirmation(false);
   };
 
-  const handleSaveBoard = () => {
+  const handleSaveBoard = async () => {
+    // Get all image shapes
+    const imageShapes = allShapes.filter(shape => shape.component === 'SimpleImage');
+    
+    // Create a map to store image data
+    const imageDataMap = {};
+    
+    // Load all images and convert to base64
+    for (const shape of imageShapes) {
+      const imageId = shape.settings.imageId;
+      if (imageId && !imageDataMap[imageId]) {
+        const file = await getImageFromIndexedDB(imageId);
+        if (file) {
+          const base64Data = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+          imageDataMap[imageId] = base64Data;
+        }
+      }
+    }
+
     const boardData = {
       shapes: allShapes,
       scale,
       offset,
-      boardColor
+      boardColor,
+      images: imageDataMap // Include the image data
     };
 
     const blob = new Blob([JSON.stringify(boardData)], { type: 'application/json' });
@@ -77,12 +102,28 @@ const LogoBar = ({
     e.target.value = '';
   };
 
-  const confirmImport = () => {
+  const confirmImport = async () => {
     if (importFile) {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = async (event) => {
         try {
           const boardData = JSON.parse(event.target.result);
+          
+          // Handle image data if present
+          if (boardData.images) {
+            for (const [imageId, base64Data] of Object.entries(boardData.images)) {
+              // Convert base64 to blob
+              const response = await fetch(base64Data);
+              const blob = await response.blob();
+              
+              // Save to IndexedDB with the original ID
+              const db = await openDatabase();
+              const transaction = db.transaction("images", "readwrite");
+              const store = transaction.objectStore("images");
+              store.put({ id: imageId, image: blob });
+            }
+          }
+          
           setAllShapes(boardData.shapes);
           setScale(boardData.scale);
           setOffset(boardData.offset);
