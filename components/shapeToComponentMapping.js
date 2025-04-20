@@ -48,7 +48,7 @@ export const defaultSettings = {
   "Loader7": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
   "Loader8": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
   "Loader9": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
-  "LoadingRing": {animationSpeed: "normal", borderColor: "#3c3c3c", flowColor: "#fff000"},
+  "LoadingRing": {animationSpeed: "normal", borderColor: "#3c3c3c", flowColor: "#fff000", animationSpeedOff: "no"},
 }
 
 export const getComponentByName = (componentName) => {
