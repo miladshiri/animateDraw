@@ -33,6 +33,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
         {name:"Flow Arrow", component: "Arrow"},
         {name:"Bar Arrow", component: "ArrowBar"},
         {name:"Curved Arrow", component: "ArrowCurve"},
+        {name:"Reversed Curved Arrow", component: "ArrowCurveReverse"},
         {name:"Arrow Progress", component: "ArrowProgress"},
       ]
     },

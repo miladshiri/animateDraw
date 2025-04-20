@@ -7,6 +7,7 @@ import AnimatedCircle from "./shapes/AnimatedCircle";
 import Arrow from "./shapes/Arrow";
 import ArrowBar from "./shapes/ArrowBar";
 import ArrowCurve from "./shapes/ArrowCurve";
+import ArrowCurveReverse from "./shapes/ArrowCurveReverse";
 import ArrowProgress from "./shapes/ArrowProgress";
 import Diamond3d from "./shapes/Diamond3d";
 import RobotHandShake from "./shapes/RobotHandShake";
@@ -37,6 +38,7 @@ export const defaultSettings = {
   "Arrow": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
   "ArrowBar": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
   "ArrowCurve": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
+  "ArrowCurveReverse": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
   "ArrowProgress": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
   "Diamond3d": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#E0115F", textColor: "#00f01c", shapeText: "Text"},
   "RobotHandShake": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#ffffff", flowColor: "#87ceeb"},
@@ -73,6 +75,7 @@ const components = {
   "Arrow": Arrow,
   "ArrowBar": ArrowBar,
   "ArrowCurve": ArrowCurve,
+  "ArrowCurveReverse": ArrowCurveReverse,
   "ArrowProgress": ArrowProgress,
   "Diamond3d": Diamond3d,
   "RobotHandShake": RobotHandShake,
