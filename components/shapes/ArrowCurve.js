@@ -106,7 +106,7 @@ const ArrowCurve = ({ size, shapeSettings, scale }) => {
         {/* Animated flow element */}
         {speed > 0 && (
           <motion.path
-            key={`flow-${path}-${speed}-${thicknessSize}-${scale}-${flowColor}`}
+            key={`flow-${path}-${speed}-${thicknessSize}-${scale}-${flowColor}-${head}`}
             d={path}
             fill="none"
             stroke={flowColor}
@@ -115,11 +115,14 @@ const ArrowCurve = ({ size, shapeSettings, scale }) => {
               filter: `drop-shadow(0 0 ${thicknessSize * scale / 2}px ${flowColor})`,
             }}
             initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
+            animate={{ 
+              pathLength: 1
+            }}
             transition={{
               duration: speed * Math.abs(endX - startX) / scale / 300,
               repeat: Infinity,
               ease: "linear",
+              repeatType: head === "both" ? "reverse" : "loop"
             }}
           />
         )}
