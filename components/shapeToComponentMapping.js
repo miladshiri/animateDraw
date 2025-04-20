@@ -6,6 +6,7 @@ import SimpleText from "./shapes/SimpleText";
 import AnimatedCircle from "./shapes/AnimatedCircle";
 import Arrow from "./shapes/Arrow";
 import ArrowBar from "./shapes/ArrowBar";
+import ArrowCurve from "./shapes/ArrowCurve";
 import Diamond3d from "./shapes/Diamond3d";
 import RobotHandShake from "./shapes/RobotHandShake";
 import FishRobot from "./shapes/FishRobot";
@@ -34,6 +35,7 @@ export const defaultSettings = {
   "SimpleText": {animationSpeed: "normal", textColor: "#fff", fontSize: 26, textAnimation: "none", borderColor: "#000000"},
   "Arrow": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
   "ArrowBar": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
+  "ArrowCurve": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
   "Diamond3d": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#E0115F", textColor: "#00f01c", shapeText: "Text"},
   "RobotHandShake": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#ffffff", flowColor: "#87ceeb"},
   "FishRobot": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#306D85", flowColor: "#D93A54"},
@@ -68,6 +70,7 @@ const components = {
   "SimpleText": SimpleText,
   "Arrow": Arrow,
   "ArrowBar": ArrowBar,
+  "ArrowCurve": ArrowCurve,
   "Diamond3d": Diamond3d,
   "RobotHandShake": RobotHandShake,
   "FishRobot": FishRobot,
