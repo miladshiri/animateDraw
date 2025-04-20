@@ -33,7 +33,7 @@ const FullGradientRect = ({ size, shapeSettings }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: "12px",
+        borderRadius: "5%",
         border: `${borderWidth}px solid ${shapeSettings ? (shapeSettings.borderColor ? shapeSettings.borderColor : defaultSettings['FullGradientRect'].borderColor) : defaultSettings['FullGradientRect'].borderColor}`,
         userSelect: "none",
         overflow: "hidden",
@@ -47,7 +47,7 @@ const FullGradientRect = ({ size, shapeSettings }) => {
             left: 0,
             right: 0,
             bottom: 0,
-            borderRadius: "12px",
+            borderRadius: "5%",
             background: "linear-gradient(270deg, #ff6ec4, #7873f5, #4facfe)",
             backgroundSize: "600% 600%",
           }}

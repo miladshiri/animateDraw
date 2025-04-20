@@ -5,7 +5,7 @@ import { defaultSettings } from "../shapeToComponentMapping";
 
 const GradientCircle = ({ size, shapeSettings }) => {
   const circleSize = Math.min(size.w, size.h);
-  const borderWidth = circleSize / 20;
+  const borderWidth = circleSize / 100;
   
   var speed = 3;
   if (shapeSettings) {
