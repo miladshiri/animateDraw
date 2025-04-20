@@ -20,6 +20,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
         {name:"Gradient Circle", component: "GradientCircle"},
         {name:"Full Gradient Circle", component: "FullGradientCircle"},
         {name:"Circle Dots", component: "LoaderCircle"},
+        {name:"Loading Ring", component: "LoadingRing"},
       ]
     },
     {name:"arrow", icon: <ArrowLeftRight />, assets: 
