@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { Menu, ScanSearch, Eraser, Save, MonitorDown } from "lucide-react";
+import { Menu, ScanSearch, Eraser, Save, MonitorDown, Mail } from "lucide-react";
 import Image from "next/image";
 import { getImageFromIndexedDB, saveImageToIndexedDB, openDatabase, clearImageDatabase } from "@/utils/indexedDBHelper";
+import ContactPopup from "./ContactPopup";
 
 const LogoBar = ({ 
   setAllShapes, 
@@ -16,6 +17,7 @@ const LogoBar = ({
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showContactPopup, setShowContactPopup] = useState(false);
   const [confirmationType, setConfirmationType] = useState(null); // 'delete' or 'import'
   const [importFile, setImportFile] = useState(null);
   const menuRef = useRef(null);
@@ -230,7 +232,7 @@ const LogoBar = ({
         <div
           style={{
             backgroundColor: `rgb(255, 255, 255)`,
-            height: "200px",
+            height: "250px",
             position: "fixed",
             bottom: "10px",
             left: "2px",
@@ -245,8 +247,11 @@ const LogoBar = ({
           <div className="menu-item" onClick={handleCleanBoardClick}><Eraser size={20} strokeWidth={1} />Clean the Board</div>
           <div className="menu-item" onClick={handleSaveBoard}><Save size={20} strokeWidth={1} />Save the Board</div>
           <div className="menu-item" onClick={handleImportBoard}><MonitorDown size={20} strokeWidth={1} />Import a Board</div>
+          <div className="menu-item" onClick={() => setShowContactPopup(true)}><Mail size={20} strokeWidth={1} />Contact Us</div>
         </div>
       }
+
+      {showContactPopup && <ContactPopup onClose={() => setShowContactPopup(false)} />}
 
       {showConfirmation && (
         <div id="clean-board-confirmation" className="confirmation-box">
