@@ -8,6 +8,7 @@ import Arrow from "./shapes/Arrow";
 import ArrowBar from "./shapes/ArrowBar";
 import Diamond3d from "./shapes/Diamond3d";
 import RobotHandShake from "./shapes/RobotHandShake";
+import FishRobot from "./shapes/FishRobot";
 import AnimatedRedCircle from "./shapes/AnimatedRedCircle";
 import GradientRect from "./shapes/GradientRect";
 import FullGradientRect from "./shapes/FullGradientRect";
@@ -34,6 +35,7 @@ export const defaultSettings = {
   "ArrowBar": {animationSpeed: "slow", thickness: "normal", shapeColor: "#00ee00", flowColor: "#e30707", startX: 0, startY: 0, endX: 100, endY: 100, head: "end"},
   "Diamond3d": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#E0115F", textColor: "#00f01c", shapeText: "Text"},
   "RobotHandShake": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#ffffff", flowColor: "#87ceeb"},
+  "FishRobot": {animationSpeed: "slow", animationSpeedOff: "no", shapeColor: "#306D85", flowColor: "#D93A54"},
   "AnimatedRedCircle": {animationSpeed: "normal", shapeColor: "#ff0000", borderColor: "#ff0000"},
   "GradientRect": {animationSpeed: "normal", shapeColor: "#2a2a2a"},
   "FullGradientRect": {animationSpeed: "normal", borderColor: "#51b39a"},
@@ -66,6 +68,7 @@ const components = {
   "ArrowBar": ArrowBar,
   "Diamond3d": Diamond3d,
   "RobotHandShake": RobotHandShake,
+  "FishRobot": FishRobot,
   "AnimatedRedCircle": AnimatedRedCircle,
   "GradientRect": GradientRect,
   "FullGradientRect": FullGradientRect,

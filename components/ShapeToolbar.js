@@ -39,6 +39,7 @@ const ShapeToolbar = ({setShapeToCreate, shapeToCreate}) => {
     {name:"misc", icon: <Bot />, assets: 
       [
       {name:"Robot Wave Hand", component: "RobotHandShake"},
+      {name:"Fish Robot", component: "FishRobot"},
       ]
     },
     {name:"loaders", icon: <Loader />, assets: 
