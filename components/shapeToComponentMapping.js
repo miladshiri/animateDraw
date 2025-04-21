@@ -28,6 +28,7 @@ import Loader7 from "./shapes/Loader7";
 import Loader8 from "./shapes/Loader8";
 import Loader9 from "./shapes/Loader9";
 import LoadingRing from "./shapes/LoadingRing";
+import Astronaut from "./shapes/Astronaut";
 
 export const defaultSettings = {
   "AnimatedRec": {animationSpeed: "normal", shapeColor: "#2a2a2a", borderColor: "#51b39a", flowColor: "#aaaaaa"},
@@ -59,6 +60,7 @@ export const defaultSettings = {
   "Loader8": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
   "Loader9": {animationSpeed: "normal", shapeColor: "#ffffff", animationSpeedOff: "no"},
   "LoadingRing": {animationSpeed: "normal", borderColor: "#3c3c3c", flowColor: "#fff000", animationSpeedOff: "no"},
+  "Astronaut": {animationSpeed: "normal", animationSpeedOff: "no", shapeColor: "#ffffff", borderColor: "#ff9933"},
 }
 
 export const getComponentByName = (componentName) => {
@@ -96,6 +98,7 @@ const components = {
   "Loader8": Loader8,
   "Loader9": Loader9,
   "LoadingRing": LoadingRing,
+  "Astronaut": Astronaut,
 }
 
 export default components;
