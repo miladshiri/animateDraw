@@ -273,35 +273,25 @@ export default function Home() {
 
   const handleWheel = (e) => {
     if (isTyping) return;
-    if (e.ctrlKey || e.metaKey) {
-            // const scaleDiff = e.deltaY > 0 ? -0.05 : 0.05;
-            const scaleDiff = e.deltaY > 0 ? 0.9 : 1.1;
-            zoomInOut (scaleDiff, e.clientX, e.clientY);
-
-
-    }
-    else if (e.shiftKey) {
-      const xDiff = e.deltaX > 0 ? -1 : 1;
-
-      setOffset((prevOffset) => {
-        // Adjust the offset to keep the mouse pointer fixed relative to content
-
-        const newOffsetX = prevOffset.x + xDiff / scale * 26;
-        const newOffsetY = prevOffset.y;
-
-        return { x: newOffsetX, y: newOffsetY};
-      });
-
+    if (e.ctrlKey || e.metaKey || e.shiftKey) {
+      e.preventDefault(); // Prevent default browser zoom behavior
+      if (e.ctrlKey || e.metaKey) {
+        const scaleDiff = e.deltaY > 0 ? 0.9 : 1.1;
+        zoomInOut (scaleDiff, e.clientX, e.clientY);
+      } else if (e.shiftKey) {
+        const xDiff = e.deltaX > 0 ? -1 : 1;
+        setOffset((prevOffset) => {
+          const newOffsetX = prevOffset.x + xDiff / scale * 26;
+          const newOffsetY = prevOffset.y;
+          return { x: newOffsetX, y: newOffsetY};
+        });
+      }
     }
     else {
-
       const yDiff = e.deltaY > 0 ? -1 : 1;
       setOffset((prevOffset) => {
-        // Adjust the offset to keep the mouse pointer fixed relative to content
-
         const newOffsetX = prevOffset.x;
         const newOffsetY = prevOffset.y + yDiff / scale * 26;
-
         return { x: newOffsetX, y: newOffsetY};
       });
     }
