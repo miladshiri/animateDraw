@@ -1026,6 +1026,25 @@ export default function Home() {
     }
   }, [isTyping]);
 
+  useEffect(() => {
+    // Add global event listener to prevent Chrome's default zoom behavior
+    const preventDefaultZoom = (e) => {
+      if (e.ctrlKey && e.type === 'wheel') {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    // Add event listener with passive: false to ensure preventDefault works
+    document.addEventListener('wheel', preventDefaultZoom, { passive: false });
+    document.addEventListener('mousewheel', preventDefaultZoom, { passive: false });
+
+    return () => {
+      document.removeEventListener('wheel', preventDefaultZoom);
+      document.removeEventListener('mousewheel', preventDefaultZoom);
+    };
+  }, []);
+
   return (
     <div
     style={{
