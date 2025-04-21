@@ -283,7 +283,9 @@ export default function Home() {
         const scaleDiff = e.deltaY > 0 ? 0.9 : 1.1;
         zoomInOut(scaleDiff, e.clientX, e.clientY);
       } else if (e.shiftKey) {
-        const xDiff = e.deltaX > 0 ? -1 : 1;
+        // Check if we're on Windows
+        const isWindows = navigator.platform.indexOf('Win') > -1;
+        const xDiff = isWindows ? (e.deltaY > 0 ? 1 : -1) : (e.deltaX > 0 ? -1 : 1);
         setOffset((prevOffset) => ({
           x: prevOffset.x + xDiff / scale * 26,
           y: prevOffset.y
@@ -1026,24 +1028,24 @@ export default function Home() {
     }
   }, [isTyping]);
 
-  // useEffect(() => {
-  //   // Add global event listener to prevent Chrome's default zoom behavior
-  //   const preventDefaultZoom = (e) => {
-  //     if (e.ctrlKey && e.type === 'wheel') {
-  //       e.preventDefault();
-  //       e.stopPropagation();
-  //     }
-  //   };
+  useEffect(() => {
+    // Add global event listener to prevent Chrome's default zoom behavior
+    const preventDefaultZoom = (e) => {
+      if ((e.ctrlKey || e.shiftKey) && e.type === 'wheel') {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
 
-  //   // Add event listener with passive: false to ensure preventDefault works
-  //   document.addEventListener('wheel', preventDefaultZoom, { passive: false });
-  //   document.addEventListener('mousewheel', preventDefaultZoom, { passive: false });
+    // Add event listener with passive: false to ensure preventDefault works
+    document.addEventListener('wheel', preventDefaultZoom, { passive: false });
+    document.addEventListener('mousewheel', preventDefaultZoom, { passive: false });
 
-  //   return () => {
-  //     document.removeEventListener('wheel', preventDefaultZoom);
-  //     document.removeEventListener('mousewheel', preventDefaultZoom);
-  //   };
-  // }, []);
+    return () => {
+      document.removeEventListener('wheel', preventDefaultZoom);
+      document.removeEventListener('mousewheel', preventDefaultZoom);
+    };
+  }, []);
 
   return (
     <div
