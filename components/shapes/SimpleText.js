@@ -88,16 +88,19 @@ const SimpleText = ({ size, shapeSettings }) => {
         fontSize: "16px",
         whiteSpace: "pre",
         transform: `scale(${
-          size.w / (textInputRef.current?.scrollWidth || 1)
-        }, ${size.h / (textInputRef.current?.scrollHeight || 1)})`,
-        overflow: "hidden",
+          Math.min(
+            size.w / (textInputRef.current?.scrollWidth || 1),
+            size.h / (textInputRef.current?.scrollHeight || 1)
+          )
+        })`,
+        transformOrigin: "center center",
+        overflow: "visible",
+        width: "max-content",
         color: isGradient ? "transparent" : shapeSettings.textColor,
         WebkitTextStroke: isGradient
           ? "0px transparent"
           : `${
-              (size.w / (textInputRef.current?.scrollWidth) / 6 +
-                size.h / (textInputRef.current?.scrollHeight) / 60) /
-              2
+              Math.min(size.w, size.h) * 0.01
             }px ${
               shapeSettings?.borderColor ||
               defaultSettings["SimpleText"].borderColor
@@ -105,9 +108,7 @@ const SimpleText = ({ size, shapeSettings }) => {
         textStroke: isGradient
           ? "0px transparent"
           : `${
-              (size.w / (textInputRef.current?.scrollWidth) / 6 +
-                size.h / (textInputRef.current?.scrollHeight) / 60) /
-              2
+              Math.min(size.w, size.h) * 0.01
             }px ${
               shapeSettings?.borderColor ||
               defaultSettings["SimpleText"].borderColor
@@ -127,6 +128,8 @@ const SimpleText = ({ size, shapeSettings }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "hidden",
+          position: "relative"
         }}
       >
         {shapeSettings.textAnimation === "shake" ? (
