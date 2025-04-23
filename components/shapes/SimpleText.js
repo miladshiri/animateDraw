@@ -87,12 +87,7 @@ const SimpleText = ({ size, shapeSettings }) => {
       style={{
         fontSize: "16px",
         whiteSpace: "pre",
-        transform: `scale(${
-          Math.min(
-            size.w / (textInputRef.current?.scrollWidth || 1),
-            size.h / (textInputRef.current?.scrollHeight || 1)
-          )
-        })`,
+        transform: `scaleX(${size.w / (textInputRef.current?.scrollWidth || 1)}) scaleY(${size.h / (textInputRef.current?.scrollHeight || 1)})`,
         transformOrigin: "center center",
         overflow: "visible",
         width: "max-content",
@@ -128,7 +123,7 @@ const SimpleText = ({ size, shapeSettings }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          overflow: "hidden",
+          overflow: "visible",
           position: "relative"
         }}
       >
