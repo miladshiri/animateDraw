@@ -11,16 +11,13 @@ import BottomToolbar from "@/components/BottomToolbar";
 import { defaultSettings } from "@/components/shapeToComponentMapping";
 import Image from 'next/image';
 import LogoBar from "@/components/LogoBar";
+import board1Template from "@/board_templates/board1.json";
 
 export default function Home() {
-  const defaultShapes = [
-    {id: 1, x: 100, y: 150, w: 100, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", shapeColor: "#626262", borderColor: "#14f4bc"}},
-    {id: 2, x: 400, y: 250, w: 130, h: 170, component: "AnimatedRec", selected: false, settings: {animationSpeed: "fast", shapeColor: "#000000", borderColor: "#e10f4e"}}
-  ]
-
-  const defaultScale = 1;
-  const defaultOffset = { x: 0, y: 0 };
-  const defaultBoardColor = "#232323";
+  const defaultScale = board1Template.scale;
+  const defaultOffset = board1Template.offset;
+  const defaultBoardColor = board1Template.boardColor;
+  const defaultShapes = board1Template.shapes;
 
   const [allShapes, setAllShapes] = useState([]);
   const [scale, setScale] = useState(defaultScale);
@@ -35,7 +32,7 @@ export default function Home() {
     const savedBoardColor = localStorage.getItem("boardColor");
   
     if (isFirstVisit) {
-      // First time user - use default values
+      // First time user - use template values
       setAllShapes(defaultShapes);
       setScale(defaultScale);
       setOffset(defaultOffset);
