@@ -228,25 +228,20 @@ export default function Home() {
   }, [selectedTool])
 
   const zoomInOut = (zoomFactor, xCenter, yCenter) => {
-    setScale((prevScale) => {
-      const newScale = Math.min(Math.max(prevScale * zoomFactor, 0.02), 16); // Clamp the scale
+    const prevScale = scale;
+    const newScale = Math.min(Math.max(prevScale * zoomFactor, 0.02), 16); // Clamp the scale
 
-      setOffset((prevOffset) => {
-        
-        const m_before_zoom_x = xCenter / prevScale + prevOffset.x;
-        const m_before_zoom_y = yCenter / prevScale + prevOffset.y;
+    // Calculate the world coordinates of the mouse position
+    const worldX = xCenter / prevScale + offset.x;
+    const worldY = yCenter / prevScale + offset.y;
+    
+    // Calculate the new offset to keep the mouse position fixed
+    const newOffsetX = worldX - (xCenter / newScale);
+    const newOffsetY = worldY - (yCenter / newScale);
 
-        const m_after_zoom_x = xCenter / newScale + prevOffset.x;
-        const m_after_zoom_y = yCenter / newScale + prevOffset.y;
-
-        const newOffsetX = prevOffset.x + (m_before_zoom_x - m_after_zoom_x) / 2;
-        const newOffsetY = prevOffset.y + (m_before_zoom_y - m_after_zoom_y) / 2;
-
-        return { x: newOffsetX, y: newOffsetY};
-      });
-
-      return newScale;
-    });
+    // Update both states together
+    setScale(newScale);
+    setOffset({ x: newOffsetX, y: newOffsetY });
   }
 
   const resetZoom = () => {
