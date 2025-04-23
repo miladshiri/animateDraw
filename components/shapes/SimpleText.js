@@ -100,7 +100,7 @@ const SimpleText = ({ size, shapeSettings }) => {
         WebkitTextStroke: isGradient
           ? "0px transparent"
           : `${
-              Math.min(size.w, size.h) * 0.01
+               0.3
             }px ${
               shapeSettings?.borderColor ||
               defaultSettings["SimpleText"].borderColor
@@ -108,7 +108,7 @@ const SimpleText = ({ size, shapeSettings }) => {
         textStroke: isGradient
           ? "0px transparent"
           : `${
-              Math.min(size.w, size.h) * 0.01
+               0.3
             }px ${
               shapeSettings?.borderColor ||
               defaultSettings["SimpleText"].borderColor
