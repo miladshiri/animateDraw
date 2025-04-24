@@ -14,10 +14,25 @@ import LogoBar from "@/components/LogoBar";
 import board1Template from "@/board_templates/board1.json";
 
 export default function Home() {
-  const defaultScale = board1Template.scale;
-  const defaultOffset = board1Template.offset;
+  var defaultScale = board1Template.scale;
+  var defaultOffset = board1Template.offset;
   const defaultBoardColor = board1Template.boardColor;
   const defaultShapes = board1Template.shapes;
+
+  // Add window size logging
+  useEffect(() => {
+    
+
+    // const handleResize = () => {
+    //   console.log('Window dimensions after resize:', {
+    //     width: window.innerWidth,
+    //     height: window.innerHeight
+    //   });
+    // };
+
+    // window.addEventListener('resize', handleResize);
+    // return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const [allShapes, setAllShapes] = useState([]);
   const [scale, setScale] = useState(defaultScale);
@@ -25,6 +40,43 @@ export default function Home() {
   const [boardColor, setBoardColor] = useState(defaultBoardColor); 
 
   useEffect(() => {
+    console.log('Window dimensions:', {
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+
+    // Calculate content bounds from template shapes
+    let minX = Infinity, minY = Infinity;
+    let maxX = -Infinity, maxY = -Infinity;
+    
+    defaultShapes.forEach(shape => {
+      minX = Math.min(minX, shape.x);
+      minY = Math.min(minY, shape.y);
+      maxX = Math.max(maxX, shape.x + shape.w);
+      maxY = Math.max(maxY, shape.y + shape.h);
+    });
+
+    // Calculate content dimensions
+    const contentWidth = maxX - minX;
+    const contentHeight = maxY - minY;
+
+    // Add padding (1% on each side)
+    const paddingX = contentWidth * 0.01;
+    const paddingY = contentHeight * 0.01;
+
+    // Account for toolbar height (toolbar + margin + padding)
+    const toolbarHeight = 100; // 40px height + 10px top margin + 10px padding
+    const availableHeight = window.innerHeight;
+
+    // Calculate scale to fit content with padding
+    const scaleX = window.innerWidth / (contentWidth + 2 * paddingX);
+    const scaleY = window.innerHeight / (contentHeight + 2 * paddingY);
+    defaultScale = Math.min(scaleX, scaleY);
+
+    // Center the content horizontally and position below toolbar vertically
+    defaultOffset.x = minX - paddingX;
+    defaultOffset.y = minY - paddingY - (toolbarHeight); // Adjust Y offset to account for toolbar
+
     const isFirstVisit = !localStorage.getItem("hasVisitedBefore");
     const savedShapes = localStorage.getItem("shapes");
     const savedScale = localStorage.getItem("scale");
