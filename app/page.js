@@ -64,18 +64,19 @@ export default function Home() {
     const paddingX = contentWidth * 0.01;
     const paddingY = contentHeight * 0.01;
 
-    // Account for toolbar height (toolbar + margin + padding)
-    const toolbarHeight = 100; // 40px height + 10px top margin + 10px padding
-    const availableHeight = window.innerHeight;
+    // Account for toolbar height
+    const toolbarHeight = 100;
 
     // Calculate scale to fit content with padding
     const scaleX = window.innerWidth / (contentWidth + 2 * paddingX);
     const scaleY = window.innerHeight / (contentHeight + 2 * paddingY);
     defaultScale = Math.min(scaleX, scaleY);
 
-    // Center the content horizontally and position below toolbar vertically
-    defaultOffset.x = minX - paddingX;
-    defaultOffset.y = minY - paddingY - (toolbarHeight); // Adjust Y offset to account for toolbar
+    // Center the content horizontally only, vertically align with top of shapes
+    const emptySpaceX = window.innerWidth - (contentWidth * defaultScale);
+    
+    defaultOffset.x = minX - (emptySpaceX / 2 / defaultScale);
+    defaultOffset.y = minY; // Start directly from where shapes begin
 
     const isFirstVisit = !localStorage.getItem("hasVisitedBefore");
     const savedShapes = localStorage.getItem("shapes");
