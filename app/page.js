@@ -435,6 +435,8 @@ export default function Home() {
         y: startY,
         width: 0,
         height: 0,
+        startX: startX,  // Store initial position
+        startY: startY   // Store initial position
       });
   
     }
@@ -537,14 +539,18 @@ export default function Home() {
       const currentX = e.clientX;
       const currentY = e.clientY;
 
-      const width = currentX - selectionDragBox.x;
-      const height = currentY - selectionDragBox.y;
+      // Calculate min and max coordinates using stored initial positions
+      const minX = Math.min(currentX, selectionDragBox.startX);
+      const minY = Math.min(currentY, selectionDragBox.startY);
+      const maxX = Math.max(currentX, selectionDragBox.startX);
+      const maxY = Math.max(currentY, selectionDragBox.startY);
 
       setSelectionDragBox({
-        x: Math.min(currentX, selectionDragBox.x),
-        y: Math.min(currentY, selectionDragBox.y),
-        width: Math.abs(width),
-        height: Math.abs(height),
+        ...selectionDragBox,
+        x: minX,
+        y: minY,
+        width: maxX - minX,
+        height: maxY - minY
       });
     }
     else if (selectedTool == 'shape') {
