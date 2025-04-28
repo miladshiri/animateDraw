@@ -355,7 +355,7 @@ export default function Home() {
         }));
       }
     } else {
-      const yDiff = e.deltaY > 0 ? -1 : 1;
+      const yDiff = e.deltaY > 0 ? 1 : -1;
       setOffset((prevOffset) => ({
         x: prevOffset.x,
         y: prevOffset.y + yDiff / scale * 26
