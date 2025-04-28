@@ -64,14 +64,26 @@ const SimpleText = ({ size, shapeSettings }) => {
       case "typewriter":
         return {
           animate: {
-            width: ["0%", "100%"],
+            x: ["-100%", "100%"]
           },
           transition: {
             duration: 2 * speed,
             repeat: Infinity,
             repeatDelay: 1 * speed,
-            ease: "linear",
+            ease: "linear"
+          }
+        };
+      case "scan-reverse":
+        return {
+          animate: {
+            x: ["100%", "-100%"]
           },
+          transition: {
+            duration: 2 * speed,
+            repeat: Infinity,
+            repeatDelay: 1 * speed,
+            ease: "linear"
+          }
         };
       default:
         return {};
@@ -133,6 +145,24 @@ const SimpleText = ({ size, shapeSettings }) => {
           </motion.div>
         ) : shapeSettings.textAnimation === "gradient" ? (
           <div className="gradient-wrapper">{scaledText}</div>
+        ) : shapeSettings.textAnimation === "typewriter" || shapeSettings.textAnimation === "scan-reverse" ? (
+          <div style={{ position: "relative", overflow: "hidden", width: "100%", height: "100%" }}>
+            <motion.div
+              key={speed}
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                left: 0
+              }}
+              {...getAnimationStyle()}
+            >
+              {scaledText}
+            </motion.div>
+          </div>
         ) : (
           <motion.div
             key={speed}

@@ -98,12 +98,24 @@ const ShapeSettings = ({ selectedShape, changeShapeSettingByName, updateColorPal
       case 'typewriter':
         return {
           animate: {
-            width: ['0%', '100%']
+            x: ["-100%", "100%"]
           },
           transition: {
             duration: 2,
             repeat: Infinity,
-            repeatDelay: 1,
+            repeatDelay: 0.1,
+            ease: "linear"
+          }
+        };
+      case 'scan-reverse':
+        return {
+          animate: {
+            x: ["100%", "-100%"]
+          },
+          transition: {
+            duration: 2,
+            repeat: Infinity,
+            repeatDelay: 0.1,
             ease: "linear"
           }
         };
@@ -254,11 +266,43 @@ const ShapeSettings = ({ selectedShape, changeShapeSettingByName, updateColorPal
                     position: "relative",
                     overflow: "hidden",
                     width: "100%",
+                    height: "100%",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center"
+                    justifyContent: "center",
+                    left: 0
                   }}
                   {...getAnimationStyle('typewriter')}
+                >
+                  Scan
+                </motion.div>
+              </motion.button>
+            </div>
+            <div>
+              <motion.button
+                onClick={() => { setTextAnimation('scan-reverse') }}
+                className={textAnimation === 'scan-reverse' ? "isSelected" : ""}
+                style={{
+                  position: "relative",
+                  overflow: "hidden",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                <motion.div
+                  style={{
+                    position: "relative",
+                    overflow: "hidden",
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    left: 0
+                  }}
+                  {...getAnimationStyle('scan-reverse')}
                 >
                   Scan
                 </motion.div>
