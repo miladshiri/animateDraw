@@ -4,10 +4,50 @@ import { HexColorPicker } from "react-colorful";
 const ColorPickerComponent = ({initialColor, changeShapeSettingByName, settingName, updateColorPalette, colorPalette}) => {
   const [color, setColor] = useState(initialColor); // Default color
   const [showPicker, setShowPicker] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
+  const [inputValue, setInputValue] = useState(initialColor);
 
   const handleColorBoxClick = (e) => {
     e.stopPropagation();
     setShowPicker(!showPicker);
+  }
+
+  const handleInputChange = (e) => {
+    e.stopPropagation();
+    const newColor = e.target.value;
+    setInputValue(newColor);
+    // Only update if it's a valid hex color
+    if (/^#[0-9A-Fa-f]{6}$/.test(newColor)) {
+      setColor(newColor);
+    }
+  }
+
+  const handleInputKeyDown = (e) => {
+    e.stopPropagation();
+    // Handle Ctrl+C or Cmd+C
+    if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+      try {
+        navigator.clipboard.writeText(color);
+        setShowCopied(true);
+        setTimeout(() => setShowCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy color:', err);
+      }
+    }
+  }
+
+  const handleInputKeyUp = (e) => {
+    e.stopPropagation();
+  }
+
+  const handleInputPaste = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const pastedText = e.clipboardData.getData('text');
+    if (/^#[0-9A-Fa-f]{6}$/.test(pastedText)) {
+      setColor(pastedText);
+      setInputValue(pastedText);
+    }
   }
 
   useEffect(() => {
@@ -73,7 +113,39 @@ const ColorPickerComponent = ({initialColor, changeShapeSettingByName, settingNa
           }}
         >
           <HexColorPicker onMouseUp={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()} color={color} onChange={setColor} />
-          <div>{color}</div>
+          <div style={{ marginTop: '10px', position: 'relative' }}>
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleInputKeyDown}
+              onKeyUp={handleInputKeyUp}
+              onPaste={handleInputPaste}
+              style={{
+                width: '100%',
+                padding: '5px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                textAlign: 'center',
+                color: 'black'
+              }}
+            />
+            {showCopied && (
+              <div style={{
+                position: "absolute",
+                top: "-25px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: "#333",
+                color: "#fff",
+                padding: "5px 10px",
+                borderRadius: "4px",
+                fontSize: "12px"
+              }}>
+                Copied!
+              </div>
+            )}
+          </div>
           <button
             onMouseUp={(e) => {setShowPicker(false); e.stopPropagation();}}
             onMouseDown={(e) => e.stopPropagation()}
