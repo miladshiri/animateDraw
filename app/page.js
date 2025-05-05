@@ -250,13 +250,25 @@ export default function Home() {
             try {
               const pastedShapes = JSON.parse(text);
               if (Array.isArray(pastedShapes)) {
+                // Calculate the center of the pasted shapes
+                const centerX = pastedShapes.reduce((sum, shape) => sum + shape.x + shape.w/2, 0) / pastedShapes.length;
+                const centerY = pastedShapes.reduce((sum, shape) => sum + shape.y + shape.h/2, 0) / pastedShapes.length;
+
+                // Calculate the offset from the center to the mouse position
+                const mouseX = xScreenToWorld(universalMousePosition.current.x);
+                const mouseY = yScreenToWorld(universalMousePosition.current.y);
+                const offsetX = mouseX - centerX;
+                const offsetY = mouseY - centerY;
+
+                // Create new shapes with adjusted positions
                 const newShapes = pastedShapes.map(shape => ({
                   ...shape,
                   id: generateUniqueId(),
-                  x: xScreenToWorld(universalMousePosition.current.x) - shape.w / 2,
-                  y: yScreenToWorld(universalMousePosition.current.y) - shape.h / 2,
+                  x: shape.x + offsetX,
+                  y: shape.y + offsetY,
                   selected: false
                 }));
+
                 setAllShapes(prevShapes => [...prevShapes, ...newShapes]);
                 pushToHistory();
               }
