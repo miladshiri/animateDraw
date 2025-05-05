@@ -232,25 +232,50 @@ export default function Home() {
           redo(event);
         } else if (event.key === "c") {
           const selectedShapes = allShapes.filter(shape => shape.selected);
-          setClipboard(selectedShapes);
+          if (selectedShapes.length > 0) {
+            const shapesText = JSON.stringify(selectedShapes);
+            navigator.clipboard.writeText(shapesText);
+          }
         } else if (event.key === "x") {
           const selectedShapes = allShapes.filter(shape => shape.selected);
-          setClipboard(selectedShapes);
-          setAllShapes(allShapes.filter(shape => !shape.selected));
-          setSelectionBox(null);
-        } else if (event.key === "v") {
-          if (clipboard.length > 0) {
-
-            const newShapes = clipboard.map(shape => ({
-              ...shape,
-              id: generateUniqueId(),
-              x: xScreenToWorld(universalMousePosition.current.x) - shape.w / 2,
-              y: yScreenToWorld(universalMousePosition.current.y) - shape.h / 2,
-              selected: false
-            }));
-            setAllShapes(prevShapes => [...prevShapes, ...newShapes]);
-            pushToHistory();
+          if (selectedShapes.length > 0) {
+            const shapesText = JSON.stringify(selectedShapes);
+            navigator.clipboard.writeText(shapesText);
+            setAllShapes(allShapes.filter(shape => !shape.selected));
+            setSelectionBox(null);
           }
+        } else if (event.key === "v") {
+          // First try to read as text (for shapes)
+          navigator.clipboard.readText().then(text => {
+            try {
+              const pastedShapes = JSON.parse(text);
+              if (Array.isArray(pastedShapes)) {
+                const newShapes = pastedShapes.map(shape => ({
+                  ...shape,
+                  id: generateUniqueId(),
+                  x: xScreenToWorld(universalMousePosition.current.x) - shape.w / 2,
+                  y: yScreenToWorld(universalMousePosition.current.y) - shape.h / 2,
+                  selected: false
+                }));
+                setAllShapes(prevShapes => [...prevShapes, ...newShapes]);
+                pushToHistory();
+              }
+            } catch (e) {
+              // If JSON parsing fails, try to read as image
+              navigator.clipboard.read().then(clipboardItems => {
+                for (const clipboardItem of clipboardItems) {
+                  if (clipboardItem.types.includes('image/png') || 
+                      clipboardItem.types.includes('image/jpeg') || 
+                      clipboardItem.types.includes('image/gif')) {
+                    clipboardItem.getType(clipboardItem.types[0]).then(blob => {
+                      storeImage(blob);
+                    });
+                    break;
+                  }
+                }
+              });
+            }
+          });
         }
       }
     };
@@ -1021,15 +1046,26 @@ export default function Home() {
 
   useEffect(() => {
     const pasteImageFunction = async () => {
-  
       if (pasteImageId) {
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
+        try {
+          const centerX = window.innerWidth / 2;
+          const centerY = window.innerHeight / 2;
   
-        const img = new window.Image();
-        img.src = await loadImageAsBase64(pasteImageId); // Ensure we get the image URL
-        
-        img.onload = () => {
+          const imageUrl = await loadImageAsBase64(pasteImageId);
+          
+          if (!imageUrl) {
+            setPasteImageId(null);
+            return;
+          }
+
+          // Create a new image and wait for it to load
+          const img = document.createElement('img');
+          img.crossOrigin = "anonymous"; // Add this to handle CORS if needed
+          
+          await new Promise((resolve, reject) => {
+            img.onload = () => resolve(img);
+            img.src = imageUrl;
+          });
           
           const imageShape = {
             id: generateUniqueId(),
@@ -1044,12 +1080,11 @@ export default function Home() {
   
           setAllShapes((prev) => [...prev, imageShape]);
           pushToHistory();
-          setPasteImage(null);
-        };
-  
-        img.onerror = (err) => {
-          console.error("Failed to load image:", err);
-        };
+          setPasteImageId(null);
+        } catch (err) {
+          console.error("Error in pasteImageFunction:", err);
+          setPasteImageId(null);
+        }
       }
     };
   
