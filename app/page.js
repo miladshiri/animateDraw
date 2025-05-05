@@ -1048,9 +1048,6 @@ export default function Home() {
     const pasteImageFunction = async () => {
       if (pasteImageId) {
         try {
-          const centerX = window.innerWidth / 2;
-          const centerY = window.innerHeight / 2;
-  
           const imageUrl = await loadImageAsBase64(pasteImageId);
           
           if (!imageUrl) {
@@ -1069,8 +1066,8 @@ export default function Home() {
           
           const imageShape = {
             id: generateUniqueId(),
-            x: xScreenToWorld(centerX) - img.width / 2,
-            y: yScreenToWorld(centerY) - img.height / 2,
+            x: xScreenToWorld(universalMousePosition.current.x) - img.width / 2,
+            y: yScreenToWorld(universalMousePosition.current.y) - img.height / 2,
             w: img.width,
             h: img.height,
             selected: false,
