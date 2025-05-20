@@ -1019,6 +1019,9 @@ export default function Home() {
   };
 
   const handleImagePaste = (e) => {
+    // Only handle paste events when not in typing mode
+    if (isTyping) return;
+    
     e.preventDefault()
     const items = e.clipboardData.items;
     for (const item of items) {
@@ -1284,7 +1287,18 @@ export default function Home() {
         setCurrentTypingText(e.target.innerText);
       }}
       onKeyDown={(e) => {
+        // Allow copy and paste shortcuts
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'v')) {
+          return;
+        }
         e.stopPropagation();
+      }}
+      onPaste={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // Only paste text content
+        const text = e.clipboardData.getData('text/plain');
+        document.execCommand('insertText', false, text);
       }}
       onMouseDown={(e) => e.stopPropagation()}
       ref={textInputRef}
