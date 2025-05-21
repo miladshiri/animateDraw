@@ -50,11 +50,17 @@ const ArrowBar = ({ size, shapeSettings, scale }) => {
   const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
   const length = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
 
-  const barWidth = thicknessSize * scale * 5 * length / 200;
-  const endOffset = thicknessSize * 2;
+  // Calculate available space between arrow heads
+  const headSpace = thicknessSize * scale * 2;
+  const availableLength = length - (head === "both" ? headSpace * 2 : (head === "start" || head === "end" ? headSpace : 0));
+  
+  // Calculate bar width as a fixed proportion of available space
+  const barWidth = Math.max(availableLength * 0.2, thicknessSize * scale * 2);
+  const endOffset = thicknessSize * scale * 2;
   const animationEndPoint = length - endOffset - barWidth;
 
-  const headSize = (size.h + size.w) / 10;
+  // Ensure minimum head size while maintaining scale relationship
+  const headSize = Math.max(thicknessSize * scale * 2, 4);
 
   return (
     <div
@@ -82,8 +88,10 @@ const ArrowBar = ({ size, shapeSettings, scale }) => {
     {(head === "start" || head === "both") && (
         <div
           style={{
-            width: `${scale * thicknessSize * 2}px`,
-            height: `${scale * thicknessSize * 2}px`,
+            position: "absolute",
+            left: "0",
+            width: `${thicknessSize * scale * 2}px`,
+            height: `${thicknessSize * scale * 2}px`,
             backgroundColor: shapeColor,
             clipPath: "polygon(100% 0, 0 50%, 100% 100%)"
           }}
@@ -91,7 +99,9 @@ const ArrowBar = ({ size, shapeSettings, scale }) => {
       )}
       <div
         style={{
-          flexGrow: 1,
+          position: "absolute",
+          left: head === "start" || head === "both" ? `${thicknessSize * scale * 2}px` : "0",
+          right: head === "end" || head === "both" ? `${thicknessSize * scale * 2}px` : "0",
           height: `${thicknessSize / 2 * scale}px`,
           backgroundColor: shapeColor,
           display: 'flex',
@@ -124,8 +134,10 @@ const ArrowBar = ({ size, shapeSettings, scale }) => {
       {(head === "end" || head === "both") && (
         <div
         style={{
-          width: `${scale * thicknessSize * 2}px`,
-          height: `${scale * thicknessSize * 1.5}px`,
+          position: "absolute",
+          right: "0",
+          width: `${thicknessSize * scale * 2}px`,
+          height: `${thicknessSize * scale * 1.5}px`,
           backgroundColor: shapeColor,
           clipPath: "polygon(0% 100%, 100% 50%, 0% 0%)"
         }}

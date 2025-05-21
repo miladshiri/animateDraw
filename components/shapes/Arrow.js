@@ -56,7 +56,7 @@ const Arrow = ({ size, shapeSettings, scale }) => {
     { x: length - thicknessSize * scale * 4},
   ];
 
-  const headSize = (size.h + size.w) / 10;
+  const headSize = thicknessSize * scale * 2;
 
   return (
     <div

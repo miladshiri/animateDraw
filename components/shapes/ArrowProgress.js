@@ -77,8 +77,8 @@ const ArrowProgress = ({ size, shapeSettings, scale }) => {
             style={{
               position: "absolute",
               left: "0",
-              width: `${thicknessSize * 2}px`,
-              height: `${thicknessSize * 2}px`,
+              width: `${thicknessSize * scale * 2}px`,
+              height: `${thicknessSize * scale * 2}px`,
               backgroundColor: shapeColor,
               clipPath: "polygon(100% 0, 0 50%, 100% 100%)"
             }}
@@ -87,8 +87,8 @@ const ArrowProgress = ({ size, shapeSettings, scale }) => {
         <div
           style={{
             position: "absolute",
-            left: head === "start" || head === "both" ? `${thicknessSize * 2}px` : "0",
-            right: head === "end" || head === "both" ? `${thicknessSize * 2}px` : "0",
+            left: head === "start" || head === "both" ? `${thicknessSize * scale * 2}px` : "0",
+            right: head === "end" || head === "both" ? `${thicknessSize * scale * 2}px` : "0",
             height: `${thicknessSize / 2 * scale}px`,
             backgroundColor: shapeColor,
             display: 'flex',
@@ -100,7 +100,7 @@ const ArrowProgress = ({ size, shapeSettings, scale }) => {
               <>
                 <motion.path
                   key={`progress-left-${startX}-${startY}-${endX}-${endY}-${speed}-${thicknessSize}-${scale}-${flowColor}`}
-                  d={`M ${(length - (thicknessSize * 4)) / 2} 0 L 0 0`}
+                  d={`M ${(length - (thicknessSize * scale * 4)) / 2} 0 L 0 0`}
                   fill="none"
                   stroke={flowColor}
                   strokeWidth={thicknessSize * scale}
@@ -117,7 +117,7 @@ const ArrowProgress = ({ size, shapeSettings, scale }) => {
                 />
                 <motion.path
                   key={`progress-right-${startX}-${startY}-${endX}-${endY}-${speed}-${thicknessSize}-${scale}-${flowColor}`}
-                  d={`M ${(length - (thicknessSize * 4)) / 2} 0 L ${length - (thicknessSize * 4)} 0`}
+                  d={`M ${(length - (thicknessSize * scale * 4)) / 2} 0 L ${length - (thicknessSize * scale * 4)} 0`}
                   fill="none"
                   stroke={flowColor}
                   strokeWidth={thicknessSize * scale}
@@ -136,7 +136,7 @@ const ArrowProgress = ({ size, shapeSettings, scale }) => {
             ) : (
               <motion.path
                 key={`progress-${startX}-${startY}-${endX}-${endY}-${speed}-${thicknessSize}-${scale}-${flowColor}`}
-                d={`M 0 0 L ${length - (head === "end" ? thicknessSize * 2 : 0)} 0`}
+                d={`M 0 0 L ${length - (head === "end" ? thicknessSize * scale * 2 : 0)} 0`}
                 fill="none"
                 stroke={flowColor}
                 strokeWidth={thicknessSize * scale}
@@ -159,8 +159,8 @@ const ArrowProgress = ({ size, shapeSettings, scale }) => {
             style={{
               position: "absolute",
               right: "0",
-              width: `${thicknessSize * 2}px`,
-              height: `${thicknessSize * 1.5}px`,
+              width: `${thicknessSize * scale * 2}px`,
+              height: `${thicknessSize * scale * 1.5}px`,
               backgroundColor: shapeColor,
               clipPath: "polygon(0% 100%, 100% 50%, 0% 0%)"
             }}
