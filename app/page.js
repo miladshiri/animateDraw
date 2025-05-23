@@ -762,9 +762,6 @@ export default function Home() {
     let newX = initialX;
     let newY = initialY;
     
-    // Calculate the new size of the container
-    // var newWidth = Math.max(initialWidth + (e.clientX - startX) / scale, 1);
-    // var newHeight = Math.max(initialHeight + (e.clientY - startY) / scale, 1);
     const deltaX = (e.clientX - startX) / scale;
     const deltaY = (e.clientY - startY) / scale;
   
@@ -780,10 +777,29 @@ export default function Home() {
       newHeight = Math.max(initialHeight - deltaY, 1);
       newY = initialY + deltaY;
     } else if (corner === "topLeft") {
-      newWidth = Math.max(initialWidth - deltaX, 1);
-      newHeight = Math.max(initialHeight - deltaY, 1);
-      newX = initialX + deltaX;
-      newY = initialY + deltaY;
+      // For topLeft corner, we need to handle the case when hitting borders
+      const newWidthTemp = Math.max(initialWidth - deltaX, 1);
+      const newHeightTemp = Math.max(initialHeight - deltaY, 1);
+      
+      // If we're hitting the right border
+      if (initialX + initialWidth <= initialX + deltaX) {
+        // Use the right edge as the new start point and mouse position as end point
+        newWidth = Math.max((e.clientX - xWorldToScreen(initialX + initialWidth)) / scale, 1);
+        newX = initialX + initialWidth;
+      } else {
+        newWidth = newWidthTemp;
+        newX = initialX + deltaX;
+      }
+      
+      // If we're hitting the bottom border
+      if (initialY + initialHeight <= initialY + deltaY) {
+        // Use the bottom edge as the new start point and mouse position as end point
+        newHeight = Math.max((e.clientY - yWorldToScreen(initialY + initialHeight)) / scale, 1);
+        newY = initialY + initialHeight;
+      } else {
+        newHeight = newHeightTemp;
+        newY = initialY + deltaY;
+      }
     } else if (corner === "topEdge") {
       newHeight = Math.max(initialHeight - deltaY, 1);
       newY = initialY + deltaY;
