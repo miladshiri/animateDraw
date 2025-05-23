@@ -1342,116 +1342,209 @@ export default function Home() {
             left: `${(selectionBox.x - offset.x - 1) * scale}px`,
             width: `${(selectionBox.width + 2) * scale}px`,
             height: `${(selectionBox.height + 2) * scale}px`,
-            backgroundColor: "rgba(0, 118, 215, 0.05)",
-            border: "2px dotted rgb(0, 68, 140)",
+            backgroundColor: selectedShape && ['Arrow', 'ArrowBar', 'ArrowCurve', 'ArrowCurveReverse', 'ArrowProgress'].includes(selectedShape.component) 
+              ? "transparent" 
+              : "rgba(0, 118, 215, 0.05)",
+            border: selectedShape && ['Arrow', 'ArrowBar', 'ArrowCurve', 'ArrowCurveReverse', 'ArrowProgress'].includes(selectedShape.component)
+              ? "none"
+              : "2px dotted rgb(0, 68, 140)",
             cursor: "grab"
           }}
         >
-          {/* Top-left corner */}
-          <div
-            onMouseDown={(e) => handleCornerMouseDown(e, "topLeft")}
-            style={{
-              position: 'absolute',
-              top: '-5px',
-              left: '-5px',
-              width: '10px',
-              height: '10px',
-              backgroundColor: 'white',
-              border: '1px solid black',
-              borderRadius: '10%',
-              cursor: 'nwse-resize',
-            }}
-          />
-          <div
-            onMouseDown={(e) => handleCornerMouseDown(e, "topEdge")}
-            style={{
-              position: 'absolute',
-              top: '-2px',
-              width: '100%',
-              height: '2px',
-              backgroundColor: 'white',
-              cursor: 'ns-resize',
-
-            }}
-          />
-          {/* Top-right corner */}
-          <div
-            onMouseDown={(e) => handleCornerMouseDown(e, "topRight")}
-            style={{
-              position: 'absolute',
-              top: '-5px',
-              right: '-5px',
-              width: '10px',
-              height: '10px',
-              backgroundColor: 'white',
-              border: '1px solid black',
-              borderRadius: '10%',
-              cursor: 'nesw-resize',
-            }}
-          />
-          <div
-            onMouseDown={(e) => handleCornerMouseDown(e, "rightEdge")}
-            style={{
-              position: 'absolute',
-              right: '-2px',
-              height: '100%',
-              width: '2px',
-              backgroundColor: 'white',
-              cursor: 'ew-resize',
-            }}
-          />
-          {/* Bottom-right corner */}
-          <div
-            onMouseDown={(e) => handleCornerMouseDown(e, "bottomRight")}
-            style={{
-              position: 'absolute',
-              bottom: '-5px',
-              right: '-5px',
-              width: '10px',
-              height: '10px',
-              backgroundColor: 'white',
-              border: '1px solid black',
-              borderRadius: '10%',
-              cursor: 'nwse-resize',
-            }}
-          ></div>
-          <div
-            onMouseDown={(e) => handleCornerMouseDown(e, "bottomEdge")}
-            style={{
-              position: 'absolute',
-              bottom: '-2px',
-              width: '100%',
-              height: '2px',
-              backgroundColor: 'white',
-              cursor: 'ns-resize',
-            }}
-          />
-          {/* Bottom-left corner */}
-          <div
-            onMouseDown={(e) => handleCornerMouseDown(e, "bottomLeft")}
-            style={{
-              position: 'absolute',
-              bottom: '-5px',
-              left: '-5px',
-              width: '10px',
-              height: '10px',
-              backgroundColor: 'white',
-              border: '1px solid black',
-              borderRadius: '10%',
-              cursor: 'nesw-resize',
-            }}
-          />
-          <div
-            onMouseDown={(e) => handleCornerMouseDown(e, "leftEdge")}
-            style={{
-              position: 'absolute',
-              left: '-2px',
-              height: '100%',
-              width: '2px',
-              backgroundColor: 'white',
-              cursor: 'ew-resize',
-            }}
-          />
+          {/* Show corners based on arrow direction */}
+          {selectedShape && ['Arrow', 'ArrowBar', 'ArrowCurve', 'ArrowCurveReverse', 'ArrowProgress'].includes(selectedShape.component) ? (
+            <>
+              {/* Determine which corners to show based on arrow direction */}
+              {(() => {
+                const startX = selectedShape.settings.startX;
+                const startY = selectedShape.settings.startY;
+                const endX = selectedShape.settings.endX;
+                const endY = selectedShape.settings.endY;
+                
+                // If arrow goes from top-left to bottom-right
+                if ((startX === "0" && startY === "0" && endX === "100" && endY === "100") ||
+                    (startX === "100" && startY === "100" && endX === "0" && endY === "0")) {
+                  return (
+                    <>
+                      {/* Top-left corner */}
+                      <div
+                        onMouseDown={(e) => handleCornerMouseDown(e, "topLeft")}
+                        style={{
+                          position: 'absolute',
+                          top: '-5px',
+                          left: '-5px',
+                          width: '10px',
+                          height: '10px',
+                          backgroundColor: 'white',
+                          border: '1px solid black',
+                          borderRadius: '10%',
+                          cursor: 'nwse-resize',
+                        }}
+                      />
+                      {/* Bottom-right corner */}
+                      <div
+                        onMouseDown={(e) => handleCornerMouseDown(e, "bottomRight")}
+                        style={{
+                          position: 'absolute',
+                          bottom: '-5px',
+                          right: '-5px',
+                          width: '10px',
+                          height: '10px',
+                          backgroundColor: 'white',
+                          border: '1px solid black',
+                          borderRadius: '10%',
+                          cursor: 'nwse-resize',
+                        }}
+                      />
+                    </>
+                  );
+                } else {
+                  // If arrow goes from top-right to bottom-left
+                  return (
+                    <>
+                      {/* Top-right corner */}
+                      <div
+                        onMouseDown={(e) => handleCornerMouseDown(e, "topRight")}
+                        style={{
+                          position: 'absolute',
+                          top: '-5px',
+                          right: '-5px',
+                          width: '10px',
+                          height: '10px',
+                          backgroundColor: 'white',
+                          border: '1px solid black',
+                          borderRadius: '10%',
+                          cursor: 'nesw-resize',
+                        }}
+                      />
+                      {/* Bottom-left corner */}
+                      <div
+                        onMouseDown={(e) => handleCornerMouseDown(e, "bottomLeft")}
+                        style={{
+                          position: 'absolute',
+                          bottom: '-5px',
+                          left: '-5px',
+                          width: '10px',
+                          height: '10px',
+                          backgroundColor: 'white',
+                          border: '1px solid black',
+                          borderRadius: '10%',
+                          cursor: 'nesw-resize',
+                        }}
+                      />
+                    </>
+                  );
+                }
+              })()}
+            </>
+          ) : (
+            <>
+              {/* Top-left corner */}
+              <div
+                onMouseDown={(e) => handleCornerMouseDown(e, "topLeft")}
+                style={{
+                  position: 'absolute',
+                  top: '-5px',
+                  left: '-5px',
+                  width: '10px',
+                  height: '10px',
+                  backgroundColor: 'white',
+                  border: '1px solid black',
+                  borderRadius: '10%',
+                  cursor: 'nwse-resize',
+                }}
+              />
+              <div
+                onMouseDown={(e) => handleCornerMouseDown(e, "topEdge")}
+                style={{
+                  position: 'absolute',
+                  top: '-2px',
+                  width: '100%',
+                  height: '2px',
+                  backgroundColor: 'white',
+                  cursor: 'ns-resize',
+                }}
+              />
+              {/* Top-right corner */}
+              <div
+                onMouseDown={(e) => handleCornerMouseDown(e, "topRight")}
+                style={{
+                  position: 'absolute',
+                  top: '-5px',
+                  right: '-5px',
+                  width: '10px',
+                  height: '10px',
+                  backgroundColor: 'white',
+                  border: '1px solid black',
+                  borderRadius: '10%',
+                  cursor: 'nesw-resize',
+                }}
+              />
+              <div
+                onMouseDown={(e) => handleCornerMouseDown(e, "rightEdge")}
+                style={{
+                  position: 'absolute',
+                  right: '-2px',
+                  height: '100%',
+                  width: '2px',
+                  backgroundColor: 'white',
+                  cursor: 'ew-resize',
+                }}
+              />
+              {/* Bottom-right corner */}
+              <div
+                onMouseDown={(e) => handleCornerMouseDown(e, "bottomRight")}
+                style={{
+                  position: 'absolute',
+                  bottom: '-5px',
+                  right: '-5px',
+                  width: '10px',
+                  height: '10px',
+                  backgroundColor: 'white',
+                  border: '1px solid black',
+                  borderRadius: '10%',
+                  cursor: 'nwse-resize',
+                }}
+              />
+              <div
+                onMouseDown={(e) => handleCornerMouseDown(e, "bottomEdge")}
+                style={{
+                  position: 'absolute',
+                  bottom: '-2px',
+                  width: '100%',
+                  height: '2px',
+                  backgroundColor: 'white',
+                  cursor: 'ns-resize',
+                }}
+              />
+              {/* Bottom-left corner */}
+              <div
+                onMouseDown={(e) => handleCornerMouseDown(e, "bottomLeft")}
+                style={{
+                  position: 'absolute',
+                  bottom: '-5px',
+                  left: '-5px',
+                  width: '10px',
+                  height: '10px',
+                  backgroundColor: 'white',
+                  border: '1px solid black',
+                  borderRadius: '10%',
+                  cursor: 'nesw-resize',
+                }}
+              />
+              <div
+                onMouseDown={(e) => handleCornerMouseDown(e, "leftEdge")}
+                style={{
+                  position: 'absolute',
+                  left: '-2px',
+                  height: '100%',
+                  width: '2px',
+                  backgroundColor: 'white',
+                  cursor: 'ew-resize',
+                }}
+              />
+            </>
+          )}
         </div>
       )}
     </div>
