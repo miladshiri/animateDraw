@@ -766,50 +766,173 @@ export default function Home() {
     const deltaY = (e.clientY - startY) / scale;
   
     if (corner === "bottomRight") {
-      newWidth = Math.max(initialWidth + deltaX, 1);
-      newHeight = Math.max(initialHeight + deltaY, 1);
-    } else if (corner === "bottomLeft") {
-      newWidth = Math.max(initialWidth - deltaX, 1);
-      newHeight = Math.max(initialHeight + deltaY, 1);
-      newX = initialX + deltaX;
-    } else if (corner === "topRight") {
-      newWidth = Math.max(initialWidth + deltaX, 1);
-      newHeight = Math.max(initialHeight - deltaY, 1);
-      newY = initialY + deltaY;
-    } else if (corner === "topLeft") {
-      // For topLeft corner, we need to handle the case when hitting borders
-      const newWidthTemp = Math.max(initialWidth - deltaX, 1);
-      const newHeightTemp = Math.max(initialHeight - deltaY, 1);
+      // If we're hitting the left border
+      if (initialX + initialWidth <= initialX + deltaX) {
+        // Fix the right edge position and let the left edge move
+        const mouseX = xScreenToWorld(e.clientX);
+        const hitPointX = initialX;
+        newWidth = Math.max(hitPointX - mouseX, 1);
+        newX = mouseX;
+      } else {
+        newWidth = Math.max(initialWidth + deltaX, 1);
+        if (newWidth === 1 && deltaX < 0) {
+          // When hitting minimum width, maintain the right edge position
+          const mouseX = xScreenToWorld(e.clientX);
+          const hitPointX = initialX;
+          newWidth = Math.max(hitPointX - mouseX, 1);
+          newX = mouseX;
+        }
+      }
       
+      // If we're hitting the top border
+      if (initialY + initialHeight <= initialY + deltaY) {
+        // Fix the bottom edge position and let the top edge move
+        const mouseY = yScreenToWorld(e.clientY);
+        const hitPointY = initialY;
+        newHeight = Math.max(hitPointY - mouseY, 1);
+        newY = mouseY;
+      } else {
+        newHeight = Math.max(initialHeight + deltaY, 1);
+        if (newHeight === 1 && deltaY < 0) {
+          // When hitting minimum height, maintain the bottom edge position
+          const mouseY = yScreenToWorld(e.clientY);
+          const hitPointY = initialY;
+          newHeight = Math.max(hitPointY - mouseY, 1);
+          newY = mouseY;
+        }
+      }
+    } else if (corner === "bottomLeft") {
       // If we're hitting the right border
       if (initialX + initialWidth <= initialX + deltaX) {
-        // Use the right edge as the new start point and mouse position as end point
-        newWidth = Math.max((e.clientX - xWorldToScreen(initialX + initialWidth)) / scale, 1);
-        newX = initialX + initialWidth;
+        // Fix the left edge position and let the right edge move
+        const mouseX = xScreenToWorld(e.clientX);
+        const hitPointX = initialX + initialWidth;
+        newWidth = Math.max(mouseX - hitPointX, 1);
+        newX = hitPointX;
       } else {
-        newWidth = newWidthTemp;
-        newX = initialX + deltaX;
+        newWidth = Math.max(initialWidth - deltaX, 1);
+        if (newWidth === 1 && deltaX > 0) {
+          // When hitting minimum width, maintain the left edge position
+          const mouseX = xScreenToWorld(e.clientX);
+          const hitPointX = initialX + initialWidth;
+          newWidth = Math.max(mouseX - hitPointX, 1);
+          newX = hitPointX;
+        } else {
+          newX = initialX + deltaX;
+        }
+      }
+      
+      // If we're hitting the top border
+      if (initialY + initialHeight <= initialY + deltaY) {
+        // Fix the bottom edge position and let the top edge move
+        const mouseY = yScreenToWorld(e.clientY);
+        const hitPointY = initialY;
+        newHeight = Math.max(hitPointY - mouseY, 1);
+        newY = mouseY;
+      } else {
+        newHeight = Math.max(initialHeight + deltaY, 1);
+        if (newHeight === 1 && deltaY < 0) {
+          // When hitting minimum height, maintain the bottom edge position
+          const mouseY = yScreenToWorld(e.clientY);
+          const hitPointY = initialY;
+          newHeight = Math.max(hitPointY - mouseY, 1);
+          newY = mouseY;
+        }
+      }
+    } else if (corner === "topRight") {
+      // If we're hitting the left border
+      if (initialX + initialWidth <= initialX + deltaX) {
+        // Fix the right edge position and let the left edge move
+        const mouseX = xScreenToWorld(e.clientX);
+        const hitPointX = initialX;
+        newWidth = Math.max(hitPointX - mouseX, 1);
+        newX = mouseX;
+      } else {
+        newWidth = Math.max(initialWidth + deltaX, 1);
+        if (newWidth === 1 && deltaX < 0) {
+          // When hitting minimum width, maintain the right edge position
+          const mouseX = xScreenToWorld(e.clientX);
+          const hitPointX = initialX;
+          newWidth = Math.max(hitPointX - mouseX, 1);
+          newX = mouseX;
+        }
       }
       
       // If we're hitting the bottom border
       if (initialY + initialHeight <= initialY + deltaY) {
-        // Use the bottom edge as the new start point and mouse position as end point
+        // Fix the top edge position and let the bottom edge move
+        const mouseY = yScreenToWorld(e.clientY);
+        const hitPointY = initialY + initialHeight;
+        newHeight = Math.max(mouseY - hitPointY, 1);
+        newY = hitPointY;
+      } else {
+        newHeight = Math.max(initialHeight - deltaY, 1);
+        if (newHeight === 1 && deltaY > 0) {
+          // When hitting minimum height, maintain the top edge position
+          const mouseY = yScreenToWorld(e.clientY);
+          const hitPointY = initialY + initialHeight;
+          newHeight = Math.max(mouseY - hitPointY, 1);
+          newY = hitPointY;
+        } else {
+          newY = initialY + deltaY;
+        }
+      }
+    } else if (corner === "topLeft") {
+      // If we're hitting the right border
+      if (initialX + initialWidth <= initialX + deltaX) {
+        newWidth = Math.max((e.clientX - xWorldToScreen(initialX + initialWidth)) / scale, 1);
+        newX = initialX + initialWidth;
+      } else {
+        newWidth = Math.max(initialWidth - deltaX, 1);
+        if (newWidth === 1 && deltaX > 0) {
+          newWidth = deltaX;
+          newX = initialX + initialWidth - newWidth;
+        } else {
+          newX = initialX + deltaX;
+        }
+      }
+      
+      // If we're hitting the bottom border
+      if (initialY + initialHeight <= initialY + deltaY) {
         newHeight = Math.max((e.clientY - yWorldToScreen(initialY + initialHeight)) / scale, 1);
         newY = initialY + initialHeight;
       } else {
-        newHeight = newHeightTemp;
-        newY = initialY + deltaY;
+        newHeight = Math.max(initialHeight - deltaY, 1);
+        if (newHeight === 1 && deltaY > 0) {
+          newHeight = deltaY;
+          newY = initialY + initialHeight - newHeight;
+        } else {
+          newY = initialY + deltaY;
+        }
       }
     } else if (corner === "topEdge") {
       newHeight = Math.max(initialHeight - deltaY, 1);
-      newY = initialY + deltaY;
+      if (newHeight === 1 && deltaY > 0) {
+        newHeight = deltaY;
+        newY = initialY + initialHeight - newHeight;
+      } else {
+        newY = initialY + deltaY;
+      }
     } else if (corner === "bottomEdge") {
       newHeight = Math.max(initialHeight + deltaY, 1);
+      if (newHeight === 1 && deltaY < 0) {
+        newHeight = Math.abs(deltaY);
+        newY = initialY + initialHeight - newHeight;
+      }
     } else if (corner === "rightEdge") {
       newWidth = Math.max(initialWidth + deltaX, 1);
+      if (newWidth === 1 && deltaX < 0) {
+        newWidth = Math.abs(deltaX);
+        newX = initialX + initialWidth - newWidth;
+      }
     } else if (corner === "leftEdge") {
       newWidth = Math.max(initialWidth - deltaX, 1);
-      newX = initialX + deltaX;
+      if (newWidth === 1 && deltaX > 0) {
+        newWidth = deltaX;
+        newX = initialX + initialWidth - newWidth;
+      } else {
+        newX = initialX + deltaX;
+      }
     }
 
     if (e.ctrlKey || e.metaKey) {
