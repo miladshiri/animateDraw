@@ -970,13 +970,85 @@ export default function Home() {
     const heightRatio = newHeight / initialHeight;
 
     // Update elements based on resize ratios
-    const resizedItems = initialAllShapes.map((shape) => ({
-      ...shape,
-      x: shape.selected ? Math.round((shape.x - initialX) * widthRatio + newX) : shape.x,
-      y: shape.selected ? Math.round((shape.y - initialY) * heightRatio + newY) : shape.y,
-      w: shape.selected ? Math.round(shape.w * widthRatio) : shape.w,
-      h: shape.selected ? Math.round(shape.h * heightRatio) : shape.h,
-    }));
+    const resizedItems = initialAllShapes.map((shape) => {
+      if (!shape.selected) return shape;
+      
+      const shapeNewX = Math.round((shape.x - initialX) * widthRatio + newX);
+      const shapeNewY = Math.round((shape.y - initialY) * heightRatio + newY);
+      const shapeNewWidth = Math.round(shape.w * widthRatio);
+      const shapeNewHeight = Math.round(shape.h * heightRatio);
+      
+      // Calculate start/end points based on border crossing logic
+      let startX = shape.settings.startX;
+      let startY = shape.settings.startY;
+      let endX = shape.settings.endX;
+      let endY = shape.settings.endY;
+      
+      if (corner === "bottomRight") {
+        // If width becomes negative
+        if (deltaX + initialWidth < 0) {
+          startX = shape.settings.endX;
+          endX = shape.settings.startX;
+        }
+        
+        // If height becomes negative
+        if (deltaY + initialHeight < 0) {
+          startY = shape.settings.endY;
+          endY = shape.settings.startY;
+        }
+      } else if (corner === "bottomLeft") {
+        // If width becomes negative
+        if (-deltaX + initialWidth < 0) {
+          startX = shape.settings.endX;
+          endX = shape.settings.startX;
+        }
+        
+        // If height becomes negative
+        if (deltaY + initialHeight < 0) {
+          startY = shape.settings.endY;
+          endY = shape.settings.startY;
+        }
+      } else if (corner === "topRight") {
+        // If width becomes negative
+        if (deltaX + initialWidth < 0) {
+          startX = shape.settings.endX;
+          endX = shape.settings.startX;
+        }
+        
+        // If height becomes negative
+        if (-deltaY + initialHeight < 0) {
+          startY = shape.settings.endY;
+          endY = shape.settings.startY;
+        }
+      } else if (corner === "topLeft") {
+        // If width becomes negative
+        if (-deltaX + initialWidth < 0) {
+          startX = shape.settings.endX;
+          endX = shape.settings.startX;
+        }
+        
+        // If height becomes negative
+        if (-deltaY + initialHeight < 0) {
+          startY = shape.settings.endY;
+          endY = shape.settings.startY;
+        }
+      }
+      
+      return {
+        ...shape,
+        x: shapeNewX,
+        y: shapeNewY,
+        w: shapeNewWidth,
+        h: shapeNewHeight,
+        settings: {
+          ...shape.settings,
+          startX,
+          startY,
+          endX,
+          endY
+        }
+      };
+    });
 
     // Update state
     setSelectionBox({ x: newX, y: newY, width: newWidth, height: newHeight });
