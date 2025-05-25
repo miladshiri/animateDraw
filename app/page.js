@@ -767,7 +767,7 @@ export default function Home() {
   
     if (corner === "bottomRight") {
       // If we're hitting the left border
-      if (initialX + initialWidth <= initialX + deltaX) {
+      if (deltaX + initialWidth < 0) {
         // Fix the right edge position and let the left edge move
         const mouseX = xScreenToWorld(e.clientX);
         const hitPointX = initialX;
@@ -785,45 +785,7 @@ export default function Home() {
       }
       
       // If we're hitting the top border
-      if (initialY + initialHeight <= initialY + deltaY) {
-        // Fix the bottom edge position and let the top edge move
-        const mouseY = yScreenToWorld(e.clientY);
-        const hitPointY = initialY;
-        newHeight = Math.max(hitPointY - mouseY, 1);
-        newY = mouseY;
-      } else {
-        newHeight = Math.max(initialHeight + deltaY, 1);
-        if (newHeight === 1 && deltaY < 0) {
-          // When hitting minimum height, maintain the bottom edge position
-          const mouseY = yScreenToWorld(e.clientY);
-          const hitPointY = initialY;
-          newHeight = Math.max(hitPointY - mouseY, 1);
-          newY = mouseY;
-        }
-      }
-    } else if (corner === "bottomLeft") {
-      // If we're hitting the right border
-      if (initialX + initialWidth <= initialX + deltaX) {
-        // Fix the left edge position and let the right edge move
-        const mouseX = xScreenToWorld(e.clientX);
-        const hitPointX = initialX + initialWidth;
-        newWidth = Math.max(mouseX - hitPointX, 1);
-        newX = hitPointX;
-      } else {
-        newWidth = Math.max(initialWidth - deltaX, 1);
-        if (newWidth === 1 && deltaX > 0) {
-          // When hitting minimum width, maintain the left edge position
-          const mouseX = xScreenToWorld(e.clientX);
-          const hitPointX = initialX + initialWidth;
-          newWidth = Math.max(mouseX - hitPointX, 1);
-          newX = hitPointX;
-        } else {
-          newX = initialX + deltaX;
-        }
-      }
-      
-      // If we're hitting the top border
-      if (initialY + initialHeight <= initialY + deltaY) {
+      if (deltaY + initialHeight < 0) {
         // Fix the bottom edge position and let the top edge move
         const mouseY = yScreenToWorld(e.clientY);
         const hitPointY = initialY;
@@ -841,7 +803,7 @@ export default function Home() {
       }
     } else if (corner === "topRight") {
       // If we're hitting the left border
-      if (initialX + initialWidth <= initialX + deltaX) {
+      if (deltaX + initialWidth < 0) {
         // Fix the right edge position and let the left edge move
         const mouseX = xScreenToWorld(e.clientX);
         const hitPointX = initialX;
@@ -859,7 +821,7 @@ export default function Home() {
       }
       
       // If we're hitting the bottom border
-      if (initialY + initialHeight <= initialY + deltaY) {
+      if (deltaY + initialHeight < 0) {
         // Fix the top edge position and let the bottom edge move
         const mouseY = yScreenToWorld(e.clientY);
         const hitPointY = initialY + initialHeight;
@@ -879,59 +841,157 @@ export default function Home() {
       }
     } else if (corner === "topLeft") {
       // If we're hitting the right border
-      if (initialX + initialWidth <= initialX + deltaX) {
-        newWidth = Math.max((e.clientX - xWorldToScreen(initialX + initialWidth)) / scale, 1);
-        newX = initialX + initialWidth;
+      if (deltaX + initialWidth < 0) {
+        // Fix the left edge position and let the right edge move
+        const mouseX = xScreenToWorld(e.clientX);
+        const hitPointX = initialX + initialWidth;
+        newWidth = Math.max(mouseX - hitPointX, 1);
+        newX = hitPointX;
       } else {
         newWidth = Math.max(initialWidth - deltaX, 1);
         if (newWidth === 1 && deltaX > 0) {
-          newWidth = deltaX;
-          newX = initialX + initialWidth - newWidth;
+          // When hitting minimum width, maintain the left edge position
+          const mouseX = xScreenToWorld(e.clientX);
+          const hitPointX = initialX + initialWidth;
+          newWidth = Math.max(mouseX - hitPointX, 1);
+          newX = hitPointX;
         } else {
           newX = initialX + deltaX;
         }
       }
       
       // If we're hitting the bottom border
-      if (initialY + initialHeight <= initialY + deltaY) {
-        newHeight = Math.max((e.clientY - yWorldToScreen(initialY + initialHeight)) / scale, 1);
-        newY = initialY + initialHeight;
+      if (deltaY + initialHeight < 0) {
+        // Fix the top edge position and let the bottom edge move
+        const mouseY = yScreenToWorld(e.clientY);
+        const hitPointY = initialY + initialHeight;
+        newHeight = Math.max(mouseY - hitPointY, 1);
+        newY = hitPointY;
       } else {
         newHeight = Math.max(initialHeight - deltaY, 1);
         if (newHeight === 1 && deltaY > 0) {
-          newHeight = deltaY;
-          newY = initialY + initialHeight - newHeight;
+          // When hitting minimum height, maintain the top edge position
+          const mouseY = yScreenToWorld(e.clientY);
+          const hitPointY = initialY + initialHeight;
+          newHeight = Math.max(mouseY - hitPointY, 1);
+          newY = hitPointY;
         } else {
           newY = initialY + deltaY;
         }
       }
-    } else if (corner === "topEdge") {
-      newHeight = Math.max(initialHeight - deltaY, 1);
-      if (newHeight === 1 && deltaY > 0) {
-        newHeight = deltaY;
-        newY = initialY + initialHeight - newHeight;
+    } else if (corner === "bottomLeft") {
+      // If we're hitting the right border
+      if (deltaX + initialWidth < 0) {
+        // Fix the left edge position and let the right edge move
+        const mouseX = xScreenToWorld(e.clientX);
+        const hitPointX = initialX + initialWidth;
+        newWidth = Math.max(mouseX - hitPointX, 1);
+        newX = hitPointX;
       } else {
-        newY = initialY + deltaY;
+        newWidth = Math.max(initialWidth - deltaX, 1);
+        if (newWidth === 1 && deltaX > 0) {
+          // When hitting minimum width, maintain the left edge position
+          const mouseX = xScreenToWorld(e.clientX);
+          const hitPointX = initialX + initialWidth;
+          newWidth = Math.max(mouseX - hitPointX, 1);
+          newX = hitPointX;
+        } else {
+          newX = initialX + deltaX;
+        }
+      }
+      
+      // If we're hitting the top border
+      if (deltaY + initialHeight < 0) {
+        // Fix the bottom edge position and let the top edge move
+        const mouseY = yScreenToWorld(e.clientY);
+        const hitPointY = initialY;
+        newHeight = Math.max(hitPointY - mouseY, 1);
+        newY = mouseY;
+      } else {
+        newHeight = Math.max(initialHeight + deltaY, 1);
+        if (newHeight === 1 && deltaY < 0) {
+          // When hitting minimum height, maintain the bottom edge position
+          const mouseY = yScreenToWorld(e.clientY);
+          const hitPointY = initialY;
+          newHeight = Math.max(hitPointY - mouseY, 1);
+          newY = mouseY;
+        }
+      }
+    } else if (corner === "topEdge") {
+      // If we're hitting the bottom border
+      if (deltaY + initialHeight < 0) {
+        // Fix the top edge position and let the bottom edge move
+        const mouseY = yScreenToWorld(e.clientY);
+        const hitPointY = initialY + initialHeight;
+        newHeight = Math.max(mouseY - hitPointY, 1);
+        newY = hitPointY;
+      } else {
+        newHeight = Math.max(initialHeight - deltaY, 1);
+        if (newHeight === 1 && deltaY > 0) {
+          // When hitting minimum height, maintain the top edge position
+          const mouseY = yScreenToWorld(e.clientY);
+          const hitPointY = initialY + initialHeight;
+          newHeight = Math.max(mouseY - hitPointY, 1);
+          newY = hitPointY;
+        } else {
+          newY = initialY + deltaY;
+        }
       }
     } else if (corner === "bottomEdge") {
-      newHeight = Math.max(initialHeight + deltaY, 1);
-      if (newHeight === 1 && deltaY < 0) {
-        newHeight = Math.abs(deltaY);
-        newY = initialY + initialHeight - newHeight;
-      }
-    } else if (corner === "rightEdge") {
-      newWidth = Math.max(initialWidth + deltaX, 1);
-      if (newWidth === 1 && deltaX < 0) {
-        newWidth = Math.abs(deltaX);
-        newX = initialX + initialWidth - newWidth;
+      // If we're hitting the top border
+      if (deltaY + initialHeight < 0) {
+        // Fix the bottom edge position and let the top edge move
+        const mouseY = yScreenToWorld(e.clientY);
+        const hitPointY = initialY;
+        newHeight = Math.max(hitPointY - mouseY, 1);
+        newY = mouseY;
+      } else {
+        newHeight = Math.max(initialHeight + deltaY, 1);
+        if (newHeight === 1 && deltaY < 0) {
+          // When hitting minimum height, maintain the bottom edge position
+          const mouseY = yScreenToWorld(e.clientY);
+          const hitPointY = initialY;
+          newHeight = Math.max(hitPointY - mouseY, 1);
+          newY = mouseY;
+        }
       }
     } else if (corner === "leftEdge") {
-      newWidth = Math.max(initialWidth - deltaX, 1);
-      if (newWidth === 1 && deltaX > 0) {
-        newWidth = deltaX;
-        newX = initialX + initialWidth - newWidth;
+      // If we're hitting the right border
+      if (deltaX + initialWidth < 0) {
+        // Fix the left edge position and let the right edge move
+        const mouseX = xScreenToWorld(e.clientX);
+        const hitPointX = initialX + initialWidth;
+        newWidth = Math.max(mouseX - hitPointX, 1);
+        newX = hitPointX;
       } else {
-        newX = initialX + deltaX;
+        newWidth = Math.max(initialWidth - deltaX, 1);
+        if (newWidth === 1 && deltaX > 0) {
+          // When hitting minimum width, maintain the left edge position
+          const mouseX = xScreenToWorld(e.clientX);
+          const hitPointX = initialX + initialWidth;
+          newWidth = Math.max(mouseX - hitPointX, 1);
+          newX = hitPointX;
+        } else {
+          newX = initialX + deltaX;
+        }
+      }
+    } else if (corner === "rightEdge") {
+      // If we're hitting the left border
+      if (deltaX + initialWidth < 0) {
+        // Fix the right edge position and let the left edge move
+        const mouseX = xScreenToWorld(e.clientX);
+        const hitPointX = initialX;
+        newWidth = Math.max(hitPointX - mouseX, 1);
+        newX = mouseX;
+      } else {
+        newWidth = Math.max(initialWidth + deltaX, 1);
+        if (newWidth === 1 && deltaX < 0) {
+          // When hitting minimum width, maintain the right edge position
+          const mouseX = xScreenToWorld(e.clientX);
+          const hitPointX = initialX;
+          newWidth = Math.max(hitPointX - mouseX, 1);
+          newX = mouseX;
+        }
       }
     }
 
