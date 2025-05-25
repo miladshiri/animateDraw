@@ -158,7 +158,7 @@ export default async function BlogPost({ params }) {
             </div>
           </header>
           
-          <div className="prose prose-lg max-w-none prose-headings:text-white prose-p:text-white prose-strong:text-white prose-code:text-white prose-a:text-blue-400 prose-pre:bg-gray-900/50 prose-pre:border prose-pre:border-gray-700/50">
+          <div className="prose prose-lg max-w-none prose-headings:text-white prose-p:text-white prose-strong:text-white prose-code:text-white prose-ul:text-white prose-a:text-blue-400 prose-pre:bg-gray-900/50 prose-pre:border prose-pre:border-gray-700/50">
             <MDXRemote source={post.content} />
           </div>
         </article>
