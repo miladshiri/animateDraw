@@ -821,7 +821,7 @@ export default function Home() {
       }
       
       // If we're hitting the bottom border
-      if (deltaY + initialHeight < 0) {
+      if (-deltaY + initialHeight < 0) {
         // Fix the top edge position and let the bottom edge move
         const mouseY = yScreenToWorld(e.clientY);
         const hitPointY = initialY + initialHeight;
@@ -841,7 +841,7 @@ export default function Home() {
       }
     } else if (corner === "topLeft") {
       // If we're hitting the right border
-      if (deltaX + initialWidth < 0) {
+      if (-deltaX + initialWidth < 0) {
         // Fix the left edge position and let the right edge move
         const mouseX = xScreenToWorld(e.clientX);
         const hitPointX = initialX + initialWidth;
@@ -861,7 +861,7 @@ export default function Home() {
       }
       
       // If we're hitting the bottom border
-      if (deltaY + initialHeight < 0) {
+      if (-deltaY + initialHeight < 0) {
         // Fix the top edge position and let the bottom edge move
         const mouseY = yScreenToWorld(e.clientY);
         const hitPointY = initialY + initialHeight;
@@ -881,7 +881,7 @@ export default function Home() {
       }
     } else if (corner === "bottomLeft") {
       // If we're hitting the right border
-      if (deltaX + initialWidth < 0) {
+      if (-deltaX + initialWidth < 0) {
         // Fix the left edge position and let the right edge move
         const mouseX = xScreenToWorld(e.clientX);
         const hitPointX = initialX + initialWidth;
