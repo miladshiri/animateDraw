@@ -59,7 +59,7 @@ export default async function BlogPage() {
             className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 hover:bg-gray-800/70 hover:shadow-xl hover:shadow-blue-500/10 border border-gray-700/50"
           >
             <Link href={`/blog/${post.slug}`} className="group block">
-              <h2 className="text-2xl font-semibold mb-3 group-hover:text-blue-400 transition-colors">
+              <h2 className="text-2xl font-semibold mb-3 text-white transition-colors">
                 {post.title}
               </h2>
               <div className="flex items-center text-gray-400 mb-4 text-sm">
