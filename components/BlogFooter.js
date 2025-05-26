@@ -15,7 +15,7 @@ export default function BlogFooter() {
               className="rounded-lg"
             />
           </Link>
-          <div className="flex space-x-6 text-sm text-gray-400">
+          <div className="flex space-x-6 text-sm text-gray-300">
             <Link href="/" className="hover:text-blue-400 transition-colors">
               Home
             </Link>
@@ -29,7 +29,7 @@ export default function BlogFooter() {
               Contact
             </a>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-400">
             © {new Date().getFullYear()} flowyBoard. All rights reserved.
           </p>
         </div>

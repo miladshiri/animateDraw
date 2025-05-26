@@ -49,7 +49,7 @@ export default async function BlogPage() {
         <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
           flowyBoard Blog
         </h1>
-        <p className="text-gray-400 text-lg">Discover the latest insights and updates</p>
+        <p className="text-gray-200 text-lg">Discover the latest insights and updates</p>
       </div>
       
       <div className="grid gap-8">
@@ -59,10 +59,10 @@ export default async function BlogPage() {
             className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 hover:bg-gray-800/70 hover:shadow-xl hover:shadow-blue-500/10 border border-gray-700/50"
           >
             <Link href={`/blog/${post.slug}`} className="group block">
-              <h2 className="text-2xl font-semibold mb-3 text-white transition-colors">
+              <h2 className="text-2xl font-semibold mb-3 text-gray-100 transition-colors">
                 {post.title}
               </h2>
-              <div className="flex items-center text-gray-400 mb-4 text-sm">
+              <div className="flex items-center text-gray-300 mb-4 text-sm">
                 <time dateTime={post.date} className="flex items-center">
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -81,7 +81,7 @@ export default async function BlogPage() {
                   </>
                 )}
               </div>
-              <p className="text-gray-400 leading-relaxed">{post.excerpt}</p>
+              <p className="text-gray-200 leading-relaxed">{post.excerpt}</p>
               <div className="mt-4 text-blue-400 group-hover:text-blue-300 transition-colors flex items-center">
                 Read more
                 <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

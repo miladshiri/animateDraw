@@ -5,12 +5,18 @@
 :root {
   --background: #aaaaaa;
   --foreground: #171717;
+  --text-primary: #f3f4f6;
+  --text-secondary: #e5e7eb;
+  --text-tertiary: #d1d5db;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --text-primary: #f3f4f6;
+    --text-secondary: #e5e7eb;
+    --text-tertiary: #d1d5db;
   }
 }
 
@@ -214,13 +220,33 @@ html {
 
 /* Blog post content styling */
 .prose {
-  color: var(--foreground);
+  color: var(--text-primary);
   max-width: 100%;
   -webkit-user-select: text;
   -khtml-user-select: text;
   -moz-user-select: text;
   -ms-user-select: text;
   user-select: text;
+}
+
+.prose ul {
+  color: var(--text-secondary);
+}
+
+.prose li {
+  color: var(--text-secondary);
+}
+
+.prose p {
+  color: var(--text-secondary);
+}
+
+.prose strong {
+  color: var(--text-primary);
+}
+
+.prose code {
+  color: var(--text-tertiary);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -24,7 +24,7 @@ export default function BlogHeader() {
             style={{
               background: 'linear-gradient(45deg, #3B82F6, #8B5CF6, #EC4899)',
               backgroundSize: '200% 200%',
-              color: 'white',
+              color: '#f3f4f6',
               boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)',
             }}
             whileHover={{ scale: 1.05 }}
